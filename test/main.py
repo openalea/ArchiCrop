@@ -32,7 +32,7 @@ def f_1(n_samples):
     stics_output_file='../data/mod_s02NT18SorgV2D1.sti'
 
     # Run the simulation
-    daily_dynamics, param_sets, sowing_density = run_simulations_1(
+    daily_dynamics, param_sets, density = run_simulations_1(
         archi_params=archi, 
         tec_file=tec_file_xml, 
         plant_file=plt_file_xml, 
@@ -40,9 +40,9 @@ def f_1(n_samples):
         n_samples=n_samples,
         latin_hypercube=False)
     
-    return daily_dynamics, param_sets, sowing_density
+    return daily_dynamics, param_sets, density
     
-def f_2(id_sim, daily_dynamics, param_sets, sowing_density):
+def f_2(id_sim, daily_dynamics, param_sets, density):
     # print(f"Running simulation with seed {seed}")
     # Define the inputs for the simulation
     weather_file = '../data/ntarla_corr.2018'
@@ -53,10 +53,10 @@ def f_2(id_sim, daily_dynamics, param_sets, sowing_density):
     'timezone': 'Europe/Paris'}
 
     # Run the simulation
-    daily_dynamics, param_sets, pot_la, pot_h, realized_la, realized_h, nrj_per_plant, mtgs, filters, sowing_density = run_simulations_2(
+    daily_dynamics, param_sets, pot_la, pot_h, realized_la, realized_h, nrj_per_plant, mtgs, filters, density = run_simulations_2(
         param_sets=param_sets, 
         daily_dynamics=daily_dynamics,
-        sowing_density=sowing_density,
+        density=density,
         weather_file=weather_file,
         location=location,
         opt_filter_organ_duration=False,
@@ -90,7 +90,7 @@ def f_2(id_sim, daily_dynamics, param_sets, sowing_density):
             height_stics = (["time"], daily_dyn["Plant height"]),
             inc_par = (["time"], daily_dyn["Incident PAR"]),
             abs_par_stics = (["time"], daily_dyn["Absorbed PAR"]),
-            sowing_density = sowing_density,
+            density = density,
             realized_la = (["id", "time"], pd.DataFrame.from_dict(realized_la, orient='index', columns=dates)),
             realized_h = (["id", "time"], pd.DataFrame.from_dict(realized_h, orient='index', columns=dates)),
             pot_la = (["id", "time"], pd.DataFrame.from_dict(pot_la, orient='index', columns=dates)),
@@ -128,7 +128,7 @@ def f(n_samples, seed=1):
     'timezone': 'Europe/Paris'}
 
     # Run the simulation
-    daily_dynamics, param_sets, pot_la, pot_h, realized_la, realized_h, nrj_per_plant, mtgs, filters, sowing_density = run_simulations(
+    daily_dynamics, param_sets, pot_la, pot_h, realized_la, realized_h, nrj_per_plant, mtgs, filters, density = run_simulations(
         archi_params=archi, 
         tec_file=tec_file_xml, 
         plant_file=plt_file_xml, 
@@ -168,7 +168,7 @@ def f(n_samples, seed=1):
             height_stics = (["time"], daily_dyn["Plant height"]),
             inc_par = (["time"], daily_dyn["Incident PAR"]),
             abs_par_stics = (["time"], daily_dyn["Absorbed PAR"]),
-            sowing_density = sowing_density,
+            density = density,
             realized_la = (["id", "time"], pd.DataFrame.from_dict(realized_la, orient='index', columns=dates)),
             realized_h = (["id", "time"], pd.DataFrame.from_dict(realized_h, orient='index', columns=dates)),
             pot_la = (["id", "time"], pd.DataFrame.from_dict(pot_la, orient='index', columns=dates)),
@@ -206,7 +206,7 @@ if __name__ == '__main__':
     n_cpu = 20
     id_sim = list(range(1, n_cpu+1))
 
-    daily_dynamics, param_sets, sowing_density = f_1(n)
+    daily_dynamics, param_sets, density = f_1(n)
 
     params_sets_split = {}
     for i in id_sim:
@@ -216,7 +216,7 @@ if __name__ == '__main__':
         # info('main line')
         # print(f"Running with {i} CPU")
         start_time = t.time()
-        p.starmap_async(f_2, [(id, daily_dynamics, params_sets_split[id], sowing_density) for id in id_sim]).get()
+        p.starmap_async(f_2, [(id, daily_dynamics, params_sets_split[id], density) for id in id_sim]).get()
         # p.starmap_async(f, [(sample, seed) for sample, seed in zip(n_samples, seeds)]).get()
         # p.map(slow_prime_finder, [i*1000000 for i in range(1, 11)])
         end_time = t.time()

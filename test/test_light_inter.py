@@ -15,12 +15,12 @@ from openalea.plantgl.all import Color3, Material
 seed(18)  # noqa: F405
 
 # Retrieve STICS management and senescence parameters
-tec_stics, stics_output_data, lifespan, lifespan_early = get_stics_data(
+density, stics_output_data, lifespan, lifespan_early = get_stics_data(
     file_tec_xml='Mais_tec.xml',  # Path to the STICS management XML file
     file_plt_xml='corn_plt.xml',  # Path to the STICS plant XML file
     stics_output_file='mod_smaize.sti'  # Path to the STICS output file
 )
-sowing_density = tec_stics['densitesem']
+# sowing_density = tec_stics['densitesem']
 inter_row = 70
 
 # Retrieve STICS growth and senescence dynamics
@@ -73,9 +73,9 @@ zenith = str(data_path('zenith.light'))
 
 nice_green=Color3((50,100,0))
 
-nplants, positions, domain, domain_area, unit = agronomic_plot(length=1, width=1, sowing_density=sowing_density, inter_row=inter_row, noise=0.1)
+nplants, positions, domain, domain_area, unit = agronomic_plot(length=1, width=1, density=density, inter_row=inter_row, noise=0.1)
 
-inter_plant = 1/sowing_density/inter_row
+inter_plant = 1/density/inter_row
 x_pattern = inter_plant/2
 y_pattern = inter_row/2
 pattern = (-x_pattern, -y_pattern, x_pattern, y_pattern)

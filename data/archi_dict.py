@@ -59,7 +59,7 @@ archi_sorghum = {
     # Leaf area distribution along the stem
     "leaf_area": 4000,
     "rmax": [0.65,0.95], # parameter for leaf area distribution along axis : [0.6,0.8] (Kaitaniemi et al., 1999; Welcker et al., )
-    "skew": 0.001, # parameter for leaf area distribution along axis : [0.0005,0.1] (Kaitaniemi et al., 1999; Welcker et al., )
+    "skew": [0.0005,0.1], # parameter for leaf area distribution along axis : [0.0005,0.1] (Kaitaniemi et al., 1999; Welcker et al., )
     
     # blade area 
     "wl": 0.12, # leaf blade width-to-length ratio : [0.1, 0.12] ()
@@ -69,14 +69,14 @@ archi_sorghum = {
     "f2": 0.92, # parameter for leaf blade shape
 
     # Leaf blade position in space
-    "insertion_angle": [10,60], # leaf blade insertion angle : [10,50] (Truong et al., 2015; Kaitaniemi et al., 1999)
-    "scurv": 0.7, # leaf blade relative inflexion point : [0.6, 0.8] ()
-    "curvature": [0,130], # leaf blade insertion-to-tip angle : [45, 135] (Kaitaniemi et al., 1999)
+    "insertion_angle": [10,90], # leaf blade insertion angle : [10,50] (Truong et al., 2015; Kaitaniemi et al., 1999)
+    "scurv": 0.75, # leaf blade relative inflexion point : [0.6, 0.8] ()
+    "curvature": 60, # leaf blade insertion-to-tip angle : [0,130] [45, 135] (Kaitaniemi et al., 1999)
     "phyllotactic_angle": 180, # phyllotactic angle : [180] (Davis et al., 2024)
     "phyllotactic_deviation": 10, # half-deviation to phyllotactic angle : [0,90] (Davis et al., 2024)
 
     # Development
-    "phyllochron": [30,70], # phyllochron, i.e. stem element appearance rate : [40,65 then x1.6-2.5] (Clerget, 2008)
+    "phyllochron": 51, # [30,70], # phyllochron, i.e. stem element appearance rate : [40,65 then x1.6-2.5] (Clerget, 2008)
     # "plastochron": [40,65], # plastochron, i.e. leaf blade appearance rate : [34,46 then 80-93] (Rami Kumar et al., 2009)
     "stem_duration": 1.6,
     "leaf_duration": 1.6,
@@ -96,14 +96,14 @@ archi_sorghum_angles = {
 
     # Stem
     # "height": [50,400],
-    "stem_q": 0.9, # parameter for ligule height distribution along axis : [1.1] (Kaitaniemi et al., 1999) 
+    "stem_q": 1, # parameter for ligule height distribution along axis : [1.1] (Kaitaniemi et al., 1999) 
     "diam_base": 2.2, # stem base diameter : [2.2] (Ndiaye et al., 2021)
     "diam_top": 1.2, # stem top diameter: [1.2] (Ndiaye et al., 2021)
 
     # Leaf area distribution along the stem
     # "leaf_area": [1000,20000],
-    "rmax": [0.6,0.9], # parameter for leaf area distribution along axis : [0.6,0.8] (Kaitaniemi et al., 1999; Welcker et al., )
-    "skew": 0.001, # 0.0001 # parameter for leaf area distribution along axis : [0.0005,0.1] (Kaitaniemi et al., 1999; Welcker et al., )
+    "rmax": [0.55,0.95], # parameter for leaf area distribution along axis : [0.6,0.8] (Kaitaniemi et al., 1999; Welcker et al., )
+    "skew": [0.0005,0.1], # 0.0001 # parameter for leaf area distribution along axis : [0.0005,0.1] (Kaitaniemi et al., 1999; Welcker et al., )
     
     # blade area 
     "wl": 0.12, # leaf blade width-to-length ratio : [0.1, 0.12] ()
@@ -113,14 +113,14 @@ archi_sorghum_angles = {
     "f2": 0.92, # parameter for leaf blade shape
 
     # Leaf blade position in space
-    "insertion_angle": 35, # [10,60], # leaf blade insertion angle : [10,80] (Truong et al., 2015; Kaitaniemi et al., 1999)
-    "scurv": 0.7, # leaf blade relative inflexion point : [0.5, 0.9] ()
-    "curvature": 65, # [0,130], # leaf blade insertion-to-tip angle : [0, 90] (Kaitaniemi et al., 1999)
+    "insertion_angle": [10,90], # leaf blade insertion angle : [10,80] (Truong et al., 2015; Kaitaniemi et al., 1999)
+    "scurv": 0.75, # leaf blade relative inflexion point : [0.5, 0.9] ()
+    "curvature": 60, # [0,130], # leaf blade insertion-to-tip angle : [0, 90] (Kaitaniemi et al., 1999)
     "phyllotactic_angle": 137.5, # phyllotactic angle : [90;180] (Davis et al., 2024)
     "phyllotactic_deviation": 0, # half-deviation to phyllotactic angle : [0,90] (Davis et al., 2024)
 
     # Development
-    "phyllochron": [40,75], # phyllochron, i.e. stem element appearance rate : [30,70] [40,65 then x1.6-2.5] (Clerget, 2008)
+    "phyllochron": 51, # phyllochron, i.e. stem element appearance rate : [30,70] [40,65 then x1.6-2.5] (Clerget, 2008)
     # "plastochron": 54, # plastochron, i.e. leaf blade appearance rate : [34,46 then 80-93] (Rami Kumar et al., 2009)
     "stem_duration": 1.6,
     "leaf_duration": 1.6,

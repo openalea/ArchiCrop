@@ -2,48 +2,58 @@ from __future__ import annotations
 
 import sys
 
-import pandas as pd
-import xarray as xr
-
 sys.path.append('../data')
-from archi_dict import archi_maize as archi
+from archi_dict import archi_sorghum_angles as archi
 
-from openalea.archicrop.simulation import run_simulations
+from openalea.archicrop.simulation import run_simulations, write_netcdf
+
+seed = 18
 
 # Define the inputs for the simulation
-tec_file_xml='Mais_tec.xml'
-plt_file_xml='corn_plt.xml'
-stics_output_file='mod_smaize.sti'
-weather_file = 'climaisj.meteo'
+tec_file_xml='../data/02NT18SorgV2D1_tec.xml'
+plt_file_xml='../data/sorgho_imp_M_v10_plt.xml'
+stics_output_file='../data/mod_s02NT18SorgV2D1.sti'
+weather_file = '../data/ntarla_corr.2018'
 location = {  
 'longitude': 3.87,
-'latitude': 45,
+'latitude': 12.58,
 'altitude': 800,
 'timezone': 'Europe/Paris'}
 
 # Run the simulation
-daily_dynamics, param_sets, pot_la, pot_h, realized_la, realized_h, nrj_per_plant, mtgs, filters, sowing_density = run_simulations(
+daily_dynamics, params_sets, pot_la, pot_h, realized_la, realized_h, nrj_per_plant, mtgs, filters, density = run_simulations(
     archi_params=archi, 
     tec_file=tec_file_xml, 
     plant_file=plt_file_xml, 
     dynamics_file=stics_output_file, 
     weather_file=weather_file,
     location=location,
-    n_samples=10,
-    latin_hypercube=True,
+    n_samples=3,
+    pot_factor=1.4,
+    latin_hypercube=False,
     opt_filter_organ_duration=False,
     opt_filter_pot_growth=False,
     opt_filter_realized_growth=False,
-    light_inter=False,
-    seed=18)
+    light_inter=True,
+    direct=False,
+    error_LA_pot=1,
+    error_height_pot=1,
+    error_LA_realized=1,
+    error_height_realized=1,
+    seed=seed)
 
+
+write_netcdf("results_light_inter", daily_dynamics, params_sets, pot_la, pot_h, realized_la, realized_h, nrj_per_plant, mtgs, filters, density, seed)
+
+
+'''
 # Prepare the data for xarray Dataset
 daily_dyn = {}
 for key in daily_dynamics[1]:
     daily_dyn[key] = [v[key] for v in daily_dynamics.values()]
 dates = daily_dyn["Date"]
 
-df_archi = pd.DataFrame.from_dict(param_sets, orient='index')
+df_archi = pd.DataFrame.from_dict(params_sets, orient='index')
 ds_archi = df_archi.to_xarray().rename({'index':'id'})
 
 # Create the xarray Dataset
@@ -68,7 +78,7 @@ ds = xr.merge([ds, ds_archi])
 # Save the dataset to a NetCDF file
 ds.to_netcdf("../example/simulation_results.nc")
 
-'''
+
 # Read the dataset back from the NetCDF file
 ds_read = xr.open_dataset("simulation_results.nc")
 # Print the dataset to verify

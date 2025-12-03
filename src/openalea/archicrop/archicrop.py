@@ -35,7 +35,7 @@ class ArchiCrop:
                  swmax=0.55,
                  f1=0.64,
                  f2=0.92,
-                 stem_q=1.1,
+                 stem_q=1,
                  rmax=0.8,
                  skew=0.0005,
                  phyllotactic_angle=137.5,
@@ -241,19 +241,19 @@ class ArchiCrop:
         return growing_plant
     
 
-    def display_stand(self, sowing_density, length_plot, width_plot, inter_row):
+    def display_stand(self, density, length_plot, width_plot, inter_row):
         """
         Display a single plant with PlantGL from an MTG.
 
         :param g: MTG, MTG of a plant
-        :param sowing_density: float, sowing density, same as in the crop model (in plants/m²)
+        :param density: float, density, same as in the crop model (in plants/m²)
         :param length_plot: float, length of the plot (in m)
         :param width_plot: float, width of the plot (in m)
         :param inter_row: float, inter-row (in m?)
 
         :return: PlantGL scene of a plant
         """
-        nplants, positions, domain, domain_area, unit = agronomic_plot(length_plot, width_plot, sowing_density, inter_row, noise=0.1)
+        nplants, positions, domain, domain_area, unit = agronomic_plot(length_plot, width_plot, density, inter_row, noise=0.1)
         nice_green = Color3((50, 100, 0))
         scene, _ = build_scene([self.g]*nplants, positions, leaf_material=Material(nice_green), stem_material=Material(nice_green))
         return scene

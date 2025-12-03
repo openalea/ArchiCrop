@@ -164,7 +164,8 @@ def constraint_satisfaction(params_sets: dict, daily_dynamics: dict, pot_factor:
             for rmax in rmax_int:
                 if rmax != rank/nb_phy and constrained_leaf_areas[rank-1] > 0:
                     skew = compute_skew(rank=rank, nb_phy=nb_phy, rmax=rmax, leaf_areas=leaf_areas_norm)
-                    if 1e-10 < skew < 1.0:
+                    # if 1e-10 < skew < 1.0:
+                    if params['skew'][0] < skew < params['skew'][1]:
                         skews_rmax.append((skew, rmax))
 
         skews_rmax_ok = []
@@ -220,7 +221,7 @@ def LHS_param_sampling(archi_params: dict, n_samples: int, seed: int = 42, latin
             fixed_params[key] = value
         # elif key in {"weibull"}:
         # Parameter distribution in Latin Hypercube
-        elif isinstance(value, list) and key not in ["leaf_lifespan", "rmax"]:  # Range to sample
+        elif isinstance(value, list) and key not in ["leaf_lifespan", "rmax", "skew"]:  # Range to sample
 
             if latin_hypercube:
                 l_bounds.append(min(value))
@@ -232,7 +233,7 @@ def LHS_param_sampling(archi_params: dict, n_samples: int, seed: int = 42, latin
 
             sampled_params.append(key)
 
-        elif key in ["leaf_lifespan", "rmax"]:
+        elif key in ["leaf_lifespan", "rmax", "skew"]:
             fixed_params[key] = value
 
 
@@ -521,7 +522,7 @@ def run_simulations(archi_params: dict,
              light_inter: bool = True, zenith: bool = False, direct : bool = False, save_scenes: bool = False):
 
     # Retrieve STICS management and senescence parameters
-    sowing_density, daily_dynamics, lifespan, lifespan_early = get_stics_data(
+    density, daily_dynamics, lifespan, lifespan_early = get_stics_data(
         file_tec_xml=tec_file,  # Path to the STICS management XML file
         file_plt_xml=plant_file,  # Path to the STICS plant XML file
         stics_output_file=dynamics_file  # Path to the STICS output file
@@ -556,7 +557,7 @@ def run_simulations(archi_params: dict,
         nrj_per_plant = light_interception(
             weather_file=weather_file, 
             daily_dynamics=daily_dynamics, 
-            sowing_density=sowing_density, 
+            density=density, 
             location=location, 
             mtgs=mtgs, 
             zenith=zenith, 
@@ -570,7 +571,7 @@ def run_simulations(archi_params: dict,
     # Dataframe with id, archi_params (dict to df), bool per filter, times series for h, la, nrj + dates ?
     # or xarray
 
-    return daily_dynamics, param_sets, pot_la, pot_h, realized_la, realized_h, nrj_per_plant, mtgs, filters, sowing_density
+    return daily_dynamics, param_sets, pot_la, pot_h, realized_la, realized_h, nrj_per_plant, mtgs, filters, density
 
 
 
@@ -580,7 +581,7 @@ def run_simulations_1(archi_params: dict,
              pot_factor: float = 1.05):
 
     # Retrieve STICS management and senescence parameters
-    sowing_density, daily_dynamics, lifespan, lifespan_early = get_stics_data(
+    density, daily_dynamics, lifespan, lifespan_early = get_stics_data(
         file_tec_xml=tec_file,  # Path to the STICS management XML file
         file_plt_xml=plant_file,  # Path to the STICS plant XML file
         stics_output_file=dynamics_file  # Path to the STICS output file
@@ -594,10 +595,10 @@ def run_simulations_1(archi_params: dict,
 
     param_sets = constraint_satisfaction(params_sets=param_sets, daily_dynamics=daily_dynamics, pot_factor=pot_factor, nb_sampled_values=n_samples)
 
-    return daily_dynamics, param_sets, sowing_density
+    return daily_dynamics, param_sets, density
 
 
-def run_simulations_2(param_sets: dict, daily_dynamics: dict, sowing_density: float,
+def run_simulations_2(param_sets: dict, daily_dynamics: dict, density: float,
              weather_file: str, location: dict,
              opt_filter_organ_duration: bool = True, opt_filter_pot_growth: bool = True, opt_filter_realized_growth: bool = True, 
              error_LA_pot: float = 1, error_height_pot: float = 1, error_LA_realized: float = 0.05, error_height_realized: float = 0.05,
@@ -623,7 +624,7 @@ def run_simulations_2(param_sets: dict, daily_dynamics: dict, sowing_density: fl
         nrj_per_plant = light_interception(
             weather_file=weather_file, 
             daily_dynamics=daily_dynamics, 
-            sowing_density=sowing_density, 
+            density=density, 
             location=location, 
             mtgs=mtgs, 
             zenith=zenith, 
@@ -637,7 +638,7 @@ def run_simulations_2(param_sets: dict, daily_dynamics: dict, sowing_density: fl
     # Dataframe with id, archi_params (dict to df), bool per filter, times series for h, la, nrj + dates ?
     # or xarray
 
-    return daily_dynamics, param_sets, pot_la, pot_h, realized_la, realized_h, nrj_per_plant, mtgs, filters, sowing_density
+    return daily_dynamics, param_sets, pot_la, pot_h, realized_la, realized_h, nrj_per_plant, mtgs, filters, density
 
 
 
@@ -728,7 +729,7 @@ def write_morphospace_as_netcdf(thermal_time: list, params_sets: dict, pot_la: d
 
 
 
-def plot_constained_vs_pot(dates, pot_la, pot_h, leaf_area_plant, height_canopy, sowing_density, stics_color="orange", archicrop_color="green"):
+def plot_constained_vs_pot(dates, pot_la, pot_h, leaf_area_plant, height_canopy, density, stics_color="orange", archicrop_color="green"):
     
     # conversion factor
     cf_cm = 100
@@ -736,8 +737,8 @@ def plot_constained_vs_pot(dates, pot_la, pot_h, leaf_area_plant, height_canopy,
     fig, axes = plt.subplots(2, 1, figsize=(12, 6), sharex=True)  # 1 row, 2 columns
     for la in pot_la.values():
         if la[0] is not None:
-            axes[0].plot(dates, [a*sowing_density/cf_cm**2 for a in la]) # , color=archicrop_color, alpha=0.6)
-    axes[0].plot(dates, [a*sowing_density/cf_cm**2 for a in leaf_area_plant], color=stics_color)
+            axes[0].plot(dates, [a*density/cf_cm**2 for a in la]) # , color=archicrop_color, alpha=0.6)
+    axes[0].plot(dates, [a*density/cf_cm**2 for a in leaf_area_plant], color=stics_color)
     axes[0].set_xticks(np.arange(0, len(dates)+1, (len(dates)+1)/8))
     axes[0].set_ylabel("LAI (m²/m²)", fontsize=16, fontname="Times New Roman")
 
@@ -773,17 +774,17 @@ def plot_constained_vs_pot(dates, pot_la, pot_h, leaf_area_plant, height_canopy,
     plt.show()
 
 
-def plot_constrainted_vs_realized(dates, LA_archicrop, height_archicrop, leaf_area_plant, sen_leaf_area_plant, height_canopy, sowing_density, stics_color="orange", archicrop_color="green"):
+def plot_constrainted_vs_realized(dates, LA_archicrop, height_archicrop, leaf_area_plant, sen_leaf_area_plant, height_canopy, density, stics_color="orange", archicrop_color="green"):
 
     # conversion factor
     cf_cm = 100
 
     fig, axes = plt.subplots(2, 1, figsize=(12, 6), sharex=True)  # 1 row, 2 columns
 
-    axes[0].plot(dates, [(la-sen)*sowing_density/cf_cm**2 for la, sen in zip(leaf_area_plant, sen_leaf_area_plant)], color=stics_color, linewidth=6)
+    axes[0].plot(dates, [(la-sen)*density/cf_cm**2 for la, sen in zip(leaf_area_plant, sen_leaf_area_plant)], color=stics_color, linewidth=6)
     for result in LA_archicrop.values():
         if result[0] is not None:
-            axes[0].plot(dates, [r*sowing_density/cf_cm**2 for r in result], color=archicrop_color) #, alpha=0.6)
+            axes[0].plot(dates, [r*density/cf_cm**2 for r in result], color=archicrop_color) #, alpha=0.6)
     axes[0].set_ylabel("LAI (m²/m²)", fontsize=16, fontname="Times New Roman")
     axes[0].set_xticks(np.arange(0, len(dates)+1, (len(dates)+1)/9))
     # axes[0].set_title("Leaf Area: 3D canopy vs. STICS")
@@ -823,7 +824,7 @@ def plot_constrainted_vs_realized(dates, LA_archicrop, height_archicrop, leaf_ar
     plt.show()
 
 
-def plot_faPAR(dates, nrj_per_plant, par_incident, par_stics, sowing_density, stics_color="orange", archicrop_color="green"):
+def plot_faPAR(dates, nrj_per_plant, par_incident, par_stics, density, stics_color="orange", archicrop_color="green"):
     # curves_array = np.array(nrj_per_plant)
 
     # # Calculate the envelope: min and max values for each time point
@@ -833,7 +834,7 @@ def plot_faPAR(dates, nrj_per_plant, par_incident, par_stics, sowing_density, st
     # Plotting the envelope along with individual curves for context
     fig, ax = plt.subplots(figsize=(12, 6))
     for curve in nrj_per_plant.values():
-        # ax.plot(dates, [nrj*sowing_density/par for nrj,par in zip(curve, par_incident)]) #, color=archicrop_color, alpha=0.4, label="ArchiCrop x Caribu")
+        # ax.plot(dates, [nrj*density/par for nrj,par in zip(curve, par_incident)]) #, color=archicrop_color, alpha=0.4, label="ArchiCrop x Caribu")
         ax.plot(dates, [nrj/par for nrj,par in zip(curve, par_incident)]) #, color=archicrop_color, alpha=0.4, label="ArchiCrop x Caribu")
         # ????????????????
 
@@ -857,7 +858,7 @@ def plot_faPAR(dates, nrj_per_plant, par_incident, par_stics, sowing_density, st
     plt.show()
 
 
-def plot_PAR(dates, nrj_per_plant, par_incident, par_stics, sowing_density, stics_color="orange", archicrop_color="green"):
+def plot_PAR(dates, nrj_per_plant, par_incident, par_stics, density, stics_color="orange", archicrop_color="green"):
     # curves_array = np.array(nrj_per_plant)
 
     # # Calculate the envelope: min and max values for each time point
@@ -867,7 +868,7 @@ def plot_PAR(dates, nrj_per_plant, par_incident, par_stics, sowing_density, stic
     # Plotting the envelope along with individual curves for context
     fig, ax = plt.subplots(figsize=(12, 6))
     for curve in nrj_per_plant.values():
-        # ax.plot(dates, [nrj*sowing_density for nrj in curve]) #, color=archicrop_color, alpha=0.4, label="ArchiCrop x Caribu")
+        # ax.plot(dates, [nrj*density for nrj in curve]) #, color=archicrop_color, alpha=0.4, label="ArchiCrop x Caribu")
         ax.plot(dates, [nrj for nrj in curve]) #, color=archicrop_color, alpha=0.4, label="ArchiCrop x Caribu")
         # ????????????????
 
@@ -891,7 +892,7 @@ def plot_PAR(dates, nrj_per_plant, par_incident, par_stics, sowing_density, stic
     plt.show()
 
 
-def write_netcdf(filename, daily_dynamics, params_sets, pot_la, pot_h, realized_la, realized_h, nrj_per_plant, mtgs, filters, sowing_density, seed):
+def write_netcdf(filename, daily_dynamics, params_sets, pot_la, pot_h, realized_la, realized_h, nrj_per_plant, mtgs, filters, density, seed):
     # Prepare the data for xarray Dataset
     daily_dyn = {}
     for key in daily_dynamics[1]:
@@ -917,7 +918,7 @@ def write_netcdf(filename, daily_dynamics, params_sets, pot_la, pot_h, realized_
             height_stics = (["time"], daily_dyn["Plant height"]),
             inc_par = (["time"], daily_dyn["Incident PAR"]),
             abs_par_stics = (["time"], daily_dyn["Absorbed PAR"]),
-            sowing_density = sowing_density,
+            density = density,
             realized_la = (["id", "time"], pd.DataFrame.from_dict(realized_la, orient='index', columns=dates)),
             realized_h = (["id", "time"], pd.DataFrame.from_dict(realized_h, orient='index', columns=dates)),
             pot_la = (["id", "time"], pd.DataFrame.from_dict(pot_la, orient='index', columns=dates)),
@@ -939,24 +940,24 @@ def write_netcdf(filename, daily_dynamics, params_sets, pot_la, pot_h, realized_
     ds.to_netcdf(f"D:/PhD_Oriane/simulations_ArchiCrop/{today_str}/{filename}_{seed}.nc")
 
 
-def compute_extinction_coef(nrj_per_plant, par_incident, leaf_area_plant, sowing_density):
-    extinP_list = []
-    for nrj_time_series in nrj_per_plant.values():
+def compute_extinction_coef(nrj_per_plant, par_incident, leaf_area_plant, density):
+    extinP_dict = {}
+    for id,nrj_time_series in nrj_per_plant.items():
         extinP_per_sim = []
         for i,(nrj,par) in enumerate(zip(nrj_time_series, par_incident)):
             ratio_par_abs = nrj/par
             if ratio_par_abs <= 1:
-                lai = leaf_area_plant[i]*sowing_density/10000 
+                lai = leaf_area_plant[i]*density/10000 
                 extinP = -1/lai * math.log(1-ratio_par_abs)
             else:
                 extinP = 1
             extinP_per_sim.append(extinP)
-        extinP_list.append(extinP_per_sim)
-    return extinP_list
+        extinP_dict[id] = extinP_per_sim
+    return extinP_dict
 
-def plot_extinction_coef(extinP_stics, extinP_list, dates):
+def plot_extinction_coef(extinP_stics, extin_coefs, dates):
     fig, ax = plt.subplots(figsize=(12, 6))
-    for curve in extinP_list:
+    for curve in extin_coefs.values():
         ax.plot(dates, curve)
     ax.plot(dates, [extinP_stics]*len(dates), color="black", label="STICS")
     ax.set_xticks(np.arange(0, len(dates)+1, (len(dates)+1)/8))

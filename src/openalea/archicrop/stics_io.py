@@ -30,11 +30,11 @@ def read_xml_file(file_xml, params):
     return result
 
 
-def read_sti_file(file_sti, density):
+def read_sti_file(file_sti):
     """Reads a STICS mod_s*.sti output file and builds a dictionary.
     
     :param file: str, input file of STICS outputs :
-        - tempeff(n) : daily efficient thermal time (°C.day)
+        - somupvtsem : cumulative thermal time (°C.day)
         - laimax : canopy max LAI (m2/m2)
         - laisen(n) : senescent LAI (m2/m2)
         - hauteur : canopy height (m)
@@ -90,7 +90,7 @@ def read_sti_file(file_sti, density):
 
     # start = 21 # 23
     # end = 140
-    # density = 10 # density = 20 plants/m2 = 0.002 plants/cm2
+    density = data_dict["densite"][-1] # density = 20 plants/m2 = 0.002 plants/cm2
 
     # Thermal time
     thermal_time = [float(i) for i in data_dict["somupvtsem"]]
@@ -137,7 +137,7 @@ def read_sti_file(file_sti, density):
             "Incident PAR": round(par_inc[i],4),
             "Absorbed PAR": round(par_abs[i],4)}
         for i in range(len(thermal_time))
-    }
+    }, density
 
 
 def get_stics_management_params(file_tec_xml):
@@ -147,25 +147,25 @@ def get_stics_management_params(file_tec_xml):
 
 def get_stics_senescence_params(file_plt_xml):
     """Retrieve STICS senescence parameters from an XML file."""
-    params_sen = ['durvieF', 'ratiodurvieI']
+    params_sen = ['durvieF', 'ratiodurvieI', 'coefb']
     return read_xml_file(file_plt_xml, params_sen)
 
-def get_stics_dynamics(stics_output_file, sowing_density):
+def get_stics_dynamics(stics_output_file):
     """Retrieve STICS growth and senescence dynamics from a STICS output file."""
-    return read_sti_file(stics_output_file, sowing_density)
+    return read_sti_file(stics_output_file)
 
 def get_stics_data(file_tec_xml, file_plt_xml, stics_output_file):
     """Retrieve STICS management and senescence parameters, and growth dynamics."""
     tec_stics = get_stics_management_params(file_tec_xml)
-    sowing_density = tec_stics['densitesem']
+    # sowing_density = tec_stics['densitesem']
     
-    stics_output_data = get_stics_dynamics(stics_output_file, sowing_density)
+    stics_output_data, density = get_stics_dynamics(stics_output_file)
     
     sen_stics = get_stics_senescence_params(file_plt_xml)
     lifespan = sen_stics['durvieF']
     lifespan_early = sen_stics['ratiodurvieI'] * lifespan
     
-    return sowing_density, stics_output_data, lifespan, lifespan_early
+    return density, stics_output_data, lifespan, lifespan_early
 
 
 def stics_weather_3d(filename, daily_dynamics):

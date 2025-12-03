@@ -9,18 +9,18 @@ from numpy import cos, linspace, sin
 from numpy.random import vonmises
 
 
-def compute_domain(sowing_density: float, inter_row: float = 70, conv_coef: float = 100) -> tuple:
+def compute_domain(density: float, inter_row: float = 70, conv_coef: float = 100) -> tuple:
     """
     Calculate the domain of a single plant based on the sowing density and inter-row distance.
     
     Parameters:
-    - sowing_density: Sowing density in plants per square meter.
+    - density: Sowing density in plants per square meter.
     - inter_row: Distance between rows in cm (default is 70 cm).
     
     Returns:
     - A tuple representing the domain of the sowing pattern.
     """
-    inter_plant = (conv_coef / inter_row / sowing_density) * conv_coef  # Convert to cm
+    inter_plant = (conv_coef / inter_row / density) * conv_coef  # Convert to cm
     return ((-0.5 * inter_row, -0.5 * inter_plant), (0.5 * inter_row, 0.5 * inter_plant))
 
 
@@ -86,7 +86,7 @@ def regular_plot(
 def agronomic_plot(
     length=1,
     width=1,
-    sowing_density=10,
+    density=10,
     inter_row=0.5,
     noise=0,
     convunit=100,
@@ -107,7 +107,7 @@ def agronomic_plot(
     """
 
     # find a (nrow, plant_per_row) sowing design that best match plot dimension
-    inter_plant = 1.0 / inter_row / sowing_density
+    inter_plant = 1.0 / inter_row / density
     nrow = max(1, int(round(float(width) / inter_row)))  # noqa: RUF046
     plant_per_row = max(1, int(round(float(length) / inter_plant)))  # noqa: RUF046
     positions, domain, domain_area = regular_plot(

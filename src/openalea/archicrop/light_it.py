@@ -113,12 +113,12 @@ def compute_light_inter(scene, sky, pattern):
 #     'altitude': 56,
 #     'timezone': 'Europe/Paris'}
 
-def light_interception(weather_file, daily_dynamics, sowing_density, location, mtgs, zenith=False, direct=False, save_scenes=False, inter_row=70):
+def light_interception(weather_file, daily_dynamics, density, location, mtgs, zenith=False, direct=False, save_scenes=False, inter_row=70):
     '''Compute light interception on plants with fitting parameters
     Args:
         weather_file: path to the weather file
         daily_dynamics: daily dynamics from STICS
-        sowing_density: sowing density
+        density: sowing density
         location: dictionary with location parameters (longitude, latitude, altitude, timezone)
         mtgs: list of MTGs for each plant
         zenith: if True, use zenith light sources
@@ -130,7 +130,7 @@ def light_interception(weather_file, daily_dynamics, sowing_density, location, m
     df_weather = stics_weather_3d(filename=weather_file, daily_dynamics=daily_dynamics)
 
     # Sowing pattern
-    domain = compute_domain(sowing_density = sowing_density, inter_row = inter_row) # cm
+    domain = compute_domain(density = density, inter_row = inter_row) # cm
 
     # Define incident PAR
     if zenith:

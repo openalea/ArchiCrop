@@ -38,7 +38,7 @@ def test_light_interception_real(minimal_mtg):
         2: {"Date": dates[1], "Incident PAR": 22},
         3: {"Date": dates[2], "Incident PAR": 24}
     }
-    sowing_density = 10
+    density = 10
     location = {'longitude': 3.87, 'latitude': 45, 'altitude': 56, 'timezone': 'Europe/Paris'}
 
     # You need a real weather file compatible with your pipeline
@@ -48,7 +48,7 @@ def test_light_interception_real(minimal_mtg):
     nrj_per_plant = light_interception(
         weather_file=weather_file,
         daily_dynamics=daily_dynamics,
-        sowing_density=sowing_density,
+        density=density,
         location=location,
         mtgs=minimal_mtg,
         zenith=True,
