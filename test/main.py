@@ -4,6 +4,7 @@ import os
 import sys
 import time as t
 from datetime import date
+from math import ceil
 from multiprocessing import Pool
 
 import pandas as pd
@@ -38,11 +39,12 @@ def f_1(n_samples):
         plant_file=plt_file_xml, 
         dynamics_file=stics_output_file, 
         n_samples=n_samples,
-        latin_hypercube=False)
+        latin_hypercube=False,
+        pot_factor=1.4)
     
     return daily_dynamics, param_sets, density
     
-def f_2(id_sim, daily_dynamics, param_sets, density):
+def f_2(id_sim, daily_dynamics, param_sets, density, light_inter=False):
     # print(f"Running simulation with seed {seed}")
     # Define the inputs for the simulation
     weather_file = '../data/ntarla_corr.2018'
@@ -62,8 +64,7 @@ def f_2(id_sim, daily_dynamics, param_sets, density):
         opt_filter_organ_duration=False,
         opt_filter_pot_growth=False,
         opt_filter_realized_growth=False,
-        light_inter=True)
-    
+        light_inter=light_inter)
 
     # Prepare the data for xarray Dataset
     daily_dyn = {}
@@ -71,13 +72,18 @@ def f_2(id_sim, daily_dynamics, param_sets, density):
         daily_dyn[key] = [v[key] for v in daily_dynamics.values()]
     dates = pd.to_datetime(daily_dyn['Date'])
 
+    # Unique ids among all simulations (<1000 sim per cpu)
+    # ids = range(id_sim*1000, id_sim*1000 + len(realized_la)+1)
+    # for d in [param_sets, realized_la, realized_h, pot_la, pot_h, nrj_per_plant, mtgs]:
+    #     for i,k in enumerate(list(d.keys())):
+    #         k = ids[i]
 
     df_archi = pd.DataFrame.from_dict(param_sets, orient='index')
     ds_archi = df_archi.to_xarray().rename({'index':'id'})
 
-    columns_filters = [f"filter_{i}" for i in [1,2,3]]
-    df_filters = pd.DataFrame.from_dict(filters, orient='index', columns=columns_filters)
-    ds_filters = df_filters.to_xarray().rename({'index':'id'})
+    # columns_filters = [f"filter_{i}" for i in [1,2,3]]
+    # df_filters = pd.DataFrame.from_dict(filters, orient='index', columns=columns_filters)
+    # ds_filters = df_filters.to_xarray().rename({'index':'id'})
 
     mtgs_string = {k: [write_mtg(g) for g in mtg] for k, mtg in mtgs.items()}
 
@@ -99,12 +105,13 @@ def f_2(id_sim, daily_dynamics, param_sets, density):
             mtgs = (["id", "time"], pd.DataFrame.from_dict(mtgs_string, orient='index', columns=dates)) 
         ),
         coords=dict(  # noqa: C408
-            id = range(len(realized_la)),
+            # id = ids,
+            id = list(realized_la.keys()),
             time = dates
         )
     )
 
-    ds = xr.merge([ds, ds_archi, ds_filters])
+    ds = xr.merge([ds, ds_archi]) #, ds_filters])
 
     # Save the dataset to a NetCDF file
     today_str = date.today().strftime("%Y-%m-%d")
@@ -153,9 +160,9 @@ def f(n_samples, seed=1):
     df_archi = pd.DataFrame.from_dict(param_sets, orient='index')
     ds_archi = df_archi.to_xarray().rename({'index':'id'})
 
-    columns_filters = [f"filter_{i}" for i in [1,2,3]]
-    df_filters = pd.DataFrame.from_dict(filters, orient='index', columns=columns_filters)
-    ds_filters = df_filters.to_xarray().rename({'index':'id'})
+    # columns_filters = [f"filter_{i}" for i in [1,2,3]]
+    # df_filters = pd.DataFrame.from_dict(filters, orient='index', columns=columns_filters)
+    # ds_filters = df_filters.to_xarray().rename({'index':'id'})
 
     mtgs_string = {k: [write_mtg(g) for g in mtg] for k, mtg in mtgs.items()}
 
@@ -182,7 +189,7 @@ def f(n_samples, seed=1):
         )
     )
 
-    ds = xr.merge([ds, ds_archi, ds_filters])
+    ds = xr.merge([ds, ds_archi]) #, ds_filters])
 
     # Save the dataset to a NetCDF file
     ds.to_netcdf(f"results_{seed}.nc")
@@ -192,32 +199,49 @@ def read_and_merge_netcdf_files(files):
     ds = xr.Dataset()
     for file in files:
         ds_read = xr.open_dataset(file)
-        # Replace ids by id+len(ds)
-        for i in range(len(ds_read.id.values)):
-            ds_read.id.values[i] += len(ds.id.values)
+        # # Replace ids by id+len(ds)
+        # for i in range(len(ds_read.id.values)):
+        #     ds_read.id.values[i] += len(ds.id.values)
         ds = xr.merge([ds, ds_read])
+    return ds
     # TO TEST !!!!
 
 
 if __name__ == '__main__':
 
     n = 5
-    n_samples = [1]*n
-    n_cpu = 20
+    # n_samples = [1]*n
+    n_cpu = 5
     id_sim = list(range(1, n_cpu+1))
+    light_inter = True
 
     daily_dynamics, param_sets, density = f_1(n)
 
-    params_sets_split = {}
-    for i in id_sim:
-        params_sets_split[i] = {k: v for k, v in param_sets.items() if k % n_cpu == i}
+    # params_sets_split = {}
+    # for i in id_sim:
+    #     params_sets_split[i] = {k: v for k, v in param_sets.items() if (k % n_cpu)+1 == i}
+    # print(params_sets_split)
+
+    keys = list(param_sets.keys())
+    chunk_size = ceil(len(keys) / n_cpu)
+
+    params_sets_split = {
+        i: {k: param_sets[k] for k in keys[i*chunk_size:(i+1)*chunk_size]}
+        for i in id_sim
+    }
 
     with Pool(n_cpu) as p:
         # info('main line')
         # print(f"Running with {i} CPU")
         start_time = t.time()
-        p.starmap_async(f_2, [(id, daily_dynamics, params_sets_split[id], density) for id in id_sim]).get()
+        p.starmap_async(f_2, [(id, daily_dynamics, params_sets_split[id], density, light_inter) for id in id_sim]).get()
         # p.starmap_async(f, [(sample, seed) for sample, seed in zip(n_samples, seeds)]).get()
         # p.map(slow_prime_finder, [i*1000000 for i in range(1, 11)])
         end_time = t.time()
         print(f"Time taken with {n_cpu} CPU: {end_time - start_time:.2f} seconds")
+
+    today_str = date.today().strftime("%Y-%m-%d")
+    directory = f"{today_str}/"
+    files = [directory+f for f in os.listdir(directory) if f.startswith("results_") and f.endswith(".nc")]
+    ds = read_and_merge_netcdf_files(files)
+

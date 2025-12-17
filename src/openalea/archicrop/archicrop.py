@@ -9,6 +9,8 @@ from openalea.plantgl.all import Color3, Material
 from .cereal_plant import cereal
 from .display import build_scene
 from .growth import (
+    demand_dist,
+    equal_dist,
     init_visible_variables,
     mtg_turtle_time_with_constraint,
 )
@@ -213,7 +215,7 @@ class ArchiCrop:
         # return self.g
     '''
     
-    def grow_plant(self):
+    def grow_plant(self, rate=True, distribution_function=demand_dist):
         """
         Grow a plant following incremental constraints.
 
@@ -234,7 +236,7 @@ class ArchiCrop:
         growing_plant = {}
         self.g = init_visible_variables(self.g, daily_dynamics=self.daily_dynamics)
         for k,v in self.daily_dynamics.items():
-            gtemp = mtg_turtle_time_with_constraint(self.g, k, v)
+            gtemp = mtg_turtle_time_with_constraint(self.g, k, v, rate=rate, distribution_function=distribution_function)
             growing_plant[v["Date"]] = gtemp
             self.g = gtemp.copy() # copy
         

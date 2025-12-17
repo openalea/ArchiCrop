@@ -73,7 +73,7 @@ def read_sti_file(file_sti):
                 values = values[:4] + values[5:]
             # Convert the values to floats
             row = {col.strip(): float(value) for col, value in zip(stripped_header, values)}
-            if row["hauteur"] != 0.0:
+            if row["hauteur"] > 0.0 or row["laisen(n)"] < row["laimax"]:
                 non_zero_height_encountered = True
                 
                 # Extract date values
@@ -85,7 +85,7 @@ def read_sti_file(file_sti):
 
                 for col in stripped_header:
                     data_dict[col.strip()].append(row[col.strip()])
-            if non_zero_height_encountered and (row["hauteur"] == 0.0):
+            if non_zero_height_encountered and (row["hauteur"] <= 0.0 or row["laisen(n)"] >= row["laimax"]):
                 break
 
     # start = 21 # 23

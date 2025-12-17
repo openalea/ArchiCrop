@@ -41,34 +41,6 @@ def geometric_dist(height, nb_phy, q, u0):
     return heights.tolist()
 
 
-def collar_heights_kaitaniemi(height, nb_phy):
-    """return collar heights"""
-    # coefficient k between height of successive collars : 1,17/(1-2,29*exp(-0,79*i))  and k=1,3 for penultimate and k=1,44 for last
-    k = [1.17/(1-2.29*math.exp(-0.79*i)) for i in range(1, nb_phy-2)]
-    k_pelnultimate = 1.3
-    k.append(k_pelnultimate)
-    k_flag = 1.44
-    k.append(k_flag)
-
-    # Compute first collar height
-    k_product = 1
-    k_sum = 1
-    for j in k:
-        k_product *= j
-        k_sum += k_product
-
-    u1 = height * 1/k_sum
-
-    # Compute other collars height
-    internode_lengths = [u1]
-    k_product = 1  
-    for f in k:
-        k_product *= f
-        internode_lengths.append(k_product * u1)
-
-    return np.cumsum(np.array(internode_lengths))
-
-
 # def bell_shaped_dist(max_leaf_length, nb_phy, rmax, skew):
 #     """returns relative leaf area of individual leaves along bell shaped model"""
 #     k = -np.log(skew) * rmax

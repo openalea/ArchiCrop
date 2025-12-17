@@ -443,7 +443,7 @@ def cereal(nb_phy, phyllochron, plastochron, stem_duration, leaf_duration,
         factor = axis_factors[axis]
         # Area per leaf for this axis
         area_per_leaf = leaf_area * factor / total_factor # if nb_leaves_per_axis[axis] > 0 else 0
-        height_per_axis = height * factor / total_factor # if nb_leaves_per_axis[axis] > 0 else 0
+        height_per_axis = height * (reduction_factor ** axis_orders[axis]) # if nb_leaves_per_axis[axis] > 0 else 0
         for vid in leaves:
             scaled_leaf_area = g.node(vid).leaf_area * area_per_leaf
             g.node(vid).leaf_area = scaled_leaf_area  

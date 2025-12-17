@@ -155,7 +155,7 @@ def constraint_satisfaction(params_sets: dict, daily_dynamics: dict, pot_factor:
                 # archi_params["rmax"] = rmax_int
                 break
 
-        rmax_int = np.linspace(max(0,max((id_max-2)/nb_phy, params['rmax'][0])), min(1,min((id_max+2)/nb_phy, params['rmax'][1])), 10)
+        rmax_int = np.linspace(max(0,max((id_max-3)/nb_phy, params['rmax'][0])), min(1,min((id_max+3)/nb_phy, params['rmax'][1])), 10)
     
         leaf_areas_norm = [la/max(constrained_leaf_areas) for la in constrained_leaf_areas]
         
@@ -593,7 +593,10 @@ def run_simulations_1(archi_params: dict,
     # Sampling parameters using Latin Hypercube Sampling
     param_sets = LHS_param_sampling(archi_params=archi_params, n_samples=n_samples, seed=seed, latin_hypercube=latin_hypercube)
 
-    param_sets = constraint_satisfaction(params_sets=param_sets, daily_dynamics=daily_dynamics, pot_factor=pot_factor, nb_sampled_values=n_samples)
+    param_sets = constraint_satisfaction(
+        params_sets=param_sets, 
+        daily_dynamics=daily_dynamics, 
+        pot_factor=pot_factor)
 
     return daily_dynamics, param_sets, density
 
@@ -601,7 +604,7 @@ def run_simulations_1(archi_params: dict,
 def run_simulations_2(param_sets: dict, daily_dynamics: dict, density: float,
              weather_file: str, location: dict,
              opt_filter_organ_duration: bool = True, opt_filter_pot_growth: bool = True, opt_filter_realized_growth: bool = True, 
-             error_LA_pot: float = 1, error_height_pot: float = 1, error_LA_realized: float = 0.05, error_height_realized: float = 0.05,
+             error_LA_pot: float = 1, error_height_pot: float = 1, error_LA_realized: float = 1, error_height_realized: float = 1,
              inter_row: float = 70,
              light_inter: bool = True, zenith: bool = False, direct : bool = False, save_scenes: bool = False):
 

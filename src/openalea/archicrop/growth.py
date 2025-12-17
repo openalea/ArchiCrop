@@ -166,7 +166,7 @@ def distribute_to_potential(g, growing_organs, day, time, time_increment, increm
 
 
 
-def distribute_among_organs(g, day, daily_dynamics, rate=True):
+def distribute_among_organs(g, day, daily_dynamics, rate=True, distribution_function=demand_dist):
     """Fill the dictionnary of variables recording growth process at a given time"""
 
     time = daily_dynamics["Thermal time"]
@@ -189,7 +189,7 @@ def distribute_among_organs(g, day, daily_dynamics, rate=True):
                                 time=time,
                                 time_increment=thermal_time_incr,
                                 increment_to_distribute=daily_dynamics["Leaf area increment"], 
-                                distribution_function=demand_dist, 
+                                distribution_function=distribution_function, 
                                 grow_function=update_cereal_leaf_growth)
                                 # to_print=to_print)
     # else:
@@ -413,7 +413,7 @@ def update_leaf_senescence_area(n, sen_LA_for_this_leaf, day, time_increment=Non
     # print(n.senescent_lengths)
 
 
-def mtg_turtle_time_with_constraint(g, day, daily_dynamics, update_visitor=None):  # noqa: ARG001
+def mtg_turtle_time_with_constraint(g, day, daily_dynamics, rate=True, distribution_function=demand_dist, update_visitor=None):  # noqa: ARG001
     """Compute the geometry on each node of the MTG using Turtle geometry.
 
     Update_visitor is a function called on each node in a pre order (parent before children).
@@ -428,7 +428,7 @@ def mtg_turtle_time_with_constraint(g, day, daily_dynamics, update_visitor=None)
 
     time = daily_dynamics["Thermal time"]
 
-    distribute_among_organs(g, day, daily_dynamics, rate=True)
+    distribute_among_organs(g, day, daily_dynamics, rate=rate, distribution_function=distribution_function)
     # print("sen len", g.properties()["senescent_length"].values())
 
     # to remove
