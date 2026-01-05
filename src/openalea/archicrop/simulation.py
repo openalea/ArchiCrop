@@ -126,8 +126,9 @@ def constraint_satisfaction(params_sets: dict, daily_dynamics: dict, pot_factor:
         # nb_phy = math.floor((end_veg-thermal_time[0]-phyllochron * leaf_duration)/phyllochron) # compute with floats !!
         # params_sets[id]["nb_phy"] = nb_phy
         nb_phy = params["nb_phy"]
-        phyllochron = end_veg-thermal_time[0]/(nb_phy + leaf_duration)
-        if phyllochron in params["phyllochron"]:
+        phyllochron = (end_veg-thermal_time[0])/(nb_phy + leaf_duration)
+        # print(phyllochron)
+        if min(params["phyllochron"]) <= phyllochron <= max(params["phyllochron"]):
             params_sets[id]["phyllochron"] = phyllochron
 
             # Compute organ development
@@ -183,6 +184,7 @@ def constraint_satisfaction(params_sets: dict, daily_dynamics: dict, pot_factor:
                 if ok:
                     skews_rmax_ok.append((skew, rmax))
                     
+            
             for (s,r) in skews_rmax_ok[:1]: #########################################
                 # Build new parameter set with updated 'skew' and 'rmax'
                 new_param = {}
