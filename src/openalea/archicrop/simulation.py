@@ -127,7 +127,7 @@ def constraint_satisfaction(params_sets: dict, daily_dynamics: dict, pot_factor:
         # params_sets[id]["nb_phy"] = nb_phy
         nb_phy = params["nb_phy"]
         phyllochron = end_veg-thermal_time[0]/(nb_phy + leaf_duration)
-        if phyllochron in params["nb_phy"]:
+        if phyllochron in params["phyllochron"]:
             params_sets[id]["phyllochron"] = phyllochron
 
             # Compute organ development
