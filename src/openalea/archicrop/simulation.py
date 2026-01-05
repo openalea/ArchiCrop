@@ -941,8 +941,8 @@ def write_netcdf(filename, daily_dynamics, params_sets, pot_la, pot_h, realized_
 
     # Save the dataset to a NetCDF file
     today_str = date.today().strftime("%Y-%m-%d")
-    os.makedirs(f"D:/PhD_Oriane/simulations_ArchiCrop/{today_str}", exist_ok=True)  # noqa: PTH103
-    ds.to_netcdf(f"D:/PhD_Oriane/simulations_ArchiCrop/{today_str}/{filename}_{seed}.nc")
+    os.makedirs(f"../simulations_ArchiCrop/{today_str}", exist_ok=True)  # noqa: PTH103
+    ds.to_netcdf(f"../simulations_ArchiCrop/{today_str}/{filename}_{seed}.nc")
 
 
 def compute_extinction_coef(nrj_per_plant, par_incident, leaf_area_plant, density):
