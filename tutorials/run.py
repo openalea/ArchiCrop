@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import sys
+import time as t
 
 sys.path.append('../data')
 from archi_dict import archi_sorghum_angles as archi
@@ -20,6 +21,8 @@ location = {
 'altitude': 800,
 'timezone': 'Europe/Paris'}
 
+start_time = t.time()
+
 # Run the simulation
 daily_dynamics, params_sets, pot_la, pot_h, realized_la, realized_h, nrj_per_plant, mtgs, density = run_simulations(
     archi_params=archi, 
@@ -28,59 +31,18 @@ daily_dynamics, params_sets, pot_la, pot_h, realized_la, realized_h, nrj_per_pla
     dynamics_file=stics_output_file, 
     weather_file=weather_file,
     location=location,
-    n_samples=3,
-    pot_factor=1.4,
+    n_samples=4,
+    pot_factor=1.5,
     latin_hypercube=False,
-    opt_filter_organ_duration=False,
-    opt_filter_pot_growth=False,
-    opt_filter_realized_growth=False,
     light_inter=True,
     direct=False,
-    error_LA_pot=1,
-    error_height_pot=1,
-    error_LA_realized=1,
-    error_height_realized=1,
     seed=seed)
 
+end_time = t.time()
+
+elapsed_time = (end_time - start_time)/3600
+print(f"Simulation time: {elapsed_time:.2f} hours for {len(realized_la)} simulations")  # noqa: T201
 
 write_netcdf("results_light_inter", daily_dynamics, params_sets, pot_la, pot_h, realized_la, realized_h, nrj_per_plant, density, seed)
 
-
-'''
-# Prepare the data for xarray Dataset
-daily_dyn = {}
-for key in daily_dynamics[1]:
-    daily_dyn[key] = [v[key] for v in daily_dynamics.values()]
-dates = daily_dyn["Date"]
-
-df_archi = pd.DataFrame.from_dict(params_sets, orient='index')
-ds_archi = df_archi.to_xarray().rename({'index':'id'})
-
-# Create the xarray Dataset
-ds = xr.Dataset(
-    data_vars=dict(  # noqa: C408
-        # for param in df_archi.columns:
-            
-        thermal_time = (["time"], daily_dyn["Thermal time"]),
-        lai = (["time"], daily_dyn["Plant leaf area"]),
-        realized_la = (["id", "time"], pd.DataFrame.from_dict(realized_la, orient='index', columns=dates)),
-        realized_h = (["id", "time"], pd.DataFrame.from_dict(realized_h, orient='index', columns=dates)),
-    ),
-    coords=dict(  # noqa: C408
-        id = range(len(realized_la)),
-        time = dates
-    )
-)
-
-ds = xr.merge([ds, ds_archi])
-
-
-# Save the dataset to a NetCDF file
-ds.to_netcdf("../example/simulation_results.nc")
-
-
-# Read the dataset back from the NetCDF file
-ds_read = xr.open_dataset("simulation_results.nc")
-# Print the dataset to verify
-print(ds_read['lai'].values)
-'''
+print(f"Simulations saved")  # noqa: T201

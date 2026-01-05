@@ -1,12 +1,6 @@
-import os
 import sys
 import time as t
 from datetime import date
-from multiprocessing import Pool
-
-import matplotlib.pyplot as plt
-import numpy as np
-import xarray as xr
 
 sys.path.append("../data") 
 from archi_dict import archi_sorghum_angles as archi
