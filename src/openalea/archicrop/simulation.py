@@ -236,7 +236,7 @@ def param_sampling(archi_params: dict, n_samples: int, seed: int = 42, latin_hyp
 
             sampled_params.append(key)
 
-        elif key in ["leaf_lifespan", "rmax", "skew"]:
+        elif key in ["leaf_lifespan", "rmax", "skew", "phyllochron"]:
             fixed_params[key] = value
 
 
