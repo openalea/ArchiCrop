@@ -33,7 +33,7 @@ def f_1(n_samples):
     stics_output_file='../data/mod_s02NT18SorgV2D1.sti'
 
     # Run the simulation
-    daily_dynamics, param_sets, density = run_simulations_1(
+    daily_dynamics, param_sets, density, inter_row = run_simulations_1(
         archi_params=archi, 
         tec_file=tec_file_xml, 
         plant_file=plt_file_xml, 
@@ -42,9 +42,9 @@ def f_1(n_samples):
         latin_hypercube=False,
         pot_factor=1.4)
     
-    return daily_dynamics, param_sets, density
+    return daily_dynamics, param_sets, density, inter_row
     
-def f_2(id_sim, daily_dynamics, param_sets, density, light_inter=False):
+def f_2(id_sim, daily_dynamics, param_sets, density, inter_row, light_inter=False):
     # print(f"Running simulation with seed {seed}")
     # Define the inputs for the simulation
     weather_file = '../data/ntarla_corr.2018'
@@ -55,12 +55,13 @@ def f_2(id_sim, daily_dynamics, param_sets, density, light_inter=False):
     'timezone': 'Europe/Paris'}
 
     # Run the simulation
-    daily_dynamics, param_sets, pot_la, pot_h, realized_la, realized_h, nrj_per_plant, mtgs, filters, density = run_simulations_2(
+    daily_dynamics, param_sets, pot_la, pot_h, realized_la, realized_h, nrj_per_plant, mtgs, density = run_simulations_2(
         param_sets=param_sets, 
         daily_dynamics=daily_dynamics,
         density=density,
         weather_file=weather_file,
         location=location,
+        inter_row=inter_row,
         opt_filter_organ_duration=False,
         opt_filter_pot_growth=False,
         opt_filter_realized_growth=False,
@@ -135,7 +136,7 @@ def f(n_samples, seed=1):
     'timezone': 'Europe/Paris'}
 
     # Run the simulation
-    daily_dynamics, param_sets, pot_la, pot_h, realized_la, realized_h, nrj_per_plant, mtgs, filters, density = run_simulations(
+    daily_dynamics, param_sets, pot_la, pot_h, realized_la, realized_h, nrj_per_plant, mtgs, density = run_simulations(
         archi_params=archi, 
         tec_file=tec_file_xml, 
         plant_file=plt_file_xml, 
@@ -144,6 +145,7 @@ def f(n_samples, seed=1):
         location=location,
         n_samples=n_samples,
         latin_hypercube=False,
+        pot_factor=1.4,
         opt_filter_organ_duration=False,
         opt_filter_pot_growth=False,
         opt_filter_realized_growth=False,

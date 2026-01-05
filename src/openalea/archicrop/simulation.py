@@ -41,7 +41,7 @@ def dict_ranges_to_all_possible_combinations(d):
     return list(itertools.product(*values))
 
 
-def constrain_archi_params(archi_params: dict, daily_dynamics: dict, lifespan: float, lifespan_early: float) -> dict:
+def constrain_archi_params(archi_params: dict, daily_dynamics: dict, lifespan: float, lifespan_early: float, pot_factor: float) -> dict:
     """
     Complete the architecture parameters with values from daily dynamics.
     """
@@ -49,8 +49,8 @@ def constrain_archi_params(archi_params: dict, daily_dynamics: dict, lifespan: f
         leaf_area_plant = [value["Plant leaf area"] for value in daily_dynamics.values()]
         height_canopy = [value["Plant height"] for value in daily_dynamics.values()]
 
-        archi_params["height"] = 1.2*max(height_canopy) # [1*max(height_canopy), 1.5*max(height_canopy)] # [1*max(height_canopy), 2*max(height_canopy)]
-        archi_params["leaf_area"] = 1.2*max(leaf_area_plant) # [1*max(leaf_area_plant), 1.5*max(leaf_area_plant)] # [1*max(leaf_area_plant), 2*max(leaf_area_plant)]
+        archi_params["height"] = pot_factor*max(height_canopy) # [1*max(height_canopy), 1.5*max(height_canopy)] # [1*max(height_canopy), 2*max(height_canopy)]
+        archi_params["leaf_area"] = pot_factor*max(leaf_area_plant) # [1*max(leaf_area_plant), 1.5*max(leaf_area_plant)] # [1*max(leaf_area_plant), 2*max(leaf_area_plant)]
 
     if lifespan is not None:
         archi_params["leaf_lifespan"] = lifespan
@@ -122,74 +122,78 @@ def constraint_satisfaction(params_sets: dict, daily_dynamics: dict, pot_factor:
     # Value intervals for parameters
     for id,params in params_sets.items(): 
         leaf_duration = params["leaf_duration"]
-        phyllochron = params["phyllochron"]
-        nb_phy = math.floor((end_veg-thermal_time[0]-phyllochron * leaf_duration)/phyllochron) # compute with floats !!
-        params_sets[id]["nb_phy"] = nb_phy
+        # phyllochron = params["phyllochron"]
+        # nb_phy = math.floor((end_veg-thermal_time[0]-phyllochron * leaf_duration)/phyllochron) # compute with floats !!
+        # params_sets[id]["nb_phy"] = nb_phy
+        nb_phy = params["nb_phy"]
+        phyllochron = end_veg-thermal_time[0]/(nb_phy + leaf_duration)
+        if phyllochron in params["nb_phy"]:
+            params_sets[id]["phyllochron"] = phyllochron
 
-        # Compute organ development
-        starts = [i * phyllochron + thermal_time[0] for i in range(nb_phy)]
-        ends = [start + phyllochron * leaf_duration for start in starts]
+            # Compute organ development
+            starts = [i * phyllochron + thermal_time[0] for i in range(nb_phy)]
+            ends = [start + phyllochron * leaf_duration for start in starts]
 
-        # Interpolate growth dynamics and compute it at given points (instead of daily)
-        spl_la = splrep(thermal_time, leaf_area_plant)
-        # la_starts = splev(starts, spl_la)
-        la_ends = splev(ends, spl_la)
+            # Interpolate growth dynamics and compute it at given points (instead of daily)
+            spl_la = splrep(thermal_time, leaf_area_plant)
+            # la_starts = splev(starts, spl_la)
+            la_ends = splev(ends, spl_la)
 
-        spl_h = splrep(thermal_time, height_plant)
-        # h_starts = splev(starts, spl_h)
-        h_ends = splev(ends, spl_h)
+            spl_h = splrep(thermal_time, height_plant)
+            # h_starts = splev(starts, spl_h)
+            h_ends = splev(ends, spl_h)
 
-        # Numeric solution for constrained growth
-        # Leaves
-        constrained_leaf_areas = resolve_organ_growth(nb_phy, leaf_duration, la_ends)
+            # Numeric solution for constrained growth
+            # Leaves
+            constrained_leaf_areas = resolve_organ_growth(nb_phy, leaf_duration, la_ends)
 
-        range_tt = range(round(thermal_time[0]), round(thermal_time[-1]))
-        interp_la = splev(range_tt, spl_la)
-        rates_la = [interp_la[i]-interp_la[i-1] if i > 0 else 0 for i in range(len(interp_la))]
+            range_tt = range(round(thermal_time[0]), round(thermal_time[-1]))
+            interp_la = splev(range_tt, spl_la)
+            rates_la = [interp_la[i]-interp_la[i-1] if i > 0 else 0 for i in range(len(interp_la))]
 
 
-        for i, la in enumerate(constrained_leaf_areas):
-            if la == max(constrained_leaf_areas):
-                id_max = i+1
-                # rmax_int = [max(0,(id_max-1)/nb_phy), min(1,(id_max+1)/nb_phy)]
-                # archi_params["rmax"] = rmax_int
-                break
-
-        rmax_int = np.linspace(max(0,max((id_max-3)/nb_phy, params['rmax'][0])), min(1,min((id_max+3)/nb_phy, params['rmax'][1])), 10)
-    
-        leaf_areas_norm = [la/max(constrained_leaf_areas) for la in constrained_leaf_areas]
-        
-        skews_rmax = []
-        for rank in range(1, nb_phy+1):
-            for rmax in rmax_int:
-                if rmax != rank/nb_phy and constrained_leaf_areas[rank-1] > 0:
-                    skew = compute_skew(rank=rank, nb_phy=nb_phy, rmax=rmax, leaf_areas=leaf_areas_norm)
-                    # if 1e-10 < skew < 1.0:
-                    if params['skew'][0] < skew < params['skew'][1]:
-                        skews_rmax.append((skew, rmax))
-
-        skews_rmax_ok = []
-        for skew,rmax in skews_rmax:
-            ok = True
-            bell_shaped_leaf_areas = bell_shaped_dist(leaf_area_plant[-1]*pot_factor, nb_phy, rmax, skew)
-            for i,bs in enumerate(bell_shaped_leaf_areas):
-                if bs <= constrained_leaf_areas[i]: #-(0.05*max(constrained_leaf_areas)):
-                    ok = False
+            for i, la in enumerate(constrained_leaf_areas):
+                if la == max(constrained_leaf_areas):
+                    id_max = i+1
+                    # rmax_int = [max(0,(id_max-1)/nb_phy), min(1,(id_max+1)/nb_phy)]
+                    # archi_params["rmax"] = rmax_int
                     break
-            if ok:
-                skews_rmax_ok.append((skew, rmax))
-                
-        for (s,r) in skews_rmax_ok:
-            # Build new parameter set with updated 'skew' and 'rmax'
-            new_param = {}
-            for key, value in params.items():
-                if key == "skew":
-                    new_param[key] = s
-                elif key == "rmax":
-                    new_param[key] = r
-                else:
-                    new_param[key] = value
-            new_params_sets[len(new_params_sets)+1] = new_param
+
+            rmax_int = np.linspace(max(0,max((id_max-1)/nb_phy, params['rmax'][0])), min(1,min((id_max+1)/nb_phy, params['rmax'][1])), 10)
+        
+            leaf_areas_norm = [la/max(constrained_leaf_areas) for la in constrained_leaf_areas]
+            
+            skews_rmax = []
+            for rank in range(1, nb_phy+1):
+                for rmax in rmax_int:
+                    if rmax != rank/nb_phy and constrained_leaf_areas[rank-1] > 0:
+                        skew = compute_skew(rank=rank, nb_phy=nb_phy, rmax=rmax, leaf_areas=leaf_areas_norm)
+                        # if 1e-10 < skew < 1.0:
+                        if params['skew'][0] < skew < params['skew'][1]:
+                            skews_rmax.append((skew, rmax))
+
+            skews_rmax_ok = []
+            for skew,rmax in skews_rmax:
+                ok = True
+                bell_shaped_leaf_areas = bell_shaped_dist(leaf_area_plant[-1]*pot_factor, nb_phy, rmax, skew)
+                for i,bs in enumerate(bell_shaped_leaf_areas):
+                    if bs <= constrained_leaf_areas[i]: #-(0.05*max(constrained_leaf_areas)):
+                        ok = False
+                        break
+                if ok:
+                    skews_rmax_ok.append((skew, rmax))
+                    
+            for (s,r) in skews_rmax_ok[:1]: #########################################
+                # Build new parameter set with updated 'skew' and 'rmax'
+                new_param = {}
+                for key, value in params.items():
+                    if key == "skew":
+                        new_param[key] = s
+                    elif key == "rmax":
+                        new_param[key] = r
+                    else:
+                        new_param[key] = value
+                new_params_sets[len(new_params_sets)+1] = new_param
 
     # print(len(new_params_sets))
     # print(len(skews_rmax_ok))
@@ -206,7 +210,7 @@ def constraint_satisfaction(params_sets: dict, daily_dynamics: dict, pot_factor:
 
 
 
-def LHS_param_sampling(archi_params: dict, n_samples: int, seed: int = 42, latin_hypercube: bool = False) -> dict:
+def param_sampling(archi_params: dict, n_samples: int, seed: int = 42, latin_hypercube: bool = False) -> dict:
     """Generate samples from archi_params dictionary, respecting fixed values."""
     fixed_params = {}
     sampled_params = []
@@ -219,9 +223,8 @@ def LHS_param_sampling(archi_params: dict, n_samples: int, seed: int = 42, latin
     for key, value in archi_params.items():
         if isinstance(value, (int, float)):  # Fixed parameter
             fixed_params[key] = value
-        # elif key in {"weibull"}:
         # Parameter distribution in Latin Hypercube
-        elif isinstance(value, list) and key not in ["leaf_lifespan", "rmax", "skew"]:  # Range to sample
+        elif isinstance(value, list) and key not in ["leaf_lifespan", "rmax", "skew", "phyllochron"]:  # Range to sample
 
             if latin_hypercube:
                 l_bounds.append(min(value))
@@ -515,24 +518,23 @@ def simulate_with_filters(param_sets: dict, daily_dynamics: dict,
 def run_simulations(archi_params: dict, 
              tec_file: str, plant_file: str, dynamics_file: str, weather_file: str, location: dict,
              n_samples: int = 100, seed: int = 42, latin_hypercube: bool = False, 
-             pot_factor: float = 1.05,
-             opt_filter_organ_duration: bool = True, opt_filter_pot_growth: bool = True, opt_filter_realized_growth: bool = True, 
-             error_LA_pot: float = 1, error_height_pot: float = 1, error_LA_realized: float = 0.05, error_height_realized: float = 0.05,
-             inter_row: float = 70,
+             pot_factor: float = 1.4,
+             opt_filter_organ_duration: bool = False, opt_filter_pot_growth: bool = False, opt_filter_realized_growth: bool = False, 
+             error_LA_pot: float = 1, error_height_pot: float = 1, error_LA_realized: float = 1, error_height_realized: float = 1,
              light_inter: bool = True, zenith: bool = False, direct : bool = False, save_scenes: bool = False):
 
     # Retrieve STICS management and senescence parameters
-    density, daily_dynamics, lifespan, lifespan_early = get_stics_data(
+    density, daily_dynamics, lifespan, lifespan_early, inter_row = get_stics_data(
         file_tec_xml=tec_file,  # Path to the STICS management XML file
         file_plt_xml=plant_file,  # Path to the STICS plant XML file
         stics_output_file=dynamics_file  # Path to the STICS output file
     )
 
     # Complete the architecture parameters with values from daily dynamics.
-    archi_params = constrain_archi_params(archi_params=archi_params, daily_dynamics=daily_dynamics, lifespan=lifespan, lifespan_early=lifespan_early)
+    archi_params = constrain_archi_params(archi_params=archi_params, daily_dynamics=daily_dynamics, lifespan=lifespan, lifespan_early=lifespan_early, pot_factor=pot_factor)
     
     # Sampling parameters using Latin Hypercube Sampling
-    param_sets = LHS_param_sampling(archi_params=archi_params, n_samples=n_samples, seed=seed, latin_hypercube=latin_hypercube)
+    param_sets = param_sampling(archi_params=archi_params, n_samples=n_samples, seed=seed, latin_hypercube=latin_hypercube)
 
     param_sets = constraint_satisfaction(
         params_sets=param_sets, 
@@ -571,34 +573,34 @@ def run_simulations(archi_params: dict,
     # Dataframe with id, archi_params (dict to df), bool per filter, times series for h, la, nrj + dates ?
     # or xarray
 
-    return daily_dynamics, param_sets, pot_la, pot_h, realized_la, realized_h, nrj_per_plant, mtgs, filters, density
+    return daily_dynamics, param_sets, pot_la, pot_h, realized_la, realized_h, nrj_per_plant, mtgs, density
 
 
 
 def run_simulations_1(archi_params: dict, 
              tec_file: str, plant_file: str, dynamics_file: str,
              n_samples: int = 100, seed: int = 42, latin_hypercube: bool = False,
-             pot_factor: float = 1.05):
+             pot_factor: float = 1.4):
 
     # Retrieve STICS management and senescence parameters
-    density, daily_dynamics, lifespan, lifespan_early = get_stics_data(
+    density, daily_dynamics, lifespan, lifespan_early, inter_row = get_stics_data(
         file_tec_xml=tec_file,  # Path to the STICS management XML file
         file_plt_xml=plant_file,  # Path to the STICS plant XML file
         stics_output_file=dynamics_file  # Path to the STICS output file
     )
 
     # Complete the architecture parameters with values from daily dynamics.
-    archi_params = constrain_archi_params(archi_params=archi_params, daily_dynamics=daily_dynamics, lifespan=lifespan, lifespan_early=lifespan_early)
+    archi_params = constrain_archi_params(archi_params=archi_params, daily_dynamics=daily_dynamics, lifespan=lifespan, lifespan_early=lifespan_early, pot_factor=pot_factor)
     
     # Sampling parameters using Latin Hypercube Sampling
-    param_sets = LHS_param_sampling(archi_params=archi_params, n_samples=n_samples, seed=seed, latin_hypercube=latin_hypercube)
+    param_sets = param_sampling(archi_params=archi_params, n_samples=n_samples, seed=seed, latin_hypercube=latin_hypercube)
 
     param_sets = constraint_satisfaction(
         params_sets=param_sets, 
         daily_dynamics=daily_dynamics, 
         pot_factor=pot_factor)
 
-    return daily_dynamics, param_sets, density
+    return daily_dynamics, param_sets, density, inter_row
 
 
 def run_simulations_2(param_sets: dict, daily_dynamics: dict, density: float,
@@ -641,7 +643,7 @@ def run_simulations_2(param_sets: dict, daily_dynamics: dict, density: float,
     # Dataframe with id, archi_params (dict to df), bool per filter, times series for h, la, nrj + dates ?
     # or xarray
 
-    return daily_dynamics, param_sets, pot_la, pot_h, realized_la, realized_h, nrj_per_plant, mtgs, filters, density
+    return daily_dynamics, param_sets, pot_la, pot_h, realized_la, realized_h, nrj_per_plant, mtgs, density
 
 
 
@@ -649,7 +651,7 @@ def morphospace(archi_params: dict,
              n_samples: int = 6, seed: int = 42, latin_hypercube: bool = False):
 
     # Sampling parameters using Latin Hypercube Sampling
-    param_sets = LHS_param_sampling(archi_params=archi_params, n_samples=n_samples, seed=seed, latin_hypercube=latin_hypercube)
+    param_sets = param_sampling(archi_params=archi_params, n_samples=n_samples, seed=seed, latin_hypercube=latin_hypercube)
 
     thermal_time = range(0,1000,20)
     pot_la = {}
@@ -895,7 +897,7 @@ def plot_PAR(dates, nrj_per_plant, par_incident, par_stics, density, stics_color
     plt.show()
 
 
-def write_netcdf(filename, daily_dynamics, params_sets, pot_la, pot_h, realized_la, realized_h, nrj_per_plant, mtgs, filters, density, seed):
+def write_netcdf(filename, daily_dynamics, params_sets, pot_la, pot_h, realized_la, realized_h, nrj_per_plant, density, seed):
     # Prepare the data for xarray Dataset
     daily_dyn = {}
     for key in daily_dynamics[1]:
@@ -906,11 +908,11 @@ def write_netcdf(filename, daily_dynamics, params_sets, pot_la, pot_h, realized_
     df_archi = pd.DataFrame.from_dict(params_sets, orient='index')
     ds_archi = df_archi.to_xarray().rename({'index':'id'})
 
-    columns_filters = [f"filter_{i}" for i in [1,2,3]]
-    df_filters = pd.DataFrame.from_dict(filters, orient='index', columns=columns_filters)
-    ds_filters = df_filters.to_xarray().rename({'index':'id'})
+    # columns_filters = [f"filter_{i}" for i in [1,2,3]]
+    # df_filters = pd.DataFrame.from_dict(filters, orient='index', columns=columns_filters)
+    # ds_filters = df_filters.to_xarray().rename({'index':'id'})
 
-    mtgs_string = {k: [write_mtg(g) if g is not None else None for g in mtg] for k, mtg in mtgs.items()}
+    # mtgs_string = {k: [write_mtg(g) if g is not None else None for g in mtg] for k, mtg in mtgs.items()}
 
     # Create the xarray Dataset
     ds = xr.Dataset(
@@ -927,7 +929,7 @@ def write_netcdf(filename, daily_dynamics, params_sets, pot_la, pot_h, realized_
             pot_la = (["id", "time"], pd.DataFrame.from_dict(pot_la, orient='index', columns=dates)),
             pot_h = (["id", "time"], pd.DataFrame.from_dict(pot_h, orient='index', columns=dates)),
             nrj_per_plant = (["id", "time"], pd.DataFrame.from_dict(nrj_per_plant, orient='index', columns=dates)),
-            mtgs = (["id", "time"], pd.DataFrame.from_dict(mtgs_string, orient='index', columns=dates)) 
+            # mtgs = (["id", "time"], pd.DataFrame.from_dict(mtgs_string, orient='index', columns=dates)) 
         ),
         coords=dict(  # noqa: C408
             id = range(len(realized_la)),
@@ -935,7 +937,7 @@ def write_netcdf(filename, daily_dynamics, params_sets, pot_la, pot_h, realized_
         )
     )
 
-    ds = xr.merge([ds, ds_archi, ds_filters])
+    ds = xr.merge([ds, ds_archi]) #, ds_filters])
 
     # Save the dataset to a NetCDF file
     today_str = date.today().strftime("%Y-%m-%d")

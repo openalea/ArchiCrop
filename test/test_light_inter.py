@@ -15,13 +15,11 @@ from openalea.plantgl.all import Color3, Material
 seed(18)  # noqa: F405
 
 # Retrieve STICS management and senescence parameters
-density, stics_output_data, lifespan, lifespan_early = get_stics_data(
+density, stics_output_data, lifespan, lifespan_early, inter_row = get_stics_data(
     file_tec_xml='Mais_tec.xml',  # Path to the STICS management XML file
     file_plt_xml='corn_plt.xml',  # Path to the STICS plant XML file
     stics_output_file='mod_smaize.sti'  # Path to the STICS output file
 )
-# sowing_density = tec_stics['densitesem']
-inter_row = 70
 
 # Retrieve STICS growth and senescence dynamics
 time = [value["Thermal time"] for value in stics_output_data.values()]

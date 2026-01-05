@@ -52,12 +52,12 @@ archi_sorghum = {
 
     # Stem
     "height": 180,
-    "stem_q": 1.0, # parameter for ligule height distribution along axis : [1.1] (Kaitaniemi et al., 1999) 
+    "stem_q": 0.95, # parameter for ligule height distribution along axis : [1.1] (Kaitaniemi et al., 1999) 
     "diam_base": 5.0, # stem base diameter : [2.2] (Ndiaye et al., 2021)
     "diam_top": 2.0, # stem top diameter: [1.2] (Ndiaye et al., 2021)
 
     # Leaf area distribution along the stem
-    "leaf_area": 10000,
+    "leaf_area": 11000,
     "rmax": 0.8, # parameter for leaf area distribution along axis : [0.6,0.8] (Kaitaniemi et al., 1999; Welcker et al., )
     "skew": 0.001, # parameter for leaf area distribution along axis : [0.0005,0.1] (Kaitaniemi et al., 1999; Welcker et al., )
     
@@ -69,11 +69,11 @@ archi_sorghum = {
     "f2": 0.92, # parameter for leaf blade shape
 
     # Leaf blade position in space
-    "insertion_angle": 45, # leaf blade insertion angle : [10,50] (Truong et al., 2015; Kaitaniemi et al., 1999)
+    "insertion_angle": 60, # leaf blade insertion angle : [10,50] (Truong et al., 2015; Kaitaniemi et al., 1999)
     "scurv": 0.75, # leaf blade relative inflexion point : [0.6, 0.8] ()
     "curvature": 90, # leaf blade insertion-to-tip angle : [0,130] [45, 135] (Kaitaniemi et al., 1999)
-    "phyllotactic_angle": 180, # 137.5, # phyllotactic angle : [180] (Davis et al., 2024)
-    "phyllotactic_deviation": 60, # half-deviation to phyllotactic angle : [0,90] (Davis et al., 2024)
+    "phyllotactic_angle": 137.5, # phyllotactic angle : [180] (Davis et al., 2024)
+    "phyllotactic_deviation": 0, # half-deviation to phyllotactic angle : [0,90] (Davis et al., 2024)
 
     # Development
     "phyllochron": 51, # [30,70], # phyllochron, i.e. stem element appearance rate : [40,65 then x1.6-2.5] (Clerget, 2008)
@@ -91,7 +91,7 @@ archi_sorghum = {
 
 
 archi_sorghum_angles = {
-    # "nb_phy": 12, # number of phytomers on the main stem : [10,40] (Ndiaye et al., 2021; Lafarge and Tardieu, 2002; Clerget, 2008; Ganeme et al., 2022)
+    "nb_phy": [10,40], # number of phytomers on the main stem : [10,40] (Ndiaye et al., 2021; Lafarge and Tardieu, 2002; Clerget, 2008; Ganeme et al., 2022)
     "nb_short_phy": 5,
     "short_phy_height": 3,
 
