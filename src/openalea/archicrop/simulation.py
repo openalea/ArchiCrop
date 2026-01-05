@@ -540,6 +540,8 @@ def run_simulations(archi_params: dict,
         params_sets=param_sets, 
         daily_dynamics=daily_dynamics, 
         pot_factor=pot_factor)
+    
+    print(len(param_sets), "simulations")
 
     # Simulate plant growth with fitting parameters
     param_sets, pot_la, pot_h, realized_la, realized_h, mtgs, filters = simulate_with_filters(
