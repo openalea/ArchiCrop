@@ -48,7 +48,7 @@ class ArchiCrop:
                  leaf_duration=1.6,
                  leaf_lifespan=300,
                  nb_tillers=0,
-                 tiller_delay=1,
+                 tiller_delay=2,
                  tiller_angle=30,
                  gravitropism_coefficient=0.12,
                  plant_orientation=45,

@@ -20,7 +20,7 @@ def main_axis(n=10):
     
     return g
 
-def add_tiller(g, vid, start_time, phyllochrone=1, tiller_delay=1):
+def add_tiller(g, vid, start_time, phyllochrone=1, tiller_delay=2):
     """
     Add a tiller to the MTG.
 
@@ -64,7 +64,7 @@ def add_tiller(g, vid, start_time, phyllochrone=1, tiller_delay=1):
 
     
 
-def generate_full_plant(nb_leaves=10, nb_tillers=10, phyllochrone=1, tiller_delay=1):
+def generate_full_plant(nb_leaves=10, nb_tillers=10, phyllochrone=1, tiller_delay=2):
     """
     Create a MTG as a full plant.
     """

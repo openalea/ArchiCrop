@@ -333,6 +333,17 @@ def compute_organ_growth(vid, element_node, time, growth, rate=True):
     return growth
 '''
 
+'''
+Detailed process of leaf elongation:
+-	At the beginning of the simulation, from the normalized shape of the blade along the midrib, scaled for each leaf according to the potential area, compute points on that curve, to have a correspondence between S and l.
+-	Integrate l=f(S) with python module scipy.integrate.cumulated_simpson 
+-	Fit a spline of degree k=3 (using python module scipy.interpolate.splrep) 
+-	For each leaf, at all time t, evaluate normalized length l for a normalized leaf area S+dS (i.e. percent of potential leaf area reached)
+-	Scale l according to potential total length L
+-	Computation of senescing length --> same approach as for leaf elongation 
+'''
+
+
 def update_cereal_leaf_growth_area(n, LA_for_this_leaf, day, time_increment=None):
     """Update the visible leaf area and length of a cereal leaf, 
     under a potential leaf area."""

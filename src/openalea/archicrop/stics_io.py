@@ -178,3 +178,33 @@ def stics_weather_3d(filename, daily_dynamics):
 
     # Use these dates to filter your DataFrame
     return df[(df.daydate >= pd.to_datetime(first_date)) & (df.daydate <= pd.to_datetime(last_date))]
+
+
+def stics_output(tec_file, plant_file, stics_output_file):
+    """Extract relevant data from STICS output files."""
+
+    density, daily_dynamics, lifespan, lifespan_early, interrow = get_stics_data(
+        file_tec_xml=tec_file,  # Path to the STICS management XML file
+        file_plt_xml=plant_file,  # Path to the STICS plant XML file
+        stics_output_file=stics_output_file  # Path to the STICS output file
+    )
+
+    thermal_time = [value["Thermal time"] for value in daily_dynamics.values()]
+    leaf_area_plant = [value["Plant leaf area"] for value in daily_dynamics.values()]
+    sen_leaf_area_plant = [value["Plant senescent leaf area"] for value in daily_dynamics.values()]
+    height_canopy = [value["Plant height"] for value in daily_dynamics.values()]
+
+    for key, value in daily_dynamics.items():
+        if value["Phenology"] == 'juvenile':
+            next_key = key + 1
+            if next_key in daily_dynamics and daily_dynamics[next_key]["Phenology"] == 'exponential':
+                end_juv = thermal_time[key-1] + thermal_time[0]
+
+        elif value["Phenology"] == 'exponential':
+            next_key = key + 1
+            if next_key in daily_dynamics and daily_dynamics[next_key]["Phenology"] == 'repro':
+                end_veg = thermal_time[key-1] + thermal_time[0]
+                index_end_veg = key - 1
+                break
+
+    return density, daily_dynamics, lifespan, lifespan_early, thermal_time, leaf_area_plant, sen_leaf_area_plant, height_canopy, end_juv, end_veg, index_end_veg

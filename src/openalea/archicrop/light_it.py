@@ -149,6 +149,7 @@ def light_interception(weather_file, daily_dynamics, density, location, mtgs, ze
             nrj_per_leaf = []
             # For each time step
             for i,(mtg, par) in enumerate(zip(mtgs_plant, par_incident)):
+                # if i%2 == 0 and i<=80:
                 # Compute light sources
                 if zenith:
                     lights = [(par,(0,0,-1))]
@@ -168,7 +169,7 @@ def light_interception(weather_file, daily_dynamics, density, location, mtgs, ze
                     scene_tmp.save(f'scene_{i}.png') # not as images !!!
 
             nrj_per_plant[k] = [sum(nrj) for nrj in nrj_per_leaf]
-            print(a)
+            # print(a)
             a += 1
 
     '''

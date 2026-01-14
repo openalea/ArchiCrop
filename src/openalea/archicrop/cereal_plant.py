@@ -143,9 +143,9 @@ def add_tiller(g, vid, start_time, phyllochron, plastochron,
     axis_id = g.complex(vid)
     rank = g.Rank(vid) + 1  # Number of edges from the root of the axis
     n = len(g.Axis(vid))
-    len_tiller  = n - rank  # we remove the parent that do not belong to the tiller 
+    len_tiller = n - rank - 1  # we remove the parent that do not belong to the tiller 
     nb_phy = len_tiller
-    nb_short_phy = max(nb_short_phy - rank, 0)
+    nb_short_phy = max(nb_short_phy - rank, 0) 
 
     ranks = range(1, nb_phy + 1)
     ntop = max(ranks) - np.array(ranks) + 1
@@ -183,7 +183,7 @@ def add_tiller(g, vid, start_time, phyllochron, plastochron,
         compute_potential_growth_rate(g=g, vid=vid_leaf)
         add_leaf_senescence(g=g, vid_leaf=vid_leaf, leaf_lifespan=leaf_lifespan, end_juv=end_juv)
         
-        tillers.append((vid_stem, tt_stem + tiller_delay))
+        tillers.append((vid_stem, tt_stem + tiller_delay*phyllochron))
 
     return tillers
 
@@ -362,7 +362,7 @@ def cereal(nb_phy, phyllochron, plastochron, stem_duration, leaf_duration,
             vid_stem = g.add_child(vid_stem, edge_type="<", **stem)
         tt_stem = add_development(g=g, vid=vid_stem, tt=tt_stem, dtt=dtt_stem, rate=phyllochron)
         # compute_potential_growth_rate(g=g, vid=vid_stem)
-        tiller_points.append((vid_stem, tt_stem + tiller_delay))
+        tiller_points.append((vid_stem, tt_stem + tiller_delay*phyllochron))
 
         leaf = leaf_as_dict(stem_prop=stem_prop, leaf_prop=leaf_prop, rank=rank, wl=wl)
         vid_leaf = g.add_child(vid_stem, edge_type="+", **leaf)  
@@ -448,10 +448,11 @@ def cereal(nb_phy, phyllochron, plastochron, stem_duration, leaf_duration,
             scaled_leaf_area = g.node(vid).leaf_area * area_per_leaf
             g.node(vid).leaf_area = scaled_leaf_area  
             # g.node(vid).visible_leaf_area *= area_per_leaf
-            g.node(vid).mature_length = np.sqrt(scaled_leaf_area / 0.75 / wl)
-            g.node(vid).length = np.sqrt(scaled_leaf_area / 0.75 / wl) 
-            g.node(vid).visible_length = np.sqrt(scaled_leaf_area / 0.75 / wl) 
-            g.node(vid).shape_max_width = g.node(vid).length * wl
+            scaled_leaf_length = np.sqrt(scaled_leaf_area / 0.75 / wl)
+            g.node(vid).mature_length = scaled_leaf_length
+            g.node(vid).length = scaled_leaf_length
+            g.node(vid).visible_length = scaled_leaf_length
+            g.node(vid).shape_max_width = scaled_leaf_length * wl
             compute_potential_growth_rate(g=g, vid=vid)
         for vid in stem:
             scaled_stem_length = g.node(vid).mature_length * height_per_axis
