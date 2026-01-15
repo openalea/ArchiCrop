@@ -31,11 +31,12 @@ daily_dynamics, params_sets, pot_la, pot_h, realized_la, realized_h, nrj_per_pla
     dynamics_file=stics_output_file, 
     weather_file=weather_file,
     location=location,
-    n_samples=3,
+    n_samples=6,
     pot_factor=1.5,
     latin_hypercube=False,
     light_inter=True,
     direct=False,
+    zenith=True,
     seed=seed)
 
 end_time = t.time()

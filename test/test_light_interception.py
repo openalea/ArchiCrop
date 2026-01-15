@@ -51,7 +51,7 @@ def test_light_interception_real(minimal_mtg):
         density=density,
         location=location,
         mtgs=minimal_mtg,
-        zenith=False,
+        zenith=True,
         save_scenes=False,
         inter_row=0.7
     )

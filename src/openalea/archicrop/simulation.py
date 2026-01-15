@@ -64,12 +64,17 @@ def resolve_organ_growth(N, ligul_factor, la_ends):
     A = np.zeros((N, N))
     B = np.zeros(N)
 
-    for x in range(0, N):
+    for x in range(0, N-1):
         A[x, x] = 1
         A[x, x+1] = (ligul_factor - 1) / ligul_factor
         for i in range(x):
             A[x, i] = 1
-        B[x] = la_ends[x]  
+        B[x] = la_ends[x] 
+
+    A[N-1, N-1] = 1
+    for i in range(N-1):
+        A[N-1, i] = 1
+    B[N-1] = la_ends[N-1] 
 
     S = np.linalg.solve(A, B)
 
