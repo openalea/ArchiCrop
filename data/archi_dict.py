@@ -28,7 +28,7 @@ archi_maize = {
     "scurv": 0.8, #  relative position of inflexion point
     "curvature": 30, # leaf blade insertion-to-tip angle
     "phyllotactic_angle": 180, # phyllotactic angle
-    "phyllotactic_deviation": 0, # half-deviation to phyllotactic angle
+    "phyllotactic_deviation": 15, # half-deviation to phyllotactic angle
 
     # Development
     "phyllochron": 40, # [20,55], # phyllochron, i.e. stem element appearance rate

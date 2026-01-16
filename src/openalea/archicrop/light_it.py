@@ -149,24 +149,24 @@ def light_interception(weather_file, daily_dynamics, density, location, mtgs, ze
             nrj_per_leaf = []
             # For each time step
             for i,(mtg, par) in enumerate(zip(mtgs_plant, par_incident)):
-                if i%2 == 0 and i<=80:
-                    # Compute light sources
-                    if zenith:
-                        lights = [(par,(0,0,-1))]
-                    else:
-                        irr = sky_irradiance(daydate=par.daydate, day_ghi=par.rad, **location)
-                        sun, sky = sky_sources(sky_type='clear_sky', sky_irradiance=irr, scale='global')
-                        lights = caribu_light_sources(sun, sky)
-                    # Build and illuminate scene
-                    scene, labels = build_scene(mtg, senescence=False)
-                    cs, raw, agg = illuminate(scene=scene, light=lights, labels=labels, domain=domain, direct=direct) # --> cf PARaggregators in caribu scene node
-                    # Compute energy per leaf
-                    df_mod = mean_leaf_irradiance(agg)  # noqa: F841
-                    nrj_per_leaf.append(agg.loc[agg['label'] == 'Leaf']['Energy'].values)
-                    # Save scene if required
-                    if save_scenes:
-                        scene_tmp = cs.plot(raw, display=False)[0]
-                        scene_tmp.save(f'scene_{i}.png') # not as images !!!
+                # if i%2 == 0 and i<=80:
+                # Compute light sources
+                if zenith:
+                    lights = [(par,(0,0,-1))]
+                else:
+                    irr = sky_irradiance(daydate=par.daydate, day_ghi=par.rad, **location)
+                    sun, sky = sky_sources(sky_type='clear_sky', sky_irradiance=irr, scale='global')
+                    lights = caribu_light_sources(sun, sky)
+                # Build and illuminate scene
+                scene, labels = build_scene(mtg, senescence=False)
+                cs, raw, agg = illuminate(scene=scene, light=lights, labels=labels, domain=domain, direct=direct) # --> cf PARaggregators in caribu scene node
+                # Compute energy per leaf
+                df_mod = mean_leaf_irradiance(agg)  # noqa: F841
+                nrj_per_leaf.append(agg.loc[agg['label'] == 'Leaf']['Energy'].values)
+                # Save scene if required
+                if save_scenes:
+                    scene_tmp = cs.plot(raw, display=False)[0]
+                    scene_tmp.save(f'scene_{i}.png') # not as images !!!
 
             nrj_per_plant[k] = [sum(nrj) for nrj in nrj_per_leaf]
             # print(a)
