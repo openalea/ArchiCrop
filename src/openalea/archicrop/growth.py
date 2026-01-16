@@ -107,17 +107,6 @@ def distribute_to_potential(g, growing_organs, day, time, time_increment, increm
 
     increment_for_each_organ = dict.fromkeys(growing_organs, 0.0)
 
-    
-    # if g and g.node(list(growing_organs.keys())[0]).label.startswith("Leaf"):
-    #     print(f'To distribute {increment_to_distribute}')
-    #     visible_leaf_area = g.property("visible_leaf_area")
-    #     print(visible_leaf_area)
-    #     print(growing_organs)
-    #     surface1= sum(visible_leaf_area.values())
-    #     print(f'Plant Leaf Area {surface1}')
-        # surface_growing1 = sum(visible_leaf_area[vid] for vid in growing_organs)
-        # to_distribute = increment_to_distribute
-
     while len(growing_organs) > 0 and increment_to_distribute > 1e-5: 
         incr_temp = distribution_function(increment_to_distribute, growing_organs)
         increment_to_distribute = 0.0
@@ -153,17 +142,6 @@ def distribute_to_potential(g, growing_organs, day, time, time_increment, increm
         if n.label.startswith("Leaf"):
             n.inclination = min(1.5*(time - n.start_tt) / (n.end_tt - n.start_tt), 1)
 
-    # if g and g.node(list(growing_organs.keys())[0]).label.startswith("Leaf"):
-    #     surface_growing2 = sum(growing_organs[vid]["visible"] for vid in growing_organs)
-    #     delta = surface_growing2 - surface_growing1 
-    #     if abs(delta-to_distribute)>1e-3 or to_print:
-    #         print(f'FAILURE : {delta} and {to_distribute}')
-    #         print(f'real delta {delta - sum(increment_for_each_organ.values())}')
-        
-    #print(f'Plant Leaf Area {sum(g.properties("visible_leaf_area"))}')
-
-    # return increment_for_each_organ
-
 
 
 def distribute_among_organs(g, day, daily_dynamics, rate=True, distribution_function=demand_dist):
@@ -180,7 +158,6 @@ def distribute_among_organs(g, day, daily_dynamics, rate=True, distribution_func
 
     # set amount of growth to distribute among organs
 
-    # to_print = 551 <time<552
     if daily_dynamics["Leaf area increment"] > 0.0 and len(growing_leaves) > 0:
         update_cereal_leaf_growth = update_cereal_leaf_growth_rate if rate else update_cereal_leaf_growth_area
         distribute_to_potential(g=g, 
@@ -191,13 +168,7 @@ def distribute_among_organs(g, day, daily_dynamics, rate=True, distribution_func
                                 increment_to_distribute=daily_dynamics["Leaf area increment"], 
                                 distribution_function=distribution_function, 
                                 grow_function=update_cereal_leaf_growth)
-                                # to_print=to_print)
-    # else:
-    #     LA_for_each_leaf = dict.fromkeys(growing_leaves, 0.0)
-    
-    # axes = {}
-    # for vid in growing_internodes:
-    #     axes.setdefault(g.complex(vid), []).append(vid)
+
 
     if daily_dynamics["Height increment"] > 0.0 and len(growing_internodes) > 0:
         update_stem_growth = update_stem_growth_rate if rate else update_stem_growth_height
@@ -209,20 +180,7 @@ def distribute_among_organs(g, day, daily_dynamics, rate=True, distribution_func
                                 increment_to_distribute=daily_dynamics["Height increment"], 
                                 distribution_function=demand_dist,
                                 grow_function=update_stem_growth)
-        # height_for_each_internode = {}
-        # for aid in axes:  
-        #     growing_inter = {vid:growing_internodes[vid]  for vid in axes[aid]}
-        #     height_for_each_axis = distribute_to_potential(g=g, 
-        #                                                    growing_organs=growing_inter, 
-        #                                                    day=day,
-        #                                                    time=time,
-        #                                                    time_increment=thermal_time_incr,
-        #                                                    increment_to_distribute=daily_dynamics["Height increment"], 
-        #                                                    distribution_function=demand_dist,
-        #                                                    grow_function=update_stem_growth)
-        #     height_for_each_internode.update(height_for_each_axis)
-    # else:
-    #     height_for_each_internode = dict.fromkeys(growing_internodes, 0.0)
+
 
     if daily_dynamics["Senescent leaf area increment"] > 0.0: # and len(senescing_leaves) > 0:
         distribute_to_potential(g=g, 
@@ -234,104 +192,7 @@ def distribute_among_organs(g, day, daily_dynamics, rate=True, distribution_func
                                 distribution_function=age_dist,
                                 grow_function=update_leaf_senescence_area)
 
-    # else:
-    #     sen_LA_for_each_leaf = dict.fromkeys(senescing_leaves, 0.0)
 
-    # return {"thermal_time_increment": thermal_time_incr,
-    #         # "height_to_distribute": height_to_distribute,
-    #         "height_for_each_internode": height_for_each_internode,
-    #         # "LA_to_distribute": LA_to_distribute,
-    #         "LA_for_each_leaf": LA_for_each_leaf,
-    #         # "sen_LA_to_distribute": sen_LA_to_distribute,
-    #         "sen_LA_for_each_leaf": sen_LA_for_each_leaf,
-    #         "growing_internodes": growing_internodes,
-    #         "growing_leaves": growing_leaves,
-    #         "senescing_leaves": senescing_leaves}
-
-'''
-def compute_organ_growth(vid, element_node, time, growth, rate=True):
-    """Compute the gain or loss in length or area of an organ at a given time."""
-    
-    n = element_node
-
-    # # is there LA to update for this node ?
-    # if vid in growth["LA_for_each_leaf"]:
-    #     LA_for_this_leaf = growth["LA_for_each_leaf"][vid]
-    #     if rate:
-    #         update_cereal_leaf_growth_rate(n, LA_for_this_leaf, growth["thermal_time_increment"])
-    #     else:
-    #         update_cereal_leaf_growth_area(n, LA_for_this_leaf)
-
-
-    if n.label.startswith("Leaf") or n.label.startswith("Stem"):
-    
-        if time < n.start_tt:
-            n.visible_length = 0.0
-            n.grow = False
-            if n.label.startswith("Leaf"):
-                n.leaf_lengths.append(0.0)
-                n.senescent_lengths.append(0.0)
-            elif n.label.startswith("Stem"):
-                n.stem_lengths.append(0.0)
-        if n.start_tt <= time:
-            n.age = time - n.start_tt
-        
-            if time <= n.end_tt: 
-                n.grow = True
-                if n.visible_length < n.mature_length:
-                    if n.label.startswith("Leaf") and growth["LA_to_distribute"] > 0.0:
-                        LA_for_this_leaf = growth["LA_for_each_leaf"][vid]
-                        if rate:
-                            update_cereal_leaf_growth_rate(n, LA_for_this_leaf, growth["thermal_time_increment"])
-                        else:
-                            update_cereal_leaf_growth_area(n, LA_for_this_leaf)
-                    if n.label.startswith("Stem") and growth["height_to_distribute"] > 0.0:
-                        height_for_this_internode = growth["height_for_each_internode"][vid]
-                        if rate:
-                            update_stem_growth_rate(n, height_for_this_internode, growth["thermal_time_increment"]) 
-                        else:
-                            update_stem_growth_height(n, height_for_this_internode)
-
-            elif time > n.end_tt:
-                if n.visible_length < n.mature_length:
-                    if n.label.startswith("Leaf") and growth["LA_to_distribute"] > 0.0 and vid in growth["LA_for_each_leaf"]:
-                        LA_for_this_leaf = growth["LA_for_each_leaf"][vid]
-                        if rate:
-                            update_cereal_leaf_growth_rate(n, LA_for_this_leaf, growth["thermal_time_increment"])
-                        else:
-                            update_cereal_leaf_growth_area(n, LA_for_this_leaf)
-                    if n.label.startswith("Stem") and growth["height_to_distribute"] > 0.0 and vid in growth["height_for_each_internode"]:
-                        height_for_this_internode = growth["height_for_each_internode"][vid]
-                        if rate:
-                            update_stem_growth_rate(n, height_for_this_internode, growth["thermal_time_increment"]) 
-                        else:
-                            update_stem_growth_height(n, height_for_this_internode)
-
-            if time > n.end_tt:
-                if n.label.startswith("Leaf") and growth["sen_LA_to_distribute"] > 0.0:
-                    if n.senescence <= time and not n.dead and vid in growth["sen_LA_for_each_leaf"]:
-                        sen_LA_for_this_leaf = growth["sen_LA_for_each_leaf"][vid]
-                        update_leaf_senescence_area(n, sen_LA_for_this_leaf)
-                    else:
-                        n.senescent_lengths.append(n.visible_length)
-                elif n.label.startswith("Leaf"):
-                    n.leaf_lengths.append(n.visible_length)
-                    n.senescent_lengths.append(n.senescent_length)
-                elif n.label.startswith("Stem"):
-                    n.stem_lengths.append(n.visible_length)
-
-        # Evolution of organ geometry with age
-        # TODO: take tt from stem of same rank for a leaf
-
-        n_stem = n.parent() if n.label.startswith("Leaf") else n
-        n.stem_diameter = min(n.mature_stem_diameter/2 * (1+0.5*(time - n_stem.start_tt) / (n_stem.end_tt - n_stem.start_tt)), n.mature_stem_diameter) 
-        
-        if n.label.startswith("Leaf"):
-            n.inclination = min(1.5*(time - n.start_tt) / (n.end_tt - n.start_tt), 1)
-
-
-    return growth
-'''
 
 '''
 Detailed process of leaf elongation:
@@ -354,7 +215,6 @@ def update_cereal_leaf_growth_area(n, LA_for_this_leaf, day, time_increment=None
     else:
         n.visible_leaf_area = n.leaf_area
         n.visible_length = n.mature_length
-    # print("visible length", n.visible_length)
 
     for d in range(day-1, len(n.leaf_areas)):
         n.leaf_areas[d] = n.visible_leaf_area
@@ -417,11 +277,8 @@ def update_leaf_senescence_area(n, sen_LA_for_this_leaf, day, time_increment=Non
         n.senescent_length = n.visible_length
         n.dead = True
 
-    # print("senescent length", n.senescent_length)
-
     for d in range(day, len(n.senescent_lengths)):
         n.senescent_lengths[d] = n.senescent_length
-    # print(n.senescent_lengths)
 
 
 def mtg_turtle_time_with_constraint(g, day, daily_dynamics, rate=True, distribution_function=demand_dist, update_visitor=None):  # noqa: ARG001
@@ -440,18 +297,10 @@ def mtg_turtle_time_with_constraint(g, day, daily_dynamics, rate=True, distribut
     time = daily_dynamics["Thermal time"]
 
     distribute_among_organs(g, day, daily_dynamics, rate=rate, distribution_function=distribution_function)
-    # print("sen len", g.properties()["senescent_length"].values())
-
-    # to remove
-    # visible_leaf_area = g.property("visible_leaf_area")
-    # surface1= sum(visible_leaf_area.values())
     
 
     cereal_visitor = CerealsVisitorGrowth(False)
 
-    # for id in g.vertices():
-    #     print(g[id])
-    
     
     def traverse_with_turtle_time(g, vid, time, visitor=cereal_visitor):
         turtle = CerealsTurtle()
@@ -483,9 +332,9 @@ def mtg_turtle_time_with_constraint(g, day, daily_dynamics, rate=True, distribut
 
         if g.node(vid).label.startswith("Leaf") or g.node(vid).label.startswith("Stem"):  # noqa: SIM102
             if g.node(vid).start_tt <= time:
-                visitor(g, vid, turtle) #, time, growth)
+                visitor(g, vid, turtle) 
                 # turtle.push()
-        # plant_id = g.complex_at_scale(vid, scale=1)
+
 
         for v in pre_order2_with_filter(g, vid, None, push_turtle, pop_turtle):
             if v == vid:
@@ -493,7 +342,7 @@ def mtg_turtle_time_with_constraint(g, day, daily_dynamics, rate=True, distribut
             # Done for the leaves
             if g.node(v).start_tt > time:
                 continue
-            visitor(g, v, turtle) #, time, growth)
+            visitor(g, v, turtle) 
 
         # scene = turtle.getScene()
         return g
@@ -501,18 +350,6 @@ def mtg_turtle_time_with_constraint(g, day, daily_dynamics, rate=True, distribut
 
     for plant_id in g.component_roots_at_scale_iter(g.root, scale=max_scale):
         g = traverse_with_turtle_time(g, plant_id, time)
-
-    # to remove
-    # visible_leaf_area2 = g.property("visible_leaf_area")
-    # surface2= sum(visible_leaf_area2.values())
-    # dif = daily_dynamics["Plant leaf area"] - surface2
-    # real_dif = abs(daily_dynamics["Leaf area increment"] - surface2 + surface1)
-    # if real_dif > 1:
-    #     print(f'DIFF : {dif} at {time}')
-    #     print(surface2-surface1)
-    #     print(f'Plant Leaf Area {surface2}')
-    #     print(f'Plant Leaf Area STICS {daily_dynamics["Plant leaf area"] }')
-    #     print(f'{daily_dynamics["Leaf area increment"]}')
 
     return g
 
@@ -522,7 +359,7 @@ class CerealsVisitorGrowth(CerealsVisitor):
     def __init__(self, classic):
         super().__init__(classic)
 
-    def __call__(self, g, v, turtle): #, time, growth):
+    def __call__(self, g, v, turtle): 
         
         # 1. retrieve the node
         geoms_senesc = g.property("geometry_senescent")
@@ -538,7 +375,6 @@ class CerealsVisitorGrowth(CerealsVisitor):
         if g.edge_type(v) == "+" and not n.label.startswith("Leaf"):
             # axis_id = g.complex(vid); g.property('insertion_angle')
             # TODO : vary as function of age and species(e.g. rice)
-            # print(n.label, n.visible_length, n.tiller_angle)
             angle = 2*n.tiller_angle if g.order(v) == 1 else n.tiller_angle 
             turtle.down(angle)
             turtle.elasticity = n.gravitropism_coefficient 
@@ -555,10 +391,6 @@ class CerealsVisitorGrowth(CerealsVisitor):
         # Try to build the mesh from GC rather than Cylinder
         if n.label.startswith("Leaf") or n.label.startswith("Stem"):
             # update geometry of elements
-            # if n.length > 0:
-            # print(v)
-            # nb_of_growing_internodes, nb_of_growing_leaves = growing_organs(g, time)
-            # growth = compute_organ_growth(v, n, time, growth, rate=True)
             mesh = compute_growing_organ_geometry(n, self.classic)
             if mesh:  # To DO : reset to None if calculated so ?
                 n.geometry = turtle.transform(mesh)
@@ -578,5 +410,4 @@ class CerealsVisitorGrowth(CerealsVisitor):
                 turtle.f(n.lrolled)
                 turtle.context.update({"top": turtle.getFrame()})
 
-        # return growth
 
