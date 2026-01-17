@@ -2,9 +2,9 @@ from __future__ import annotations
 
 import math
 
-from oawidgets.plantgl import *  # noqa: F403
+# from oawidgets.plantgl import *  # noqa: F403
 
-from openalea.plantgl.all import Color3, Material
+# from openalea.plantgl.all import Color3, Material
 
 from .cereal_plant import cereal
 from .display import build_scene
