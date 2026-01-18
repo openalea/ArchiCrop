@@ -44,6 +44,6 @@ end_time = t.time()
 elapsed_time = (end_time - start_time)/3600
 print(f"Simulation time: {elapsed_time:.2f} hours for {len(realized_la)} simulations")  # noqa: T201
 
-write_netcdf("results_light_inter", daily_dynamics, params_sets, pot_la, pot_h, realized_la, realized_h, nrj_per_plant, density, seed)
+write_netcdf("results_light_inter_not_zenith", daily_dynamics, params_sets, pot_la, pot_h, realized_la, realized_h, nrj_per_plant, density, seed)
 
 print(f"Simulations saved")  # noqa: T201
