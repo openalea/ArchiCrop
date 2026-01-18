@@ -31,9 +31,9 @@ par_stics = [value["Absorbed PAR"] for value in stics_output_data.values()]
 
 # Set ArchiCrop parameters
 archi = {
-        'height': 3*max(height_stics),
-        'leaf_area': 1.2*max(LA_stics),
-        'nb_phy': 10,
+        'height': 1.5*max(height_stics),
+        'leaf_area': 1.5*max(LA_stics),
+        'nb_phy': 15,
         'nb_short_phy': 3,
         'wl': 0.08,
         'diam_base': 2.5,

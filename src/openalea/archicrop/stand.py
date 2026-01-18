@@ -9,18 +9,18 @@ from numpy import cos, linspace, sin
 from numpy.random import vonmises
 
 
-def compute_domain(density: float, inter_row: float = 70, conv_coef: float = 100) -> tuple:
+def compute_domain(density: float, inter_row: float = 0.7, conv_coef: float = 100) -> tuple:
     """
     Calculate the domain of a single plant based on the sowing density and inter-row distance.
     
     Parameters:
     - density: Sowing density in plants per square meter.
-    - inter_row: Distance between rows in cm (default is 70 cm).
+    - inter_row: Distance between rows in m (default is 0.7 m).
     
     Returns:
     - A tuple representing the domain of the sowing pattern.
     """
-    inter_plant = (conv_coef / inter_row / density) * conv_coef  # Convert to cm
+    inter_plant = (conv_coef / inter_row / density)  # Convert to cm
     return ((-0.5 * inter_row, -0.5 * inter_plant), (0.5 * inter_row, 0.5 * inter_plant))
 
 

@@ -113,7 +113,7 @@ def compute_light_inter(scene, sky, pattern):
 #     'altitude': 56,
 #     'timezone': 'Europe/Paris'}
 
-def light_interception(weather_file, daily_dynamics, density, location, mtgs, zenith=False, direct=False, save_scenes=False, inter_row=70):
+def light_interception(weather_file, daily_dynamics, density, location, mtgs, zenith=False, direct=False, save_scenes=False, inter_row=0.7):
     '''Compute light interception on plants with fitting parameters
     Args:
         weather_file: path to the weather file
@@ -141,7 +141,7 @@ def light_interception(weather_file, daily_dynamics, density, location, mtgs, ze
     # Compute light interception for each plant at each time step
     nrj_per_plant = {}
     # For each plant
-    a = 0
+    # a = 0
     for k, mtgs_plant in mtgs.items():
         if mtgs_plant[0] is None:
             nrj_per_plant[k] = [None] * len(par_incident)
@@ -170,7 +170,7 @@ def light_interception(weather_file, daily_dynamics, density, location, mtgs, ze
 
             nrj_per_plant[k] = [sum(nrj) for nrj in nrj_per_leaf]
             # print(a)
-            a += 1
+            # a += 1
 
     '''
     # Calculate energy per leaf and irradiance per plant

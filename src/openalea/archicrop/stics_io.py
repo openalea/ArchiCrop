@@ -91,6 +91,7 @@ def read_sti_file(file_sti):
     # start = 21 # 23
     # end = 140
     density = data_dict["densite"][-1] # density = 20 plants/m2 = 0.002 plants/cm2
+    print(density)
 
     # Thermal time
     thermal_time = [float(i) for i in data_dict["somupvtsem"]]
