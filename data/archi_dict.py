@@ -38,7 +38,7 @@ archi_maize = {
 
     # Tillering
     "nb_tillers": 0, # number of tillers
-    "tiller_delay": 2, # delay, as factor of phyllochron, between the appearance of a phytomer and the appearance of its tiller
+    "tiller_delay": 1, # delay, as factor of phyllochron, between the appearance of a phytomer and the appearance of its tiller
     "tiller_angle": 30, # degree
     "reduction_factor": 1, # reduction factor between tillers of consecutive order
     "gravitropism_coefficient": 0.05, # 0.12
@@ -86,7 +86,7 @@ archi_wheat = {
     # Tillering
     "nb_tillers": 6, # number of tillers : [0,6] (Lafarge et al., 2002)
     "tiller_angle": 10,
-    "tiller_delay": 2, # delay, as factor of phyllochron, between the appearance of a phytomer and the appearance of its tiller : [] ()
+    "tiller_delay": 1, # delay, as factor of phyllochron, between the appearance of a phytomer and the appearance of its tiller : [] ()
     "reduction_factor": 0.8, # reduction factor between tillers of consecutive order : [0.8,1] ()
     "gravitropism_coefficient": 0.15 # 0.12
 }
@@ -131,7 +131,7 @@ archi_rice = {
     # Tillering
     "nb_tillers": 15, # number of tillers : [0,6] (Lafarge et al., 2002)
     "tiller_angle": 8,
-    "tiller_delay": 2, # delay, as factor of phyllochron, between the appearance of a phytomer and the appearance of its tiller : [] ()
+    "tiller_delay": 1, # delay, as factor of phyllochron, between the appearance of a phytomer and the appearance of its tiller : [] ()
     "reduction_factor": 0.8, # reduction factor between tillers of consecutive order : [0.8,1] ()
     "gravitropism_coefficient": 0.05 # 0.12
 }
@@ -176,7 +176,7 @@ archi_sorghum = {
     # Tillering
     "nb_tillers": 2, # number of tillers : [0,6] (Lafarge et al., 2002)
     "tiller_angle": 20,
-    "tiller_delay": 2, # delay, as factor of phyllochron, between the appearance of a phytomer and the appearance of its tiller : [] ()
+    "tiller_delay": 1, # delay, as factor of phyllochron, between the appearance of a phytomer and the appearance of its tiller : [] ()
     "reduction_factor": 0.6, # reduction factor between tillers of consecutive order : [0.8,1] ()
     "gravitropism_coefficient": 0.15 # 0.12
 }
@@ -208,7 +208,7 @@ archi_sorghum_angles = {
     # Leaf blade position in space
     "insertion_angle": [10,90], # leaf blade insertion angle : [10,80] (Truong et al., 2015; Kaitaniemi et al., 1999)
     "scurv": 0.75, # leaf blade relative inflexion point : [0.5, 0.9] ()
-    "curvature": [0,90], # leaf blade insertion-to-tip angle : [0, 90] (Kaitaniemi et al., 1999)
+    "curvature": 60, # leaf blade insertion-to-tip angle : [0, 90] (Kaitaniemi et al., 1999)
     "phyllotactic_angle": 137.5, # phyllotactic angle : [90;180] (Davis et al., 2024)
     "phyllotactic_deviation": 0, # half-deviation to phyllotactic angle : [0,90] (Davis et al., 2024)
 
@@ -221,7 +221,7 @@ archi_sorghum_angles = {
     # Tillering
     "nb_tillers": 0, # number of tillers : [0,6] (Lafarge et al., 2002)
     "tiller_angle": 20,
-    "tiller_delay": 2, # delay, as factor of phyllochron, between the appearance of a phytomer and the appearance of its tiller : [] ()
+    "tiller_delay": 1, # delay, as factor of phyllochron, between the appearance of a phytomer and the appearance of its tiller : [] ()
     "reduction_factor": 1 # reduction factor between tillers of consecutive order : [] ()
 }
 
@@ -265,6 +265,6 @@ archi_sorghum_PMA = {
     # Tillering
     "nb_tillers": 0, # number of tillers : [0,6] (Lafarge et al., 2002)
     "tiller_angle": 20,
-    "tiller_delay": 2, # delay, as factor of phyllochron, between the appearance of a phytomer and the appearance of its tiller : [] ()
+    "tiller_delay": 1, # delay, as factor of phyllochron, between the appearance of a phytomer and the appearance of its tiller : [] ()
     "reduction_factor": 0.8 # reduction factor between tillers of consecutive order : [0.8,1] ()
 }

@@ -176,7 +176,7 @@ def stics_weather_3d(filename, daily_dynamics):
     first_date = list(daily_dynamics.values())[0]["Date"]  # noqa: RUF015
     last_date = list(daily_dynamics.values())[-1]["Date"]
 
-    # Use these dates to filter your DataFrame
+    # Use these dates to filter DataFrame
     return df[(df.daydate >= pd.to_datetime(first_date)) & (df.daydate <= pd.to_datetime(last_date))]
 
 
