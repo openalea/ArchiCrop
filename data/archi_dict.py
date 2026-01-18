@@ -213,7 +213,7 @@ archi_sorghum_angles = {
     "phyllotactic_deviation": 0, # half-deviation to phyllotactic angle : [0,90] (Davis et al., 2024)
 
     # Development
-    "phyllochron": [30,70], #51 # phyllochron, i.e. stem element appearance rate : [30,70] [40,65 then x1.6-2.5] (Clerget, 2008)
+    "phyllochron": [30,80], #51 # phyllochron, i.e. stem element appearance rate : [30,70] [40,65 then x1.6-2.5] (Clerget, 2008)
     # "plastochron": 54, # plastochron, i.e. leaf blade appearance rate : [34,46 then 80-93] (Rami Kumar et al., 2009)
     "stem_duration": 1.6,
     "leaf_duration": 1.6,
