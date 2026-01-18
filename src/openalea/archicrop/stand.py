@@ -21,7 +21,7 @@ def compute_domain(density: float, inter_row: float = 0.7, conv_coef: float = 10
     - A tuple representing the domain of the sowing pattern.
     """
     inter_plant = (conv_coef / inter_row / density)  # Convert to cm
-    return ((-0.5 * inter_row, -0.5 * inter_plant), (0.5 * inter_row, 0.5 * inter_plant))
+    return ((-0.5 * inter_row * conv_coef, -0.5 * inter_plant), (0.5 * inter_row * conv_coef, 0.5 * inter_plant))
 
 
 def regular(nb_plants, nb_rank, dx, dy, nx=None):
