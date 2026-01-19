@@ -5,7 +5,7 @@ channels:
   - conda-forge
 dependencies:
   - openalea.astk
-  - alinea.caribu
+  - openalea.caribu
   - numpy
   - openalea.mtg
   - openalea.plantgl
