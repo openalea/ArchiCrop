@@ -155,7 +155,7 @@ def light_interception(weather_file, daily_dynamics, density, location, mtgs, ze
                     lights = [(par,(0,0,-1))]
                 else:
                     irr = sky_irradiance(daydate=par.daydate, day_ghi=par.rad, **location)
-                    sun, sky = sky_sources(sky_type='clear_sky', sky_irradiance=irr, scale='global')
+                    sun, sky = sky_sources(sky_type='clear_sky', sky_irradiance=irr, scale='global', source_irradiance='horizontal')
                     lights = caribu_light_sources(sun, sky)
                 # Build and illuminate scene
                 scene, labels = build_scene(mtg, senescence=False)
@@ -168,9 +168,12 @@ def light_interception(weather_file, daily_dynamics, density, location, mtgs, ze
                     scene_tmp = cs.plot(raw, display=False)[0]
                     scene_tmp.save(f'scene_{i}.png') # not as images !!!
 
-            nrj_per_plant[k] = [sum(nrj) for nrj in nrj_per_leaf]
+            # nrj_per_plant[k] = [sum(nrj) for nrj in nrj_per_leaf]
+            nrj_per_plant[k] = nrj_per_leaf
             # print(a)
             # a += 1
+
+            # Qi_soil, Einc_soil = cs.getSoilEnergy()
 
     '''
     # Calculate energy per leaf and irradiance per plant
@@ -190,4 +193,4 @@ def light_interception(weather_file, daily_dynamics, density, location, mtgs, ze
     nrj_per_plant = [[sum(growing_plant) for growing_plant in plant] for plant in nrj_per_leaf] # to dict !!!!
     '''
 
-    return nrj_per_plant 
+    return nrj_per_plant
