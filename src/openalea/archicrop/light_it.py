@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import numpy as np
 import pandas as pd
-from openalea.caribu.CaribuScene import CaribuScene
+from alinea.caribu.CaribuScene import CaribuScene
 
 from openalea.archicrop.display import build_scene
 from openalea.archicrop.stand import compute_domain
