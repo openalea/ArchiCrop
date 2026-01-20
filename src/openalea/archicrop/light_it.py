@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import numpy as np
 import pandas as pd
-from alinea.caribu.CaribuScene import CaribuScene
+from openalea.caribu.CaribuScene import CaribuScene
 
 from openalea.archicrop.display import build_scene
 from openalea.archicrop.stand import compute_domain
@@ -133,10 +133,7 @@ def light_interception(weather_file, daily_dynamics, density, location, mtgs, ze
     domain = compute_domain(density = density, inter_row = inter_row) # cm
 
     # Define incident PAR
-    if zenith:
-        par_incident = [value["Incident PAR"] for value in daily_dynamics.values()]
-    else:
-        par_incident = list(df_weather.itertuples())
+    incident_rads = list(df_weather.itertuples())
 
     # Compute light interception for each plant at each time step
     nrj_per_plant = {}
@@ -144,18 +141,19 @@ def light_interception(weather_file, daily_dynamics, density, location, mtgs, ze
     # a = 0
     for k, mtgs_plant in mtgs.items():
         if mtgs_plant[0] is None:
-            nrj_per_plant[k] = [None] * len(par_incident)
+            nrj_per_plant[k] = [None] * len(incident_rads)
         else:
             nrj_per_leaf = []
             # For each time step
-            for i,(mtg, par) in enumerate(zip(mtgs_plant, par_incident)):
+            for i,(mtg, incident_rad) in enumerate(zip(mtgs_plant, incident_rads)):
                 # if i%2 == 0 and i<=80:
+                par = incident_rad.rad * 0.48 * 0.95
                 # Compute light sources
                 if zenith:
                     lights = [(par,(0,0,-1))]
                 else:
-                    irr = sky_irradiance(daydate=par.daydate, day_ghi=par.rad, **location)
-                    sun, sky = sky_sources(sky_type='clear_sky', sky_irradiance=irr, scale='global', source_irradiance='horizontal')
+                    irr = sky_irradiance(daydate=incident_rad.daydate, day_ghi=par, **location)
+                    sun, sky = sky_sources(sky_type='clear_sky', sky_irradiance=irr, scale='global') #, source_irradiance='horizontal')
                     lights = caribu_light_sources(sun, sky)
                 # Build and illuminate scene
                 scene, labels = build_scene(mtg, senescence=False)
@@ -168,8 +166,8 @@ def light_interception(weather_file, daily_dynamics, density, location, mtgs, ze
                     scene_tmp = cs.plot(raw, display=False)[0]
                     scene_tmp.save(f'scene_{i}.png') # not as images !!!
 
-            # nrj_per_plant[k] = [sum(nrj) for nrj in nrj_per_leaf]
-            nrj_per_plant[k] = nrj_per_leaf
+            nrj_per_plant[k] = [sum(nrj) for nrj in nrj_per_leaf]
+            # nrj_per_plant[k] = nrj_per_leaf
             # print(a)
             # a += 1
 

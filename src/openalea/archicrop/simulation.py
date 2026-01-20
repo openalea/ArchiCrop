@@ -7,7 +7,7 @@ from datetime import date
 
 import numpy as np
 import pandas as pd
-import sympy as sp
+# import sympy as sp
 import xarray as xr
 from matplotlib import pyplot as plt
 from matplotlib.lines import Line2D
