@@ -138,7 +138,6 @@ def light_interception(weather_file, daily_dynamics, density, location, mtgs, ze
     # Compute light interception for each plant at each time step
     nrj_per_plant = {}
     # For each plant
-    # a = 0
     for k, mtgs_plant in mtgs.items():
         if mtgs_plant[0] is None:
             nrj_per_plant[k] = [None] * len(incident_rads)
@@ -146,7 +145,6 @@ def light_interception(weather_file, daily_dynamics, density, location, mtgs, ze
             nrj_per_leaf = []
             # For each time step
             for i,(mtg, incident_rad) in enumerate(zip(mtgs_plant, incident_rads)):
-                # if i%2 == 0 and i<=80:
                 par = incident_rad.rad * 0.48 * 0.95
                 # Compute light sources
                 if zenith:
@@ -168,10 +166,6 @@ def light_interception(weather_file, daily_dynamics, density, location, mtgs, ze
 
             nrj_per_plant[k] = [sum(nrj) for nrj in nrj_per_leaf]
             # nrj_per_plant[k] = nrj_per_leaf
-            # print(a)
-            # a += 1
-
-            # Qi_soil, Einc_soil = cs.getSoilEnergy()
 
     '''
     # Calculate energy per leaf and irradiance per plant
