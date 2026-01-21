@@ -894,45 +894,79 @@ def plot_PAR(dates, nrj_per_plant, par_incident, par_stics, density, stics_color
 
 def write_netcdf(filename, daily_dynamics, params_sets, pot_la, pot_h, realized_la, realized_h, nrj_per_plant, density, seed):
     # Prepare the data for xarray Dataset
-    daily_dyn = {}
-    for key in daily_dynamics[1]:
-        daily_dyn[key] = [v[key] for v in daily_dynamics.values()]
-    dates = pd.to_datetime(daily_dyn['Date'])
+    daily_dyn = {k: [v[k] for v in daily_dynamics.values()]
+                for k in daily_dynamics[1]}
+    dates = pd.to_datetime(daily_dyn["Date"])
 
+    ds_archi = (
+        pd.DataFrame.from_dict(params_sets, orient="index")
+        .to_xarray()
+        .rename({"index": "id"})
+    )
 
-    df_archi = pd.DataFrame.from_dict(params_sets, orient='index')
-    ds_archi = df_archi.to_xarray().rename({'index':'id'})
+    # ds_archi = (
+    #     pd.DataFrame.from_dict(params_sets, orient="index")
+    #     .rename_axis("id")      # rename pandas index
+    #     .to_xarray()
+    # )
 
-    # columns_filters = [f"filter_{i}" for i in [1,2,3]]
-    # df_filters = pd.DataFrame.from_dict(filters, orient='index', columns=columns_filters)
-    # ds_filters = df_filters.to_xarray().rename({'index':'id'})
+    # df_archi = pd.DataFrame.from_dict(params_sets, orient='index')
+    # ds_archi = df_archi.to_xarray().rename({'index':'id'})
 
     # mtgs_string = {k: [write_mtg(g) if g is not None else None for g in mtg] for k, mtg in mtgs.items()}
 
-    # Create the xarray Dataset
+    # Per-id time series
+    df_realized_la = pd.DataFrame.from_dict(realized_la, orient="index", columns=dates)
+    df_realized_h = pd.DataFrame.from_dict(realized_h, orient="index", columns=dates)
+    df_pot_la = pd.DataFrame.from_dict(pot_la, orient="index", columns=dates)
+    df_pot_h = pd.DataFrame.from_dict(pot_h, orient="index", columns=dates)
+    df_nrj = pd.DataFrame.from_dict(nrj_per_plant, orient="index", columns=dates)
+
     ds = xr.Dataset(
-        data_vars=dict(  # noqa: C408
-            thermal_time = (["time"], daily_dyn["Thermal time"]),
-            lai_stics = (["time"], daily_dyn["Plant leaf area"]),
-            sen_lai_stics = (["time"], daily_dyn["Plant senescent leaf area"]),
-            height_stics = (["time"], daily_dyn["Plant height"]),
-            inc_par = (["time"], daily_dyn["Incident PAR"]),
-            abs_par_stics = (["time"], daily_dyn["Absorbed PAR"]),
-            density = density,
-            realized_la = (["id", "time"], pd.DataFrame.from_dict(realized_la, orient='index', columns=dates)),
-            realized_h = (["id", "time"], pd.DataFrame.from_dict(realized_h, orient='index', columns=dates)),
-            pot_la = (["id", "time"], pd.DataFrame.from_dict(pot_la, orient='index', columns=dates)),
-            pot_h = (["id", "time"], pd.DataFrame.from_dict(pot_h, orient='index', columns=dates)),
-            nrj_per_plant = (["id", "time"], pd.DataFrame.from_dict(nrj_per_plant, orient='index', columns=dates)),
-            # mtgs = (["id", "time"], pd.DataFrame.from_dict(mtgs_string, orient='index', columns=dates)) 
+        data_vars=dict(
+            thermal_time=("time", daily_dyn["Thermal time"]),
+            lai_stics=("time", daily_dyn["Plant leaf area"]),
+            sen_lai_stics=("time", daily_dyn["Plant senescent leaf area"]),
+            height_stics=("time", daily_dyn["Plant height"]),
+            inc_par=("time", daily_dyn["Incident PAR"]),
+            abs_par_stics=("time", daily_dyn["Absorbed PAR"]),
+            density=density,
+            realized_la=(("id", "time"), df_realized_la),
+            realized_h=(("id", "time"), df_realized_h),
+            pot_la=(("id", "time"), df_pot_la),
+            pot_h=(("id", "time"), df_pot_h),
+            nrj_per_plant=(("id", "time"), df_nrj),
         ),
-        coords=dict(  # noqa: C408
-            id = range(len(realized_la)),
-            time = dates
+        coords=dict(
+            id=df_realized_la.index,
+            time=dates
         )
     )
 
-    ds = xr.merge([ds, ds_archi]) #, ds_filters])
+    # # Create the xarray Dataset
+    # ds = xr.Dataset(
+    #     data_vars=dict(  # noqa: C408
+    #         thermal_time = (["time"], daily_dyn["Thermal time"]),
+    #         lai_stics = (["time"], daily_dyn["Plant leaf area"]),
+    #         sen_lai_stics = (["time"], daily_dyn["Plant senescent leaf area"]),
+    #         height_stics = (["time"], daily_dyn["Plant height"]),
+    #         inc_par = (["time"], daily_dyn["Incident PAR"]),
+    #         abs_par_stics = (["time"], daily_dyn["Absorbed PAR"]),
+    #         density = density,
+    #         realized_la = (["id", "time"], pd.DataFrame.from_dict(realized_la, orient='index', columns=dates)),
+    #         realized_h = (["id", "time"], pd.DataFrame.from_dict(realized_h, orient='index', columns=dates)),
+    #         pot_la = (["id", "time"], pd.DataFrame.from_dict(pot_la, orient='index', columns=dates)),
+    #         pot_h = (["id", "time"], pd.DataFrame.from_dict(pot_h, orient='index', columns=dates)),
+    #         nrj_per_plant = (["id", "time"], pd.DataFrame.from_dict(nrj_per_plant, orient='index', columns=dates)),
+    #         # mtgs = (["id", "time"], pd.DataFrame.from_dict(mtgs_string, orient='index', columns=dates)) 
+    #     ),
+    #     coords=dict(  # noqa: C408
+    #         id = range(len(realized_la)),
+    #         time = dates
+    #     )
+    # )
+
+    ds = xr.merge([ds, ds_archi]) 
 
     # Save the dataset to a NetCDF file
     today_str = date.today().strftime("%Y-%m-%d")
