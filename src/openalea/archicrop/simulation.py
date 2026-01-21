@@ -29,9 +29,7 @@ def constrain_archi_params(archi_params: dict, daily_dynamics: dict,
         archi_params["leaf_area"] = pot_factor*max(leaf_area_plant) 
 
     if lifespan is not None:
-        archi_params["leaf_lifespan"] = lifespan
-    if lifespan_early is not None:
-        archi_params["leaf_lifespan_early"] = lifespan_early
+        archi_params["leaf_lifespan"] = [lifespan_early, lifespan]
 
     return archi_params
 
@@ -59,8 +57,9 @@ def param_sampling(archi_params: dict, n_samples: int, seed: int = 42, latin_hyp
                 u_bounds.append(max(value))
             else:
                 # Discretize each parameter
-                value_list = np.linspace(min(value), max(value), n_samples)
-                values_lists.append(value_list)
+                # value_list = np.linspace(min(value), max(value), n_samples)
+                # values_lists.append(value_list)
+                values_lists.append(value)
 
             sampled_params.append(key)
 
@@ -93,16 +92,16 @@ def param_sampling(archi_params: dict, n_samples: int, seed: int = 42, latin_hyp
     return param_sets
 
 
-def cumsum_organs(g, thermal_time: list, starts_ends: list) -> list:
+def cumsum_organs(g, thermal_time: list, starts_ends: list, property: str) -> list:
     '''Compute the sum of all organs dimension, i.e. the plant-scale dimension at each thermal time step'''
     cumsum = []
     for t in thermal_time:
         sum_organs = 0
         for (vid, s,e) in starts_ends:
             if s <= t < e:
-                sum_organs += (t-s)/(e-s) * g.node(vid).leaf_area
+                sum_organs += (t-s)/(e-s) * g.properties()[property][vid]
             elif t >= e:
-                sum_organs += g.node(vid).leaf_area
+                sum_organs += g.properties()[property][vid]
         cumsum.append(sum_organs)
     return cumsum
 
@@ -143,8 +142,8 @@ def compute_pot_growth(param_sets: dict, daily_dynamics: dict):
         stem_starts_ends.sort(key=lambda x: x[1])  
         leaf_starts_ends.sort(key=lambda x: x[1])
 
-        pot_la[id] = cumsum_organs(g, thermal_time, leaf_starts_ends)
-        pot_h[id] = cumsum_organs(g, thermal_time, stem_starts_ends)
+        pot_la[id] = cumsum_organs(g, thermal_time, leaf_starts_ends, 'leaf_area')
+        pot_h[id] = cumsum_organs(g, thermal_time, stem_starts_ends, 'mature_length')
 
     return pot_la, pot_h, mtgs
     
@@ -308,7 +307,15 @@ def write_netcdf(filename: str, daily_dynamics: dict, params_sets: dict,
     df_realized_h = pd.DataFrame.from_dict(realized_h, orient="index", columns=dates)
     df_pot_la = pd.DataFrame.from_dict(pot_la, orient="index", columns=dates)
     df_pot_h = pd.DataFrame.from_dict(pot_h, orient="index", columns=dates)
-    df_nrj = pd.DataFrame.from_dict(nrj_per_plant, orient="index", columns=dates)
+
+    # 3D array for nrj per leaf 
+    ids = list(nrj_per_plant.keys())
+    n_id = len(ids)
+    n_time = len(dates)
+    n_leaf = len(nrj_per_plant[ids[0]][0])  # length of inner list
+    arr_nrj = np.empty((n_id, n_time, n_leaf), dtype=float)
+    for i, k in enumerate(ids):
+        arr_nrj[i, :, :] = nrj_per_plant[k]
 
     ds = xr.Dataset(
         data_vars=dict(
@@ -323,11 +330,12 @@ def write_netcdf(filename: str, daily_dynamics: dict, params_sets: dict,
             realized_h=(("id", "time"), df_realized_h),
             pot_la=(("id", "time"), df_pot_la),
             pot_h=(("id", "time"), df_pot_h),
-            nrj_per_plant=(("id", "time"), df_nrj),
+            nrj_per_plant=(("id", "time", "leaf"), arr_nrj),
         ),
         coords=dict(
             id=df_realized_la.index,
-            time=dates
+            time=dates,
+            leaf=np.arange(n_leaf)
         )
     )
 

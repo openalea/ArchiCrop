@@ -178,20 +178,20 @@ archi_sorghum = {
     "tiller_angle": 20,
     "tiller_delay": 1, # delay, as factor of phyllochron, between the appearance of a phytomer and the appearance of its tiller : [] ()
     "reduction_factor": 0.6, # reduction factor between tillers of consecutive order : [0.8,1] ()
-    "gravitropism_coefficient": 0.15 # 0.12
+    "gravitropism_coefficient": 0.05 # 0.12
 }
 
 
 archi_sorghum_angles = {
-    "nb_phy": 18, # [10,30], # number of phytomers on the main stem : [10,40] (Ndiaye et al., 2021; Lafarge and Tardieu, 2002; Clerget, 2008; Ganeme et al., 2022)
+    "nb_phy": 20, # [10,30], # number of phytomers on the main stem : [10,40] (Ndiaye et al., 2021; Lafarge and Tardieu, 2002; Clerget, 2008; Ganeme et al., 2022)
     "nb_short_phy": 4,
     "short_phy_height": 3,
 
     # Stem
     # "height": [50,400],
     "stem_q": 1, # parameter for ligule height distribution along axis : [1.1] (Kaitaniemi et al., 1999) 
-    "diam_base": 2.2, # stem base diameter : [2.2] (Ndiaye et al., 2021)
-    "diam_top": 1.2, # stem top diameter: [1.2] (Ndiaye et al., 2021)
+    "diam_base": 4.0, # stem base diameter : [2.2] (Ndiaye et al., 2021)
+    "diam_top": 1.5, # stem top diameter: [1.2] (Ndiaye et al., 2021)
 
     # Leaf area distribution along the stem
     # "leaf_area": [1000,20000],
@@ -206,9 +206,9 @@ archi_sorghum_angles = {
     "f2": 0.92, # parameter for leaf blade shape
 
     # Leaf blade position in space
-    "insertion_angle": [10,90], # leaf blade insertion angle : [10,80] (Truong et al., 2015; Kaitaniemi et al., 1999)
-    "scurv": 0.75, # leaf blade relative inflexion point : [0.5, 0.9] ()
-    "curvature": 60, # leaf blade insertion-to-tip angle : [0, 90] (Kaitaniemi et al., 1999)
+    "insertion_angle": [15,30,45,60,75,90], # leaf blade insertion angle : [10,80] (Truong et al., 2015; Kaitaniemi et al., 1999)
+    "scurv": 0.6, # leaf blade relative inflexion point : [0.5, 0.9] ()
+    "curvature": 90, # leaf blade insertion-to-tip angle : [0, 90] (Kaitaniemi et al., 1999)
     "phyllotactic_angle": 137.5, # phyllotactic angle : [90;180] (Davis et al., 2024)
     "phyllotactic_deviation": 0, # half-deviation to phyllotactic angle : [0,90] (Davis et al., 2024)
 
@@ -222,7 +222,9 @@ archi_sorghum_angles = {
     "nb_tillers": 0, # number of tillers : [0,6] (Lafarge et al., 2002)
     "tiller_angle": 20,
     "tiller_delay": 1, # delay, as factor of phyllochron, between the appearance of a phytomer and the appearance of its tiller : [] ()
-    "reduction_factor": 1 # reduction factor between tillers of consecutive order : [] ()
+    "reduction_factor": 1, # reduction factor between tillers of consecutive order : [] ()
+
+    # "inter_row": [0.4,0.6]
 }
 
 

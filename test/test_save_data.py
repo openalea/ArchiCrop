@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import numpy as np
 import pandas as pd
 import xarray as xr
 
@@ -34,26 +35,41 @@ pot_h = {
     4: [12, 13, 14, 15, 16]
 }
 
+nrj_per_leaf = {
+    0: [[10,10], [11,11], [12,12], [13,13], [14,14]],
+    2: [[11,11], [12,12], [13,13], [14,14], [15,15]],
+    4: [[12,12], [13,13], [14,14], [15,15], [16,16]]
+}
+
+ids = list(nrj_per_leaf.keys())
+n_id = len(ids)
+n_time = len(dates)
+n_leaf = len(nrj_per_leaf[ids[0]][0])  # length of inner list
+arr_nrj = np.empty((n_id, n_time, n_leaf), dtype=float)
+for i, k in enumerate(ids):
+    arr_nrj[i, :, :] = nrj_per_leaf[k]
+
 df_pot_la = pd.DataFrame.from_dict(pot_la, orient="index", columns=dates)
 df_pot_h = pd.DataFrame.from_dict(pot_h, orient="index", columns=dates)
 
-ds = xr.Dataset(
+ds_res = xr.Dataset(
     data_vars={
-        "STICS_tps_ther": (["time"], daily_dyn["tps_ther"]),
-        "STICS_lai": (["time"], daily_dyn["lai"]),
-        "pot_la": (["id", "time"], df_pot_la),
-        "pot_h": (["id", "time"], df_pot_h)
+        "STICS_tps_ther": (("time"), daily_dyn["tps_ther"]),
+        "STICS_lai": (("time"), daily_dyn["lai"]),
+        "pot_la": (("id", "time"), df_pot_la),
+        "pot_h": (("id", "time"), df_pot_h),
+        "nrj_per_leaf": (("id", "time", "leaf"), arr_nrj)
     },
     coords={
         "id": df_pot_la.index,
-        # "id": range(len(pot_la)),
-        "time": dates
+        "time": dates,
+        "leaf": np.arange(n_leaf)
     }
 )
 
-ds1 = xr.merge([ds, ds_archi])
+ds1 = xr.merge([ds_res, ds_archi])
 
-ds2 = xr.merge([ds, ds_archi])
+ds2 = xr.merge([ds_res, ds_archi])
 
 # print(dict(zip(ds.id.values, ds.pot_la.values)))
 # print(dict(zip(ds.id.values, ds.a.values)))
