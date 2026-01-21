@@ -206,7 +206,7 @@ archi_sorghum_angles = {
     "f2": 0.92, # parameter for leaf blade shape
 
     # Leaf blade position in space
-    "insertion_angle": [15,30,45,60,75,90], # leaf blade insertion angle : [10,80] (Truong et al., 2015; Kaitaniemi et al., 1999)
+    "insertion_angle": [30,45,60], # [15,30,45,60,75,90], # leaf blade insertion angle : [10,80] (Truong et al., 2015; Kaitaniemi et al., 1999)
     "scurv": 0.6, # leaf blade relative inflexion point : [0.5, 0.9] ()
     "curvature": 90, # leaf blade insertion-to-tip angle : [0, 90] (Kaitaniemi et al., 1999)
     "phyllotactic_angle": 137.5, # phyllotactic angle : [90;180] (Davis et al., 2024)
