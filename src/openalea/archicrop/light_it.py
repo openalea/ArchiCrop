@@ -164,8 +164,8 @@ def light_interception(weather_file, daily_dynamics, density, location, mtgs, ze
                     scene_tmp = cs.plot(raw, display=False)[0]
                     scene_tmp.save(f'scene_{i}.png') # not as images !!!
 
-            nrj_per_plant[k] = [sum(nrj) for nrj in nrj_per_leaf]
-            # nrj_per_plant[k] = nrj_per_leaf
+            # nrj_per_plant[k] = [sum(nrj) for nrj in nrj_per_leaf]
+            nrj_per_plant[k] = nrj_per_leaf
 
     '''
     # Calculate energy per leaf and irradiance per plant
