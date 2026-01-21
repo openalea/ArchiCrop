@@ -7,7 +7,7 @@ import numpy as np
 
 def geometric_dist(height, nb_phy, q, u0):
     """
-    Calculates the heights of leaves'ligules along an axis, according to a geometric series,
+    Calculates the heights of leaves' ligules along an axis, according to a geometric series,
     starting from an offset height (u0) = pseudostem height.
 
     Parameters:
@@ -19,15 +19,6 @@ def geometric_dist(height, nb_phy, q, u0):
     Returns:
     - List[float]: Normalized distances of leaves along the plant's height.
     """
-    if nb_phy <= 0:
-        msg = "Number of phytomers (nb_phy) must be greater than zero."
-        raise ValueError(msg)
-    if q <= 0:
-        msg = "Geometric progression factor (q) must be positive."
-        raise ValueError(msg)
-    if u0 >= height:
-        msg = "Offset height (u0) must be less than the total height."
-        raise ValueError(msg)
 
     # Calculate the height available for geometric distribution
     # remaining_height = height - u0
@@ -41,15 +32,8 @@ def geometric_dist(height, nb_phy, q, u0):
     return heights.tolist()
 
 
-# def bell_shaped_dist(max_leaf_length, nb_phy, rmax, skew):
-#     """returns relative leaf area of individual leaves along bell shaped model"""
-#     k = -np.log(skew) * rmax
-#     r = np.linspace(1.0 / nb_phy, 1, nb_phy)
-#     relative_area = np.exp(-k / rmax * (2 * (r - rmax) ** 2 + (r - rmax) ** 3))
-#     return relative_area * max_leaf_length
-
 def bell_shaped_dist(leaf_area, nb_phy, rmax, skew):
-    """returns relative leaf area of individual leaves along bell shaped model, so that the sum equals leaf_area"""
+    """Compute leaf area of individual leaves along bell shaped model, so that the sum equals leaf_area"""
     k = -np.log(skew) * rmax
     r = np.linspace(1.0 / nb_phy, 1, nb_phy)
     relative_area = np.exp(-k / rmax * (2 * (r - rmax) ** 2 + (r - rmax) ** 3))

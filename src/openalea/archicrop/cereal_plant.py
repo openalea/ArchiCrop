@@ -86,7 +86,7 @@ def add_leaf_senescence(g, vid_leaf, leaf_lifespan, end_juv):
 
 def add_tiller(g, vid, start_time, phyllochron, plastochron, 
                stem_duration, leaf_duration, leaf_lifespan, end_juv, 
-               tiller_delay, reduction_factor,  # noqa: ARG001
+               tiller_delay, reduction_factor,  
                height, leaf_area, nb_short_phy, short_phy_height, wl, diam_base, diam_top,
                insertion_angle, scurv, curvature,
                klig, swmax, f1, f2,
@@ -274,7 +274,6 @@ def cereal(nb_phy, phyllochron, plastochron, stem_duration, leaf_duration,
             insertion_angle,
             scurv,
             curvature,
-            # alpha,
             klig, swmax, f1, f2,
             stem_q,
             rmax,
@@ -286,9 +285,8 @@ def cereal(nb_phy, phyllochron, plastochron, stem_duration, leaf_duration,
             plant_orientation=45,
             spiral=True,
             classic=False):
-            # json=None, classic=False, seed=None, plant=None):
     """
-    Generate a 'geometric-based' MTG representation of cereals
+    Generate a MTG representation of cereals
 
     Args:
     :param nb_phy: int, number of phytomers
@@ -371,7 +369,7 @@ def cereal(nb_phy, phyllochron, plastochron, stem_duration, leaf_duration,
         add_leaf_senescence(g=g, vid_leaf=vid_leaf, leaf_lifespan=leaf_lifespan, end_juv=end_juv)
 
 
-    # Tillers
+    ## Tillers
 
     for i in range(nb_tillers):
         # add a tiller

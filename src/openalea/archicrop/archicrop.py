@@ -1,11 +1,5 @@
 from __future__ import annotations
 
-import math
-
-# from oawidgets.plantgl import *  # noqa: F403
-
-# from openalea.plantgl.all import Color3, Material
-
 from .cereal_plant import cereal
 from .display import build_scene
 from .growth import (
@@ -15,11 +9,10 @@ from .growth import (
     mtg_turtle_time_with_constraint,
 )
 from .stand import agronomic_plot
+from .stics_io import get_pheno
 
 
 class ArchiCrop:
-
-    # g = None 
 
     def __init__(self, 
                  height,
@@ -43,7 +36,6 @@ class ArchiCrop:
                  phyllotactic_angle=137.5,
                  phyllotactic_deviation=0,
                  phyllochron=40,
-                #  plastochron=30,
                  stem_duration=1.6,
                  leaf_duration=1.6,
                  leaf_lifespan=300,
@@ -66,7 +58,6 @@ class ArchiCrop:
         :param insertion_angle: float, insertion angle of the leaf (i.e. between the stem and the tangent line at the base of the leaf) (in °)
         :param scurv: float, curvilinear abscissa of inflexion point for leaf curvature (in [0,1])
         :param curvature: float, curvature angle (i.e. angle between insertion angle and the tangent line at the tip of the leaf) (in °)
-        # :param alpha: float, parameter of the polynomial defining leaf shape
         :param stem_q: float, common ratio of the geometric series defining internode lengths for a given height (cf partition of unit)
         :param rmax: float, proportion of the total number of leaves corresponding to the position of the longest leaf, from the base of the stem, according to a bell-shaped distribution of leaf lengths along the stem (in [0,1])
         :param skem: float, parameter describing the asymmetry of the bell-shaped distribution of leaf lengths along the stem
@@ -93,29 +84,8 @@ class ArchiCrop:
         """
 
         if daily_dynamics is not None:
-
-            thermal_time = [value["Thermal time"] for value in daily_dynamics.values()]
-
-            for key, value in daily_dynamics.items():
-                if value["Phenology"] == 'juvenile':
-                    next_key = key + 1
-                    if next_key in daily_dynamics and daily_dynamics[next_key]["Phenology"] == 'exponential':
-                        end_juv = thermal_time[key-1] + thermal_time[0]
-
-                elif value["Phenology"] == 'exponential':
-                    next_key = key + 1
-                    if next_key in daily_dynamics and daily_dynamics[next_key]["Phenology"] == 'repro':
-                        end_veg = thermal_time[key-1] + thermal_time[0]
-                        break
-
-                # else:
-                #     end_veg = 0
-            
-            # self.nb_phy = math.ceil((end_veg-thermal_time[0]-(leaf_duration*phyllochron))/phyllochron) # nb_phy
-
-
+            _, end_veg, end_juv = get_pheno(daily_dynamics)
         else:
-            # self.nb_phy = nb_phy
             end_juv = 0
             end_veg = 1000
             
@@ -139,10 +109,10 @@ class ArchiCrop:
         self.skew = skew 
         self.phyllotactic_angle = phyllotactic_angle
         self.phyllotactic_deviation = phyllotactic_deviation
-        self.phyllochron = phyllochron # (end_veg-thermal_time[0])/(leaf_duration+nb_phy)
+        self.phyllochron = phyllochron 
         self.plastochron = phyllochron
-        self.leaf_duration = leaf_duration # end_veg/phyllochron-nb_phy 
-        self.stem_duration = leaf_duration # end_veg/plastochron-nb_phy
+        self.leaf_duration = leaf_duration 
+        self.stem_duration = leaf_duration 
         self.leaf_lifespan = leaf_lifespan
         self.nb_tillers = nb_tillers
         self.tiller_delay = tiller_delay
@@ -195,25 +165,6 @@ class ArchiCrop:
                         tiller_angle=self.tiller_angle,
                         gravitropism_coefficient=self.gravitropism_coefficient,
                         plant_orientation=self.plant_orientation)
-
-    '''
-    def define_development(self):
-        """
-        Define the development of the plant, by setting a start and an end thermal time for the growth of each organ.
-
-        :param g: MTG, MTG of a plant
-        :param phyllochron: float, phyllochron, i.e. internode appearance rate (in °C.day/internode)
-        :param plastochron: float, plastochron, i.e. leaf appearance rate (in °C.day/leaf)
-        :param leaf_duration: float, leaf elongation time / phyllochron
-        :param stem_duration: float, internode elongation time / phyllochron
-
-        :return: MTG of a plant
-        """
-                
-        self.g = thermal_time(self.g, self.phyllochron, self.plastochron, self.leaf_duration, self.stem_duration, self.leaf_lifespan, self.end_juv)
-
-        # return self.g
-    '''
     
     def grow_plant(self, rate=True, distribution_function=demand_dist):
         """
@@ -242,7 +193,7 @@ class ArchiCrop:
         
         return growing_plant
     
-
+'''
     def display_stand(self, density, length_plot, width_plot, inter_row):
         """
         Display a single plant with PlantGL from an MTG.
@@ -269,3 +220,4 @@ class ArchiCrop:
         nice_green = Color3((50, 100, 0))
         scene, _ = build_scene(self.g, leaf_material = Material(nice_green), stem_material=Material(nice_green))
         return scene
+'''

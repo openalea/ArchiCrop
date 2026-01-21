@@ -31,7 +31,6 @@ def sr_dornbush(nb_segment=100, klig=0.6, swmax=0.55, f1=0.64, f2=0.92):
 
     Returns
     -------
-
     s,r parallel array for curviliear abcissa / relative leaf width along leaf shape
     """
 
@@ -105,7 +104,7 @@ def growing_leaf_area(leaf, length=1, mature_length=1, width_max=1, form_factor=
     sr_b = 1 - float(length) / mature_length
     return leaf_area(s, r, mature_length, width_max, sr_base=sr_b, sr_top=1)
 
-
+'''
 def truncate_leaf(leaf, fraction=0.1):
     x, y, s, r = leaf
     st = np.linspace(0, fraction, len(s))
@@ -128,3 +127,4 @@ def get_base_width(leaf, visible_length=None):
     _, _, s, r = leaf
     s /= max(s)
     return interp1d(s, r)(1 - visible_length)
+'''

@@ -51,7 +51,24 @@ ds = xr.Dataset(
     }
 )
 
-ds = xr.merge([ds, ds_archi])
+ds1 = xr.merge([ds, ds_archi])
+
+ds2 = xr.merge([ds, ds_archi])
 
 # print(dict(zip(ds.id.values, ds.pot_la.values)))
-# print(dict(zip(ds.id.values, ds.pot_la.values)))
+# print(dict(zip(ds.id.values, ds.a.values)))
+
+def concat_ds(ds_list):
+    # ds_new = xr.Dataset()
+    for i,ds in enumerate(ds_list):
+        if i > 0:
+            ds_new = ds.assign_coords(id=ds.id + offset)
+            ds_tot = xr.concat([ds_tot, ds_new], dim="id")
+        else:
+            ds_tot = ds
+        offset = int(ds.id.max()) + 2
+    return ds_tot
+
+ds_new = concat_ds([ds1,ds2])
+
+# print(ds_new)
