@@ -320,18 +320,19 @@ def write_netcdf(filename: str, daily_dynamics: dict, params_sets: dict,
     df_realized_h = pd.DataFrame.from_dict(realized_h, orient="index", columns=dates)
     df_pot_la = pd.DataFrame.from_dict(pot_la, orient="index", columns=dates)
     df_pot_h = pd.DataFrame.from_dict(pot_h, orient="index", columns=dates)
+    df_nrj_per_plant = pd.DataFrame.from_dict(nrj_per_plant, orient="index", columns=dates)
 
-    # 3D array for nrj per leaf 
-    ids = list(nrj_per_plant.keys())
-    n_id = len(ids)
-    n_time = len(dates)
-    n_leaf = len(nrj_per_plant[ids[0]][-1])  # length of inner list for a plant with all leaves
-    arr_nrj = np.zeros((n_id, n_time, n_leaf), dtype=float)
-    for i, plant_id in enumerate(ids):
-        plant = nrj_per_plant[plant_id]
-        for t, leaf_list in enumerate(plant):
-            for j, leaf in enumerate(leaf_list):
-                arr_nrj[i, t, j] = leaf
+    # # 3D array for nrj per leaf 
+    # ids = list(nrj_per_plant.keys())
+    # n_id = len(ids)
+    # n_time = len(dates)
+    # n_leaf = len(nrj_per_plant[ids[0]][-1])  # length of inner list for a plant with all leaves
+    # arr_nrj = np.zeros((n_id, n_time, n_leaf), dtype=float)
+    # for i, plant_id in enumerate(ids):
+    #     plant = nrj_per_plant[plant_id]
+    #     for t, leaf_list in enumerate(plant):
+    #         for j, leaf in enumerate(leaf_list):
+    #             arr_nrj[i, t, j] = leaf
 
     ds = xr.Dataset(
         data_vars=dict(
@@ -346,7 +347,7 @@ def write_netcdf(filename: str, daily_dynamics: dict, params_sets: dict,
             realized_h=(("id", "time"), df_realized_h),
             pot_la=(("id", "time"), df_pot_la),
             pot_h=(("id", "time"), df_pot_h),
-            # nrj_per_plant=(("id", "time", "leaf"), arr_nrj),
+            nrj_per_plant=(("id", "time", "leaf"), df_nrj_per_plant),
         ),
         coords=dict(
             id=df_realized_la.index,
@@ -354,13 +355,13 @@ def write_netcdf(filename: str, daily_dynamics: dict, params_sets: dict,
         )
     )
 
-    for n in range(n_leaf):
-        list_nrj_leaf = np.zeros((n_id, n_time), dtype=float)
-        for i, plant_id in enumerate(ids):
-            for j, t in enumerate(nrj_per_plant[plant_id]):
-                if n < len(t):
-                    list_nrj_leaf[i,j] = t[n]
-        ds["nrj_leaf_"+str(n)] = (("id", "time"), list_nrj_leaf)
+    # for n in range(n_leaf):
+    #     list_nrj_leaf = np.zeros((n_id, n_time), dtype=float)
+    #     for i, plant_id in enumerate(ids):
+    #         for j, t in enumerate(nrj_per_plant[plant_id]):
+    #             if n < len(t):
+    #                 list_nrj_leaf[i,j] = t[n]
+    #     ds["nrj_leaf_"+str(n)] = (("id", "time"), list_nrj_leaf)
 
 
     ds = xr.merge([ds, ds_archi]) 
