@@ -347,7 +347,7 @@ def write_netcdf(filename: str, daily_dynamics: dict, params_sets: dict,
             realized_h=(("id", "time"), df_realized_h),
             pot_la=(("id", "time"), df_pot_la),
             pot_h=(("id", "time"), df_pot_h),
-            nrj_per_plant=(("id", "time", "leaf"), df_nrj_per_plant),
+            nrj_per_plant=(("id", "time"), df_nrj_per_plant),
         ),
         coords=dict(
             id=df_realized_la.index,
