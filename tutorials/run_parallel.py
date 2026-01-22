@@ -31,7 +31,8 @@ if __name__ == '__main__':
                                                                                 tec_file = tec_file_xml, 
                                                                                 plant_file = plt_file_xml, 
                                                                                 dynamics_file = stics_output_file,
-                                                                                pot_factor = 1.5)
+                                                                                pot_factor = 1.5,
+                                                                                end=80)
 
     keys = list(param_sets.keys())
     chunk_size = ceil(len(keys) / n_cpu)

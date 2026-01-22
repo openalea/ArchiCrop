@@ -30,7 +30,7 @@ def read_xml_file(file_xml, params):
     return result
 
 
-def read_sti_file(file_sti):
+def read_sti_file(file_sti, conv_unit=100, end=-1):
     """Reads a STICS mod_s*.sti output file and builds a dictionary.
     
     :param file: str, input file of STICS outputs :
@@ -89,39 +89,36 @@ def read_sti_file(file_sti):
                 break
 
     # start = 21 # 23
-    # end = 140
-    density = data_dict["densite"][-1] # density = 20 plants/m2 = 0.002 plants/cm2
+    # end = 80
 
     # Thermal time
-    thermal_time = [float(i) for i in data_dict["somupvtsem"]]
+    thermal_time = [float(i) for i in data_dict["somupvtsem"]][:end]
     thermal_time_incr = [thermal_time[0]] + [thermal_time[i+1]-thermal_time[i] for i in range(len(thermal_time[1:]))]
-    # print(thermal_time)
-    # print(np.diff(thermal_time, prepend=0))
-    # thermal_time = list(np.cumsum([float(i) for i in data_dict["tempeff"]]))
-    # thermal_time = list(np.cumsum([float(i) for i in data_dict["tmoy(n)"][:end]]))
 
     # Green LAI
-    plant_leaf_area = [10000*float(i)/density for i in data_dict["laimax"]] # from m2/m2 to cm2/plant
+    plant_leaf_area = [conv_unit**2*float(i)/density for i in data_dict["laimax"]][:end] # from m2/m2 to cm2/plant
     leaf_area_incr = [plant_leaf_area[0]] + [plant_leaf_area[i+1]-plant_leaf_area[i] for i in range(len(plant_leaf_area[1:]))]
-    # print(leaf_area_incr)
 
     # Senescent LAI
-    sen_leaf_area = [10000*float(i)/density for i in data_dict["laisen(n)"]] # from m2/m2 to cm2/plant
+    sen_leaf_area = [conv_unit**2*float(i)/density for i in data_dict["laisen(n)"]][:end] # from m2/m2 to cm2/plant
     sen_leaf_area_incr = [sen_leaf_area[0]] + [sen_leaf_area[i+1]-sen_leaf_area[i] for i in range(len(sen_leaf_area[1:]))]
+
+    # Height
+    height = [float(i)*conv_unit for i in data_dict["hauteur"]][:end] # from m to cm
+    height_incr = [height[0]] + [height[i+1]-height[i] for i in range(len(height[1:]))]
 
     # Phenology
     emergence = data_dict["ilevs"][-1] - data_dict["jul"][0] # from pseudo julian day (from the beginning of the year) to day from begining of the simulation
     end_juv = data_dict["iamfs"][-1] - data_dict["jul"][0]
     max_lai = data_dict["ilaxs"][-1] - data_dict["jul"][0]
 
-    # Height
-    height = [float(i)*100 for i in data_dict["hauteur"]] # from m to cm
-    height_incr = [height[0]] + [height[i+1]-height[i] for i in range(len(height[1:]))]
+    # Density
+    density = data_dict["densite"][-1] # density = 20 plants/m2 = 0.002 plants/cm2
 
-    # Incident PAR
-    par_inc = [0.95*0.48*float(j) for j in data_dict["trg(n)"]]
-    # Absorbed PAR
-    par_abs = [float(i)/(0.95*0.48*float(j)) for i, j in zip(data_dict["raint"], data_dict["trg(n)"])] # to % of light intercepted, in MJ/m^2
+    # Incident and absorbed PAR
+    par_rg_ratio = 0.95*0.48
+    par_inc = [par_rg_ratio*float(rg) for rg in data_dict["trg(n)"]][:end]
+    par_abs = [float(abs)/inc for abs, inc in zip(data_dict["raint"], par_inc)][:end] # to % of light intercepted, in MJ/m^2
 
     return {
         i+1: {"Date": date_list[i],
@@ -150,16 +147,16 @@ def get_stics_senescence_params(file_plt_xml):
     params_sen = ['durvieF', 'ratiodurvieI', 'coefb']
     return read_xml_file(file_plt_xml, params_sen)
 
-def get_stics_dynamics(stics_output_file):
+def get_stics_dynamics(stics_output_file, end=-1):
     """Retrieve STICS growth and senescence dynamics from a STICS output file."""
-    return read_sti_file(stics_output_file)
+    return read_sti_file(stics_output_file, end=end)
 
-def get_stics_data(file_tec_xml, file_plt_xml, stics_output_file):
+def get_stics_data(file_tec_xml, file_plt_xml, stics_output_file, end=-1):
     """Retrieve STICS management and senescence parameters, and growth dynamics."""
     tec_stics = get_stics_management_params(file_tec_xml)
     interrow = tec_stics['interrang']
     
-    stics_output_data, density = get_stics_dynamics(stics_output_file)
+    stics_output_data, density = get_stics_dynamics(stics_output_file, end=end)
     
     sen_stics = get_stics_senescence_params(file_plt_xml)
     lifespan = sen_stics['durvieF']

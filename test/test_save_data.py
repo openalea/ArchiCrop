@@ -36,18 +36,26 @@ pot_h = {
 }
 
 nrj_per_leaf = {
-    0: [[10,10], [11,11], [12,12], [13,13], [14,14]],
-    2: [[11,11], [12,12], [13,13], [14,14], [15,15]],
-    4: [[12,12], [13,13], [14,14], [15,15], [16,16]]
+    0: [[10], [11], [12,12], [13,13], [14,14]],
+    2: [[11], [12], [13,13], [14,14], [15,15]],
+    4: [[12], [13], [14,14], [15,15], [16,16]]
 }
 
 ids = list(nrj_per_leaf.keys())
 n_id = len(ids)
 n_time = len(dates)
-n_leaf = len(nrj_per_leaf[ids[0]][0])  # length of inner list
-arr_nrj = np.empty((n_id, n_time, n_leaf), dtype=float)
-for i, k in enumerate(ids):
-    arr_nrj[i, :, :] = nrj_per_leaf[k]
+n_leaf = len(nrj_per_leaf[ids[0]][-1])  # length of inner list
+
+arr_nrj = np.zeros((n_id, n_time, n_leaf), dtype=float)
+
+# for k,v in nrj_per_leaf.items():
+#     for t, lst in enumerate(nrj_per_leaf[k]):
+#         arr_nrj[k, t, :len(lst)] = lst
+
+for i, plant_id in enumerate(ids):
+    plant = nrj_per_leaf[plant_id]
+    for t, lst in enumerate(plant):
+        arr_nrj[i, t, :len(lst)] = lst
 
 df_pot_la = pd.DataFrame.from_dict(pot_la, orient="index", columns=dates)
 df_pot_h = pd.DataFrame.from_dict(pot_h, orient="index", columns=dates)

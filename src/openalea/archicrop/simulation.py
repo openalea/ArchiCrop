@@ -185,13 +185,14 @@ def simulate_plant_growth(param_sets: dict, daily_dynamics: dict):
 def define_archicrop_parameters(archi_params: dict, 
              tec_file: str, plant_file: str, dynamics_file: str,
              n_samples: int = 10, seed: int = 42, latin_hypercube: bool = False,
-             pot_factor: float = 1.5):
+             pot_factor: float = 1.5, end: int = -1):
 
     # Retrieve STICS management and senescence parameters
     density, daily_dynamics, lifespan, lifespan_early, inter_row = get_stics_data(
         file_tec_xml=tec_file,  # Path to the STICS management XML file
         file_plt_xml=plant_file,  # Path to the STICS plant XML file
-        stics_output_file=dynamics_file  # Path to the STICS output file
+        stics_output_file=dynamics_file,  # Path to the STICS output file
+        end=end
     )
 
     # Complete ArchiCrop parameters with values from constraint
@@ -324,10 +325,12 @@ def write_netcdf(filename: str, daily_dynamics: dict, params_sets: dict,
     ids = list(nrj_per_plant.keys())
     n_id = len(ids)
     n_time = len(dates)
-    n_leaf = len(nrj_per_plant[ids[0]][0])  # length of inner list
-    arr_nrj = np.empty((n_id, n_time, n_leaf), dtype=float)
-    for i, k in enumerate(ids):
-        arr_nrj[i, :, :] = nrj_per_plant[k]
+    n_leaf = len(nrj_per_plant[ids[0]][-1])  # length of inner list for a plant with all leaves
+    arr_nrj = np.zeros((n_id, n_time, n_leaf), dtype=float)
+    for i, plant_id in enumerate(ids):
+        plant = nrj_per_plant[plant_id]
+        for t, lst in enumerate(plant):
+            arr_nrj[i, t, :len(lst)] = lst
 
     ds = xr.Dataset(
         data_vars=dict(
