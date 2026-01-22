@@ -91,6 +91,9 @@ def read_sti_file(file_sti, conv_unit=100, end=-1):
     # start = 21 # 23
     # end = 80
 
+    # Density
+    density = data_dict["densite"][-1] # density = 20 plants/m2 = 0.002 plants/cm2
+
     # Thermal time
     thermal_time = [float(i) for i in data_dict["somupvtsem"]][:end]
     thermal_time_incr = [thermal_time[0]] + [thermal_time[i+1]-thermal_time[i] for i in range(len(thermal_time[1:]))]
@@ -111,9 +114,6 @@ def read_sti_file(file_sti, conv_unit=100, end=-1):
     emergence = data_dict["ilevs"][-1] - data_dict["jul"][0] # from pseudo julian day (from the beginning of the year) to day from begining of the simulation
     end_juv = data_dict["iamfs"][-1] - data_dict["jul"][0]
     max_lai = data_dict["ilaxs"][-1] - data_dict["jul"][0]
-
-    # Density
-    density = data_dict["densite"][-1] # density = 20 plants/m2 = 0.002 plants/cm2
 
     # Incident and absorbed PAR
     par_rg_ratio = 0.95*0.48
