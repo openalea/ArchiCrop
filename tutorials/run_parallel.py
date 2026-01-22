@@ -36,11 +36,11 @@ if __name__ == '__main__':
 
     keys = list(param_sets.keys())
     chunk_size = ceil(len(keys) / n_cpu)
-
     params_sets_split = {
         i: {k: param_sets[k] for k in keys[i*chunk_size:(i+1)*chunk_size]}
         for i in id_sim
     }
+    print(f"Run {len(param_sets)} simulations on {n_cpu} CPU")
 
     with Pool(n_cpu) as p:
         start_time = t.time()

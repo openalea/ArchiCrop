@@ -259,7 +259,7 @@ def run_simulations(archi_params: dict,
     daily_dynamics, param_sets, density, inter_row = define_archicrop_parameters(archi_params, tec_file, plant_file, dynamics_file, 
                                                                                  n_samples, seed, latin_hypercube, pot_factor)
     
-    print(len(param_sets), "simulations")
+    # print(len(param_sets), "simulations")
 
     pot_la, pot_h, realized_la, realized_h, nrj_per_plant, mtgs = run_archicrop_and_light(param_sets, daily_dynamics, density,
                                                                                           weather_file, location, inter_row,
