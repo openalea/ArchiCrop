@@ -46,16 +46,16 @@ n_id = len(ids)
 n_time = len(dates)
 n_leaf = len(nrj_per_leaf[ids[0]][-1])  # length of inner list
 
-arr_nrj = np.zeros((n_id, n_time, n_leaf), dtype=float)
+# arr_nrj = np.zeros((n_id, n_time, n_leaf), dtype=float)
 
 # for k,v in nrj_per_leaf.items():
 #     for t, lst in enumerate(nrj_per_leaf[k]):
 #         arr_nrj[k, t, :len(lst)] = lst
 
-for i, plant_id in enumerate(ids):
-    plant = nrj_per_leaf[plant_id]
-    for t, lst in enumerate(plant):
-        arr_nrj[i, t, :len(lst)] = lst
+# for i, plant_id in enumerate(ids):
+#     plant = nrj_per_leaf[plant_id]
+#     for t, lst in enumerate(plant):
+#         arr_nrj[i, t, :len(lst)] = lst
 
 df_pot_la = pd.DataFrame.from_dict(pot_la, orient="index", columns=dates)
 df_pot_h = pd.DataFrame.from_dict(pot_h, orient="index", columns=dates)
@@ -65,15 +65,23 @@ ds_res = xr.Dataset(
         "STICS_tps_ther": (("time"), daily_dyn["tps_ther"]),
         "STICS_lai": (("time"), daily_dyn["lai"]),
         "pot_la": (("id", "time"), df_pot_la),
-        "pot_h": (("id", "time"), df_pot_h),
-        "nrj_per_leaf": (("id", "time", "leaf"), arr_nrj)
+        "pot_h": (("id", "time"), df_pot_h)
+        # "nrj_per_leaf": (("id", "time", "leaf"), arr_nrj)
     },
     coords={
         "id": df_pot_la.index,
-        "time": dates,
-        "leaf": np.arange(n_leaf)
+        "time": dates
+        # "leaf": np.arange(n_leaf)
     }
 )
+
+for n in range(n_leaf):
+    list_nrj_leaf = np.zeros((n_id, n_time), dtype=float)
+    for i, plant_id in enumerate(ids):
+        for j, t in enumerate(nrj_per_leaf[plant_id]):
+            if n < len(t):
+                list_nrj_leaf[i,j] = t[n]
+    ds_res["nrj_leaf_"+str(n)] = (("id", "time"), list_nrj_leaf)
 
 ds1 = xr.merge([ds_res, ds_archi])
 

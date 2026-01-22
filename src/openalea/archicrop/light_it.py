@@ -157,7 +157,7 @@ def light_interception(weather_file, daily_dynamics, density, location, mtgs, ze
                 scene, labels = build_scene(mtg, senescence=False)
                 cs, raw, agg = illuminate(scene=scene, light=lights, labels=labels, domain=domain, direct=direct) # --> cf PARaggregators in caribu scene node
                 # Compute energy per leaf
-                df_mod = mean_leaf_irradiance(agg)  # noqa: F841
+                df_mod = mean_leaf_irradiance(agg) 
                 nrj_per_leaf.append(agg.loc[agg['label'] == 'Leaf']['Energy'].values)
                 # Save scene if required
                 if save_scenes:

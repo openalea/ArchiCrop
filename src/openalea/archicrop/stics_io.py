@@ -118,7 +118,7 @@ def read_sti_file(file_sti, conv_unit=100, end=-1):
     # Incident and absorbed PAR
     par_rg_ratio = 0.95*0.48
     par_inc = [par_rg_ratio*float(rg) for rg in data_dict["trg(n)"]][:end]
-    par_abs = [float(abs)/inc for abs, inc in zip(data_dict["raint"], par_inc)][:end] # to % of light intercepted, in MJ/m^2
+    par_abs = [float(abs)/inc for abs, inc in zip(data_dict["raint"], par_inc)]#[:end] # to % of light intercepted, in MJ/m^2
 
     return {
         i+1: {"Date": date_list[i],

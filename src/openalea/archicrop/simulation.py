@@ -329,8 +329,9 @@ def write_netcdf(filename: str, daily_dynamics: dict, params_sets: dict,
     arr_nrj = np.zeros((n_id, n_time, n_leaf), dtype=float)
     for i, plant_id in enumerate(ids):
         plant = nrj_per_plant[plant_id]
-        for t, lst in enumerate(plant):
-            arr_nrj[i, t, :len(lst)] = lst
+        for t, leaf_list in enumerate(plant):
+            for j, leaf in enumerate(leaf_list):
+                arr_nrj[i, t, j] = leaf
 
     ds = xr.Dataset(
         data_vars=dict(
@@ -345,14 +346,22 @@ def write_netcdf(filename: str, daily_dynamics: dict, params_sets: dict,
             realized_h=(("id", "time"), df_realized_h),
             pot_la=(("id", "time"), df_pot_la),
             pot_h=(("id", "time"), df_pot_h),
-            nrj_per_plant=(("id", "time", "leaf"), arr_nrj),
+            # nrj_per_plant=(("id", "time", "leaf"), arr_nrj),
         ),
         coords=dict(
             id=df_realized_la.index,
-            time=dates,
-            leaf=np.arange(n_leaf)
+            time=dates
         )
     )
+
+    for n in range(n_leaf):
+        list_nrj_leaf = np.zeros((n_id, n_time), dtype=float)
+        for i, plant_id in enumerate(ids):
+            for j, t in enumerate(nrj_per_plant[plant_id]):
+                if n < len(t):
+                    list_nrj_leaf[i,j] = t[n]
+        ds["nrj_leaf_"+str(n)] = (("id", "time"), list_nrj_leaf)
+
 
     ds = xr.merge([ds, ds_archi]) 
 
