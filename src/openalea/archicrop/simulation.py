@@ -242,8 +242,9 @@ def run_archicrop_and_light_parallel(id_sim, param_sets: dict, daily_dynamics: d
     pot_la, pot_h, realized_la, realized_h, nrj_per_plant, _ = run_archicrop_and_light(param_sets, daily_dynamics, density, 
                                                                                           weather_file, location, inter_row, light_inter)
     
-    first_key = list(param_sets.keys())[0]
-    filename = f"results_light_inter_{param_sets[first_key]['nb_phy']}"
+    # first_key = list(param_sets.keys())[0]
+    # filename = f"results_light_inter_{param_sets[first_key]['nb_phy']}"
+    filename = f"results_light_inter"
     write_netcdf(filename, daily_dynamics, param_sets, 
                  pot_la, pot_h, realized_la, realized_h, nrj_per_plant, 
                  density, id_sim, 
