@@ -39,6 +39,7 @@ class ArchiCrop:
                  stem_duration=1.6,
                  leaf_duration=1.6,
                  leaf_lifespan=300,
+                 leaf_lifespan_early=200,
                  nb_tillers=0,
                  tiller_delay=2,
                  tiller_angle=30,
@@ -115,6 +116,7 @@ class ArchiCrop:
         self.leaf_duration = leaf_duration 
         self.stem_duration = leaf_duration 
         self.leaf_lifespan = leaf_lifespan
+        self.leaf_lifespan_early = leaf_lifespan_early,
         self.nb_tillers = nb_tillers
         self.tiller_delay = tiller_delay
         self.reduction_factor = reduction_factor
@@ -161,6 +163,7 @@ class ArchiCrop:
                         leaf_duration=self.leaf_duration, 
                         stem_duration=self.stem_duration, 
                         leaf_lifespan=self.leaf_lifespan, 
+                        leaf_lifespan_early=self.leaf_lifespan_early, 
                         end_juv=self.end_juv,
                         nb_tillers=self.nb_tillers,
                         reduction_factor=self.reduction_factor,

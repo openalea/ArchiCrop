@@ -29,7 +29,8 @@ def constrain_archi_params(archi_params: dict, daily_dynamics: dict,
         archi_params["leaf_area"] = pot_factor*max(leaf_area_plant) 
 
     if lifespan is not None:
-        archi_params["leaf_lifespan"] = [lifespan_early, lifespan]
+        archi_params["leaf_lifespan"] = lifespan
+        archi_params["leaf_lifespan_early"] = lifespan_early
 
     return archi_params
 
@@ -50,7 +51,7 @@ def param_sampling(archi_params: dict, n_samples: int, seed: int = 42, latin_hyp
         if isinstance(value, (int, float)):  # Fixed parameter
             fixed_params[key] = value
         # Parameter distribution in Latin Hypercube
-        elif isinstance(value, list) and key not in ["leaf_lifespan", "rmax", "skew", "phyllochron"]:  # Range to sample
+        elif isinstance(value, list) and key not in ["rmax", "skew", "phyllochron"]:  # Range to sample
 
             if latin_hypercube:
                 l_bounds.append(min(value))
@@ -63,7 +64,7 @@ def param_sampling(archi_params: dict, n_samples: int, seed: int = 42, latin_hyp
 
             sampled_params.append(key)
 
-        elif key in ["leaf_lifespan", "rmax", "skew", "phyllochron"]:
+        elif key in ["rmax", "skew", "phyllochron"]:
             fixed_params[key] = value
 
 
@@ -238,9 +239,9 @@ def run_archicrop_and_light(param_sets: dict, daily_dynamics: dict, density: flo
     return pot_la, pot_h, realized_la, realized_h, nrj_per_plant, mtgs
 
 def run_archicrop_and_light_parallel(id_sim, param_sets: dict, daily_dynamics: dict, density: float,
-             weather_file: str, location: dict, inter_row: float, light_inter: bool = True):
+             weather_file: str, location: dict, inter_row: float, light_inter: bool = True, direct: bool = False):
     pot_la, pot_h, realized_la, realized_h, nrj_per_plant, _ = run_archicrop_and_light(param_sets, daily_dynamics, density, 
-                                                                                          weather_file, location, inter_row, light_inter)
+                                                                                          weather_file, location, inter_row, light_inter, direct=direct)
     
     # first_key = list(param_sets.keys())[0]
     # filename = f"results_light_inter_{param_sets[first_key]['nb_phy']}"
@@ -299,11 +300,11 @@ def write_netcdf(filename: str, daily_dynamics: dict, params_sets: dict,
                 for k in daily_dynamics[1]}
     dates = pd.to_datetime(daily_dyn["Date"])
 
-    ds_archi = (
-        pd.DataFrame.from_dict(params_sets, orient="index")
-        .to_xarray()
-        .rename({"index": "id"})
-    )
+    # ds_archi = (
+    #     pd.DataFrame.from_dict(params_sets, orient="index")
+    #     .to_xarray()
+    #     .rename({"index": "id"})
+    # )
 
     # ds_archi = (
     #     pd.DataFrame.from_dict(params_sets, orient="index")
@@ -311,8 +312,9 @@ def write_netcdf(filename: str, daily_dynamics: dict, params_sets: dict,
     #     .to_xarray()
     # )
 
-    # df_archi = pd.DataFrame.from_dict(params_sets, orient='index')
-    # ds_archi = df_archi.to_xarray().rename({'index':'id'})
+    df_archi = pd.DataFrame.from_dict(params_sets, orient='index')
+    # print(df_archi)
+    ds_archi = df_archi.to_xarray().rename({'index':'id'})
 
     # mtgs_string = {k: [write_mtg(g) if g is not None else None for g in mtg] for k, mtg in mtgs.items()}
 
@@ -323,11 +325,15 @@ def write_netcdf(filename: str, daily_dynamics: dict, params_sets: dict,
     df_pot_h = pd.DataFrame.from_dict(pot_h, orient="index", columns=dates)
     df_nrj_per_plant = pd.DataFrame.from_dict(nrj_per_plant, orient="index", columns=dates)
 
+    # print(df_realized_la)
+    # print(df_pot_la)
+    # print(df_nrj_per_plant)
+
     # # 3D array for nrj per leaf 
-    # ids = list(nrj_per_plant.keys())
-    # n_id = len(ids)
-    # n_time = len(dates)
-    # n_leaf = len(nrj_per_plant[ids[0]][-1])  # length of inner list for a plant with all leaves
+    ids = list(nrj_per_plant.keys())
+    n_id = len(ids)
+    n_time = len(dates)
+    n_leaf = len(nrj_per_plant[ids[0]][-1])  # length of inner list for a plant with all leaves
     # arr_nrj = np.zeros((n_id, n_time, n_leaf), dtype=float)
     # for i, plant_id in enumerate(ids):
     #     plant = nrj_per_plant[plant_id]
@@ -348,7 +354,7 @@ def write_netcdf(filename: str, daily_dynamics: dict, params_sets: dict,
             realized_h=(("id", "time"), df_realized_h),
             pot_la=(("id", "time"), df_pot_la),
             pot_h=(("id", "time"), df_pot_h),
-            nrj_per_plant=(("id", "time"), df_nrj_per_plant),
+            # nrj_per_plant=(("id", "time"), df_nrj_per_plant),
         ),
         coords=dict(
             id=df_realized_la.index,
@@ -356,13 +362,13 @@ def write_netcdf(filename: str, daily_dynamics: dict, params_sets: dict,
         )
     )
 
-    # for n in range(n_leaf):
-    #     list_nrj_leaf = np.zeros((n_id, n_time), dtype=float)
-    #     for i, plant_id in enumerate(ids):
-    #         for j, t in enumerate(nrj_per_plant[plant_id]):
-    #             if n < len(t):
-    #                 list_nrj_leaf[i,j] = t[n]
-    #     ds["nrj_leaf_"+str(n)] = (("id", "time"), list_nrj_leaf)
+    for n in range(n_leaf):
+        list_nrj_leaf = np.zeros((n_id, n_time), dtype=float)
+        for i, plant_id in enumerate(ids):
+            for j, t in enumerate(nrj_per_plant[plant_id]):
+                if n < len(t):
+                    list_nrj_leaf[i,j] = t[n]
+        ds["nrj_leaf_"+str(n)] = (("id", "time"), list_nrj_leaf)
 
 
     ds = xr.merge([ds, ds_archi]) 
@@ -380,8 +386,9 @@ def concat_ds(files: list):
         if i > 0:
             ds_new = ds.assign_coords(id=ds.id + offset)
             ds_tot = xr.concat([ds_tot, ds_new], dim="id")
+            offset = int(ds_new.id.max()) + 2
         else:
             ds_tot = ds
-        offset = int(ds_new.id.max()) + 2
+            offset = int(ds.id.max()) + 2
     return ds_tot
 

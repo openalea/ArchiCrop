@@ -87,6 +87,8 @@ ds1 = xr.merge([ds_res, ds_archi])
 
 ds2 = xr.merge([ds_res, ds_archi])
 
+ds1.to_netcdf(f"test_save_data.nc")
+
 # print(dict(zip(ds.id.values, ds.pot_la.values)))
 # print(dict(zip(ds.id.values, ds.a.values)))
 

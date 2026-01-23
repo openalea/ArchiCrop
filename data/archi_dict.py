@@ -64,7 +64,7 @@ archi_wheat = {
     "skew": 0.001, # parameter for leaf area distribution along axis : [0.0005,0.1] (Kaitaniemi et al., 1999; Welcker et al., )
     
     # blade area 
-    "wl": 0.06, # leaf blade width-to-length ratio : [0.1, 0.12] ()
+    "wl": 0.079, # leaf blade width-to-length ratio : 
     "klig": 0.6, # parameter for leaf blade shape
     "swmax": 0.55, # parameter for leaf blade shape
     "f1": 0.64, # parameter for leaf blade shape
@@ -183,7 +183,7 @@ archi_sorghum = {
 
 
 archi_sorghum_angles = {
-    "nb_phy": [12,16,20,24,28], # [10,30], # number of phytomers on the main stem : [10,40] (Ndiaye et al., 2021; Lafarge and Tardieu, 2002; Clerget, 2008; Ganeme et al., 2022)
+    "nb_phy": 16, # [12,16,20,24,28], # [10,30], # number of phytomers on the main stem : [10,40] (Ndiaye et al., 2021; Lafarge and Tardieu, 2002; Clerget, 2008; Ganeme et al., 2022)
     "nb_short_phy": 4,
     "short_phy_height": 3,
 

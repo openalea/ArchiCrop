@@ -26,6 +26,7 @@ if __name__ == '__main__':
     n_cpu = 4
     id_sim = list(range(n_cpu))
     light_inter = True
+    direct = True
 
     daily_dynamics, param_sets, density, inter_row = define_archicrop_parameters(archi_params = archi, 
                                                                                 tec_file = tec_file_xml, 
@@ -45,7 +46,7 @@ if __name__ == '__main__':
     with Pool(n_cpu) as p:
         start_time = t.time()
         p.starmap_async(run_archicrop_and_light_parallel, 
-                        [(id, params_sets_split[id], daily_dynamics, density, weather_file, location, inter_row, light_inter) 
+                        [(id, params_sets_split[id], daily_dynamics, density, weather_file, location, inter_row, light_inter, direct) 
                         for id in id_sim]).get()
         end_time = t.time()
         elapsed_time = (end_time - start_time)/3600

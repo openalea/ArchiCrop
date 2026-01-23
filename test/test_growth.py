@@ -22,6 +22,7 @@ def plant(la = 200, h = 100, phyllochron = 30, stem_duration = 2, leaf_duration 
         stem_duration=stem_duration,
         leaf_duration=leaf_duration,
         leaf_lifespan=100,
+        leaf_lifespan_early=80,
         end_juv=50,
         nb_tillers=2,
         tiller_delay=2,

@@ -72,20 +72,20 @@ def cereal_leaf_properties(nb_phy, leaf_area, rmax, skew, insertion_angle, scurv
     return blades
 
 
-def add_leaf_senescence(g, vid_leaf, leaf_lifespan, end_juv):
+def add_leaf_senescence(g, vid_leaf, leaf_lifespan, leaf_lifespan_early, end_juv):
     """Add leaf senescence time to the leaf vertex"""
-    if isinstance(leaf_lifespan, list): 
+    if leaf_lifespan_early is not None and end_juv is not None: 
         if g.node(vid_leaf).start_tt < end_juv:
-            g.node(vid_leaf).senescence = g.node(vid_leaf).start_tt + leaf_lifespan[0] 
+            g.node(vid_leaf).senescence = g.node(vid_leaf).start_tt + leaf_lifespan_early 
         else:
-            g.node(vid_leaf).senescence = g.node(vid_leaf).start_tt + leaf_lifespan[1]
+            g.node(vid_leaf).senescence = g.node(vid_leaf).start_tt + leaf_lifespan
     else:
         g.node(vid_leaf).senescence = g.node(vid_leaf).start_tt + leaf_lifespan
 
 
 
 def add_tiller(g, vid, start_time, phyllochron, plastochron, 
-               stem_duration, leaf_duration, leaf_lifespan, end_juv, 
+               stem_duration, leaf_duration, leaf_lifespan, leaf_lifespan_early, end_juv, 
                tiller_delay, reduction_factor,  
                height, leaf_area, nb_short_phy, short_phy_height, wl, diam_base, diam_top,
                insertion_angle, scurv, curvature,
@@ -181,7 +181,7 @@ def add_tiller(g, vid, start_time, phyllochron, plastochron,
         vid_leaf = g.add_child(vid_stem, edge_type="+", **leaf)
         tt_leaf = add_development(g=g, vid=vid_leaf, tt=tt_leaf, dtt=dtt_leaf, rate=plastochron)
         compute_potential_growth_rate(g=g, vid=vid_leaf)
-        add_leaf_senescence(g=g, vid_leaf=vid_leaf, leaf_lifespan=leaf_lifespan, end_juv=end_juv)
+        add_leaf_senescence(g=g, vid_leaf=vid_leaf, leaf_lifespan=leaf_lifespan, leaf_lifespan_early=leaf_lifespan_early, end_juv=end_juv)
         
         tillers.append((vid_stem, tt_stem + tiller_delay*phyllochron))
 
@@ -263,7 +263,7 @@ class CerealsVisitor:
 
 
 def cereal(nb_phy, phyllochron, plastochron, stem_duration, leaf_duration, 
-            leaf_lifespan, end_juv, nb_tillers, tiller_delay, reduction_factor,
+            leaf_lifespan, leaf_lifespan_early, end_juv, nb_tillers, tiller_delay, reduction_factor,
             height,
             leaf_area,
             nb_short_phy,
@@ -366,7 +366,7 @@ def cereal(nb_phy, phyllochron, plastochron, stem_duration, leaf_duration,
         vid_leaf = g.add_child(vid_stem, edge_type="+", **leaf)  
         tt_leaf = add_development(g=g, vid=vid_leaf, tt=tt_leaf, dtt=dtt_leaf, rate=plastochron)
         # compute_potential_growth_rate(g=g, vid=vid_leaf)
-        add_leaf_senescence(g=g, vid_leaf=vid_leaf, leaf_lifespan=leaf_lifespan, end_juv=end_juv)
+        add_leaf_senescence(g=g, vid_leaf=vid_leaf, leaf_lifespan=leaf_lifespan, leaf_lifespan_early=leaf_lifespan_early[0], end_juv=end_juv)
 
 
     ## Tillers
@@ -376,7 +376,7 @@ def cereal(nb_phy, phyllochron, plastochron, stem_duration, leaf_duration,
         vid, time = tiller_points.pop(0)
 
         new_tillers = add_tiller(g=g, vid=vid, start_time=time, phyllochron=phyllochron, plastochron=plastochron, tiller_delay=tiller_delay, 
-                                stem_duration=stem_duration, leaf_duration=leaf_duration, leaf_lifespan=leaf_lifespan, end_juv=end_juv, 
+                                stem_duration=stem_duration, leaf_duration=leaf_duration, leaf_lifespan=leaf_lifespan, leaf_lifespan_early=leaf_lifespan_early, end_juv=end_juv, 
                                 reduction_factor=reduction_factor, 
                                 height=1, leaf_area=1, wl=wl, diam_base=diam_base, diam_top=diam_top,
                                 insertion_angle=insertion_angle, scurv=scurv, curvature=curvature,
