@@ -23,10 +23,10 @@ if __name__ == '__main__':
     'altitude': 800,
     'timezone': 'Europe/Paris'}
 
-    n_cpu = 4
+    n_cpu = 6
     id_sim = list(range(n_cpu))
     light_inter = True
-    direct = True
+    direct = False
 
     daily_dynamics, param_sets, density, inter_row = define_archicrop_parameters(archi_params = archi, 
                                                                                 tec_file = tec_file_xml, 
