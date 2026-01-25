@@ -23,7 +23,7 @@ if __name__ == '__main__':
     'altitude': 800,
     'timezone': 'Europe/Paris'}
 
-    n_cpu = 6
+    n_cpu = 9
     id_sim = list(range(n_cpu))
     light_inter = True
     direct = False

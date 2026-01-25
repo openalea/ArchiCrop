@@ -38,13 +38,13 @@ pot_h = {
 nrj_per_leaf = {
     0: [[10], [11], [12,12], [13,13], [14,14]],
     2: [[11], [12], [13,13], [14,14], [15,15]],
-    4: [[12], [13], [14,14], [15,15], [16,16]]
+    4: [[12], [13], [14,14], [15,15], [16,16,16]]
 }
 
 ids = list(nrj_per_leaf.keys())
 n_id = len(ids)
 n_time = len(dates)
-n_leaf = len(nrj_per_leaf[ids[0]][-1])  # length of inner list
+n_leaf = len(max([nrj_per_leaf[id][-1] for id in ids]))  # length of inner list
 
 # arr_nrj = np.zeros((n_id, n_time, n_leaf), dtype=float)
 
@@ -60,28 +60,37 @@ n_leaf = len(nrj_per_leaf[ids[0]][-1])  # length of inner list
 df_pot_la = pd.DataFrame.from_dict(pot_la, orient="index", columns=dates)
 df_pot_h = pd.DataFrame.from_dict(pot_h, orient="index", columns=dates)
 
+
+nrj_leaf = np.zeros((n_id, n_time, n_leaf), dtype=float)
+
+for i, plant_id in enumerate(ids):
+    for j, t in enumerate(nrj_per_leaf[plant_id]):
+        nrj_leaf[i, j, : len(t)] = t
+
+
 ds_res = xr.Dataset(
     data_vars={
         "STICS_tps_ther": (("time"), daily_dyn["tps_ther"]),
         "STICS_lai": (("time"), daily_dyn["lai"]),
         "pot_la": (("id", "time"), df_pot_la),
-        "pot_h": (("id", "time"), df_pot_h)
-        # "nrj_per_leaf": (("id", "time", "leaf"), arr_nrj)
+        "pot_h": (("id", "time"), df_pot_h),
+        "nrj_leaf": (("id", "time", "leaf"), nrj_leaf)
     },
     coords={
         "id": df_pot_la.index,
-        "time": dates
-        # "leaf": np.arange(n_leaf)
+        "time": dates,
+        "leaf": np.arange(n_leaf) + 1
     }
 )
 
-for n in range(n_leaf):
-    list_nrj_leaf = np.zeros((n_id, n_time), dtype=float)
-    for i, plant_id in enumerate(ids):
-        for j, t in enumerate(nrj_per_leaf[plant_id]):
-            if n < len(t):
-                list_nrj_leaf[i,j] = t[n]
-    ds_res["nrj_leaf_"+str(n)] = (("id", "time"), list_nrj_leaf)
+
+# for n in range(n_leaf):
+#     list_nrj_leaf = np.zeros((n_id, n_time), dtype=float)
+#     for i, plant_id in enumerate(ids):
+#         for j, t in enumerate(nrj_per_leaf[plant_id]):
+#             if n < len(t):
+#                 list_nrj_leaf[i,j] = t[n]
+#     ds_res["nrj_leaf_"+str(n)] = (("id", "time"), list_nrj_leaf)
 
 ds1 = xr.merge([ds_res, ds_archi])
 

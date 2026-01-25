@@ -183,7 +183,7 @@ archi_sorghum = {
 
 
 archi_sorghum_angles = {
-    "nb_phy": 16, # [12,16,20,24,28], # [10,30], # number of phytomers on the main stem : [10,40] (Ndiaye et al., 2021; Lafarge and Tardieu, 2002; Clerget, 2008; Ganeme et al., 2022)
+    "nb_phy": [12,16,20,24,28], # [10,30], # number of phytomers on the main stem : [10,40] (Ndiaye et al., 2021; Lafarge and Tardieu, 2002; Clerget, 2008; Ganeme et al., 2022)
     "nb_short_phy": 4,
     "short_phy_height": 3,
 
@@ -206,7 +206,7 @@ archi_sorghum_angles = {
     "f2": 0.92, # parameter for leaf blade shape
 
     # Leaf blade position in space
-    "insertion_angle": [15,30,45,60,75,90], # leaf blade insertion angle : [10,80] (Truong et al., 2015; Kaitaniemi et al., 1999)
+    "insertion_angle": [10,20,30,40,50,60,70,80,90], # [15,30,45,60,75,90], # leaf blade insertion angle : [10,80] (Truong et al., 2015; Kaitaniemi et al., 1999)
     "scurv": 0.6, # leaf blade relative inflexion point : [0.5, 0.9] ()
     "curvature": 90, # leaf blade insertion-to-tip angle : [0, 90] (Kaitaniemi et al., 1999)
     "phyllotactic_angle": 137.5, # phyllotactic angle : [90;180] (Davis et al., 2024)
