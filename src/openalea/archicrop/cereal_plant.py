@@ -76,7 +76,7 @@ def add_leaf_senescence(g, vid_leaf, leaf_lifespan, leaf_lifespan_early, end_juv
     """Add leaf senescence time to the leaf vertex"""
     if leaf_lifespan_early is not None and end_juv is not None: 
         if g.node(vid_leaf).start_tt < end_juv:
-            g.node(vid_leaf).senescence = g.node(vid_leaf).start_tt + leaf_lifespan_early 
+            g.node(vid_leaf).senescence = g.node(vid_leaf).start_tt + leaf_lifespan_early[0]
         else:
             g.node(vid_leaf).senescence = g.node(vid_leaf).start_tt + leaf_lifespan
     else:
@@ -366,7 +366,7 @@ def cereal(nb_phy, phyllochron, plastochron, stem_duration, leaf_duration,
         vid_leaf = g.add_child(vid_stem, edge_type="+", **leaf)  
         tt_leaf = add_development(g=g, vid=vid_leaf, tt=tt_leaf, dtt=dtt_leaf, rate=plastochron)
         # compute_potential_growth_rate(g=g, vid=vid_leaf)
-        add_leaf_senescence(g=g, vid_leaf=vid_leaf, leaf_lifespan=leaf_lifespan, leaf_lifespan_early=leaf_lifespan_early[0], end_juv=end_juv)
+        add_leaf_senescence(g=g, vid_leaf=vid_leaf, leaf_lifespan=leaf_lifespan, leaf_lifespan_early=leaf_lifespan_early, end_juv=end_juv)
 
 
     ## Tillers

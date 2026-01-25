@@ -44,7 +44,7 @@ class ArchiCrop:
                  tiller_delay=2,
                  tiller_angle=30,
                  gravitropism_coefficient=0.12,
-                 plant_orientation=45,
+                 plant_orientation=30,
                  reduction_factor=1,
                  daily_dynamics=None,
                  inter_row=0.4):

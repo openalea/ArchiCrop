@@ -207,10 +207,10 @@ archi_sorghum_angles = {
 
     # Leaf blade position in space
     "insertion_angle": [10,20,30,40,50,60,70,80,90], # [15,30,45,60,75,90], # leaf blade insertion angle : [10,80] (Truong et al., 2015; Kaitaniemi et al., 1999)
-    "scurv": 0.6, # leaf blade relative inflexion point : [0.5, 0.9] ()
-    "curvature": 90, # leaf blade insertion-to-tip angle : [0, 90] (Kaitaniemi et al., 1999)
-    "phyllotactic_angle": 137.5, # phyllotactic angle : [90;180] (Davis et al., 2024)
-    "phyllotactic_deviation": 0, # half-deviation to phyllotactic angle : [0,90] (Davis et al., 2024)
+    "scurv": 0.5, # leaf blade relative inflexion point : [0.5, 0.9] ()
+    "curvature": 60, # leaf blade insertion-to-tip angle : [0, 90] (Kaitaniemi et al., 1999)
+    "phyllotactic_angle": 180, # phyllotactic angle : [90;180] (Davis et al., 2024)
+    "phyllotactic_deviation": 30, # half-deviation to phyllotactic angle : [0,90] (Davis et al., 2024)
 
     # Development
     "phyllochron": [30,80], #51 # phyllochron, i.e. stem element appearance rate : [30,70] [40,65 then x1.6-2.5] (Clerget, 2008)

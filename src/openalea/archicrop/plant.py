@@ -27,6 +27,8 @@ def leaf_azimuth(
     Returns:
         an array of azimuths (deg, from X+, positive counter-clockwise)
     """
+    rng = np.random.default_rng(18)
+
     if size == 1:
         return plant_orientation
     if spiral:
@@ -37,7 +39,7 @@ def leaf_azimuth(
     azim = (
         plant_orientation
         + main
-        + (np.random.random(size) - 0.5) * 2 * phyllotactic_deviation  # noqa: NPY002
+        + (rng.random(size) - 0.5) * 2 * phyllotactic_deviation  # noqa: NPY002
     )
     azim = azim % 360
     return np.where(azim <= 180, azim, azim - 360)

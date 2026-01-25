@@ -58,7 +58,7 @@ def leaf_shape_perez(insertion_angle=50, scurv=0.5, curvature=50, nb_segment=100
     coefCurv_2 = 5
 
     # leaf tip angle
-    tip_angle = insertion_angle + curvature
+    tip_angle = min(insertion_angle + curvature, 180)
 
     # leaf angle at l
     l_angle = insertion_angle + frac_l * (tip_angle - insertion_angle)

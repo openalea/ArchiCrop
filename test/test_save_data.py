@@ -37,14 +37,14 @@ pot_h = {
 
 nrj_per_leaf = {
     0: [[10], [11], [12,12], [13,13], [14,14]],
-    2: [[11], [12], [13,13], [14,14], [15,15]],
+    2: [[11], [12], [13,13], [14,14,14], [15,15,15,15]],
     4: [[12], [13], [14,14], [15,15], [16,16,16]]
 }
 
 ids = list(nrj_per_leaf.keys())
 n_id = len(ids)
 n_time = len(dates)
-n_leaf = len(max([nrj_per_leaf[id][-1] for id in ids]))  # length of inner list
+n_leaf = max([len(nrj_per_leaf[id][-1]) for id in ids])  # length of inner list
 
 # arr_nrj = np.zeros((n_id, n_time, n_leaf), dtype=float)
 
