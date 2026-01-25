@@ -333,8 +333,8 @@ def write_netcdf(filename: str, daily_dynamics: dict, params_sets: dict,
     ids = list(nrj_per_leaf.keys())
     n_id = len(ids)
     n_time = len(dates)
-    n_leaf = len(max([nrj_per_leaf[id][-1] for id in ids]))  # length of inner list for a plant with all leaves
-    
+    n_leaf = max([len(nrj_per_leaf[id][-1]) for id in ids])  # length of inner list for a plant with all leaves
+
 
     nrj_leaf = np.zeros((n_id, n_time, n_leaf), dtype=float)
 
