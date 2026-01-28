@@ -34,10 +34,18 @@ def equal_dist(increment, growing_organs):
 
 
 def demand_dist(increment, growing_organs):
-    '''return distribution of increment per organ proportionnal to potential length or area'''
+    '''return distribution of increment per organ proportionnal to potential dimension, i.e. length or area'''
     sum_growing_organs = sum([value["potential"] for value in growing_organs.values()])
     return {vid: increment*values["potential"]/sum_growing_organs 
             for vid, values in growing_organs.items()}
+
+
+def dev_dist(increment, growing_organs):
+    '''return distribution of increment per organ proportionnal to development advancement'''
+    sum_growing_organs = sum([1/value["age"] for value in growing_organs.values()])
+    return {vid: increment*(1/values["age"]/sum_growing_organs) if len(growing_organs) > 1 else increment
+            for vid, values in growing_organs.items()}
+
 
 def age_dist(increment, senescing_organs):
     '''return distribution of increment per organ proportionnal to age'''
@@ -46,121 +54,93 @@ def age_dist(increment, senescing_organs):
             for vid, values in senescing_organs.items()}
 
 
-def get_growing_and_senescing_organs_potential_visible(g, time, prev_time):
-    """Identify growing organs and their potential at a given time"""
+def get_growing_and_senescing_organs(g, time, prev_time):
+    """Identify growing organs and their potential dimension at a given time"""
 
     growing_internodes = {}
     growing_leaves = {}
     senescing_leaves = {}
 
-    for vid, la in g.property("leaf_area").items(): 
-        n = g.node(vid)
-        if n.start_tt <= time <= n.end_tt or prev_time < n.end_tt < time:
-            growing_leaves[vid] = {"potential": la, "visible": n.visible_leaf_area, "age": n.age}
-        if n.senescence <= time and n.visible_leaf_area > n.senescent_area: # not n.dead: # and n.srt > 0: 
-            senescing_leaves[vid] = {"potential": n.visible_leaf_area, "visible": n.senescent_area, "age": n.age}
-        # print(n.senescence <= time)
-        # print(n.visible_leaf_area > n.senescent_area)
-        # print(senescing_leaves)
-
+    # For each organ in the plant
     for vid, ml in g.property("mature_length").items(): 
         n = g.node(vid)
-        if n.label.startswith("Stem") and (n.start_tt <= time <= n.end_tt or prev_time < n.end_tt < time):
-            growing_internodes[vid] = {"potential": ml, "visible": n.visible_length, "age": n.age}
-
+        # Update organ age
+        n.age = time - n.start_tt
+        # Update stem diameter 
+        n_stem = n.parent() if n.label.startswith("Leaf") else n
+        n.stem_diameter = min(n.mature_stem_diameter/2 * (1+0.5*(time - n_stem.start_tt) / (n_stem.end_tt - n_stem.start_tt)), n.mature_stem_diameter) 
+        # If it is a stem element / internode
+        if n.label.startswith("Stem"): 
+            # If the internode is growing, or has finished growing in the last time step, according to development
+            if (n.start_tt <= time <= n.end_tt or prev_time < n.end_tt < time) and n.visible_length < ml:
+                growing_internodes[vid] = {"potential": ml, "visible": n.visible_length, "age": n.age}
+        # If it is a leaf
+        elif n.label.startswith("Leaf"):
+            # Update leaf inclination 
+            n.inclination = min(1.5*(time - n.start_tt) / (n.end_tt - n.start_tt), 1)
+            # If the leaf is growing, or has finished growing in the last time step, according to development
+            if (n.start_tt <= time <= n.end_tt or prev_time < n.end_tt < time) and n.visible_leaf_area < n.leaf_area:
+                growing_leaves[vid] = {"potential": n.leaf_area, "visible": n.visible_leaf_area, "age": n.age}
+            # If the leaf is senescing, according to development
+            if n.senescence <= time and n.visible_leaf_area > n.senescent_area: # not n.dead: # and n.srt > 0: 
+                senescing_leaves[vid] = {"potential": n.visible_leaf_area, "visible": n.senescent_area, "age": n.age}
+        
     return growing_internodes, growing_leaves, senescing_leaves
 
-'''
-def get_growing_organs(g, time, prev_time):
-    """Identify growing organs and their potential at a given time"""
 
-    growing_internodes = []
-    growing_leaves = []
-
-    for vid in g.properties()["leaf_area"]: 
-        n = g.node(vid)
-        if n.start_tt <= time <= n.end_tt or prev_time < n.end_tt < time:
-            growing_leaves.append(vid)
-
-    for vid in g.properties()["mature_length"]: 
-        n = g.node(vid)
-        if n.label.startswith("Stem") and (n.start_tt <= time < n.end_tt or prev_time < n.end_tt < time):
-            growing_internodes.append(vid)
-
-    return growing_internodes, growing_leaves
-
-
-def get_senescing_organs(g, time):
-    """Identify senescing blades at a given time"""
-
-    senescing_leaves = []
-    for vid in g.properties()["leaf_area"]: 
-        n = g.node(vid)
-        if n.senescence <= time and n.srt > 0: 
-            senescing_leaves.append(vid)
-    return senescing_leaves
-'''
-
-# rename to grow_organs
-def distribute_to_potential(g, growing_organs, day, time, time_increment, increment_to_distribute, distribution_function, grow_function, to_print=False):
+def distribute_among_organs(g, growing_organs, day, time, time_increment, increment_to_distribute, distribution_function, grow_function, to_print=False):
     """Distribute increment among growing organs up to potential of each organ"""
 
+    # Create dict {id : 0.0 for id in growing organs}
     increment_for_each_organ = dict.fromkeys(growing_organs, 0.0)
 
+    # While there are growing organs (i.e. organs that have not reached their theoretical dimension),
+    # and while there is still growth increment to distribute among growing organs
     while len(growing_organs) > 0 and increment_to_distribute > 1e-5: 
+        # Compute dict {id : growth increment for id in growing organs},
+        # growth increment for each organ being computed according to distribution function from plant-scale growth increment
         incr_temp = distribution_function(increment_to_distribute, growing_organs)
+        # Re-initialize increment to distribute at each iteration
         increment_to_distribute = 0.0
-
+        # Iterate over growing organs, in theory from lowest to highest ids
         for vid, val in incr_temp.items():
-        #     increment_for_each_organ[vid] += val # added here
-        # for vid in increment_for_each_organ.keys():
+            # For each growing organ
             if vid in growing_organs:
+                # Set potential increment for organ growth to the minimal value between 
+                # the increment computed for this organ and the remaining bit to growth to reach potential
                 potential_increment = min(val, growing_organs[vid]["potential"] - growing_organs[vid]["visible"])
+                # Store the growth increment of the organ in a dict
                 increment_for_each_organ[vid] += potential_increment
+                # Update the dict of growing organs, adding the increment to the visible (i.e. current) dimension
                 growing_organs[vid]["visible"] += potential_increment
+                # Increment to distribute during the next iteration among the organs that have not reached their potential yet
+                # Not equal to zero if the organ has reached its potential
                 increment_to_distribute += val - potential_increment
-                # if incr_temp[vid] + growing_organs[vid]["visible"] > growing_organs[vid]["potential"]: # not good
-                    # remaining = increment_for_each_organ[vid] + growing_organs[vid]["visible"] - growing_organs[vid]["potential"]
-                    # increment_to_distribute += remaining
-                    # increment_for_each_organ[vid] -= remaining
-                # growing_organs[vid]["visible"] += increment_for_each_organ[vid] # and added here
 
-        # filter growing_organs
+        # Filter growing_organs to keep only the ones that have not reached their potential dimension
         growing_organs = {vid: {"potential": values["potential"], "visible": values["visible"], "age": values["age"]} 
                           for vid, values in growing_organs.items() 
                           if values["visible"] < values["potential"]}
-        
+
+    # Update organ geometry in MTG  
     for vid, incr in increment_for_each_organ.items():
         n = g.node(vid)
-        n.grow = True
-        n.age = time - n.start_tt
         grow_function(n, incr, day, time_increment)
 
-        n_stem = n.parent() if n.label.startswith("Leaf") else n
-        n.stem_diameter = min(n.mature_stem_diameter/2 * (1+0.5*(time - n_stem.start_tt) / (n_stem.end_tt - n_stem.start_tt)), n.mature_stem_diameter) 
-        
-        if n.label.startswith("Leaf"):
-            n.inclination = min(1.5*(time - n.start_tt) / (n.end_tt - n.start_tt), 1)
 
-
-
-def distribute_among_organs(g, day, daily_dynamics, rate=True, distribution_function=demand_dist):
-    """Fill the dictionnary of variables recording growth process at a given time"""
+def grow_organs(g, day, daily_dynamics, rate=True, distribution_function=dev_dist):
+    """Grow organs according to plant-scale growth increment on a given day"""
 
     time = daily_dynamics["Thermal time"]
     thermal_time_incr = daily_dynamics["Thermal time increment"]
 
-    # compute number of growing organs
-    growing_internodes, growing_leaves, senescing_leaves = get_growing_and_senescing_organs_potential_visible(g, time, thermal_time_incr)
+    # Get growing and senescent organs in a dict of dict : {id : dict(potential, visible, age)}
+    growing_internodes, growing_leaves, senescing_leaves = get_growing_and_senescing_organs(g, time, thermal_time_incr)
 
-    # compute number of senscent organs
-    # senescing_leaves = get_senescing_organs(g, time)
-
-    # set amount of growth to distribute among organs
-
+    # Distribute daily plant-scale growth increment among organs
     if daily_dynamics["Leaf area increment"] > 0.0 and len(growing_leaves) > 0:
         update_cereal_leaf_growth = update_cereal_leaf_growth_rate if rate else update_cereal_leaf_growth_area
-        distribute_to_potential(g=g, 
+        distribute_among_organs(g=g, 
                                 growing_organs=growing_leaves, 
                                 day=day,
                                 time=time,
@@ -169,21 +149,19 @@ def distribute_among_organs(g, day, daily_dynamics, rate=True, distribution_func
                                 distribution_function=distribution_function, 
                                 grow_function=update_cereal_leaf_growth)
 
-
     if daily_dynamics["Height increment"] > 0.0 and len(growing_internodes) > 0:
         update_stem_growth = update_stem_growth_rate if rate else update_stem_growth_height
-        distribute_to_potential(g=g, 
+        distribute_among_organs(g=g, 
                                 growing_organs=growing_internodes, 
                                 day=day,
                                 time=time,
                                 time_increment=thermal_time_incr,
                                 increment_to_distribute=daily_dynamics["Height increment"], 
-                                distribution_function=demand_dist,
+                                distribution_function=distribution_function,
                                 grow_function=update_stem_growth)
 
-
     if daily_dynamics["Senescent leaf area increment"] > 0.0: # and len(senescing_leaves) > 0:
-        distribute_to_potential(g=g, 
+        distribute_among_organs(g=g, 
                                 growing_organs=senescing_leaves, 
                                 day=day,
                                 time=time,
@@ -192,18 +170,17 @@ def distribute_among_organs(g, day, daily_dynamics, rate=True, distribution_func
                                 distribution_function=age_dist,
                                 grow_function=update_leaf_senescence_area)
 
-
-
 '''
 Detailed process of leaf elongation:
--	At the beginning of the simulation, from the normalized shape of the blade along the midrib, scaled for each leaf according to the potential area, compute points on that curve, to have a correspondence between S and l.
--	Integrate l=f(S) with python module scipy.integrate.cumulated_simpson 
--	Fit a spline of degree k=3 (using python module scipy.interpolate.splrep) 
--	For each leaf, at all time t, evaluate normalized length l for a normalized leaf area S+dS (i.e. percent of potential leaf area reached)
--	Scale l according to potential total length L
--	Computation of senescing length --> same approach as for leaf elongation 
+-	At the beginning of the simulation: 
+        - From the normalized shape of the blade along the midrib scaled for each leaf according to the potential area, 
+          compute points on that curve, to have a correspondence between S and l.
+	    - Integrate l=f(S) with python module scipy.integrate.cumulated_simpson.
+	    - Fit a spline of degree k=3 using python module scipy.interpolate.splrep.
+-	When growing or senescing: 
+        - Evaluate normalized length l for a normalized leaf area S+dS (i.e. percent of potential leaf area reached).
+        - Scale l according to potential total length L.
 '''
-
 
 def update_cereal_leaf_growth_area(n, LA_for_this_leaf, day, time_increment=None):
     """Update the visible leaf area and length of a cereal leaf, 
@@ -212,7 +189,7 @@ def update_cereal_leaf_growth_area(n, LA_for_this_leaf, day, time_increment=None
         n.visible_leaf_area += LA_for_this_leaf
         relative_visible_area = n.visible_leaf_area / n.leaf_area
         n.visible_length = float(splev(x=relative_visible_area, tck=n.tck)) * n.mature_length
-    else:
+    else: # warning
         n.visible_leaf_area = n.leaf_area
         n.visible_length = n.mature_length
 
@@ -248,6 +225,7 @@ def update_stem_growth_height(n, height_for_this_internode, day, time_increment=
 
     for d in range(day-1, len(n.stem_lengths)):
         n.stem_lengths[d] = n.visible_length
+
 
 def update_stem_growth_rate(n, height_for_this_internode, day, time_increment):
     """Update the visible length of a stem internode, 
@@ -295,12 +273,9 @@ def mtg_turtle_time_with_constraint(g, day, daily_dynamics, rate=True, distribut
     max_scale = g.max_scale()
 
     time = daily_dynamics["Thermal time"]
-
-    distribute_among_organs(g, day, daily_dynamics, rate=rate, distribution_function=distribution_function)
+    grow_organs(g, day, daily_dynamics, rate=rate, distribution_function=distribution_function)
     
-
     cereal_visitor = CerealsVisitorGrowth(False)
-
     
     def traverse_with_turtle_time(g, vid, time, visitor=cereal_visitor):
         turtle = CerealsTurtle()
@@ -334,7 +309,6 @@ def mtg_turtle_time_with_constraint(g, day, daily_dynamics, rate=True, distribut
             if g.node(vid).start_tt <= time:
                 visitor(g, vid, turtle) 
                 # turtle.push()
-
 
         for v in pre_order2_with_filter(g, vid, None, push_turtle, pop_turtle):
             if v == vid:

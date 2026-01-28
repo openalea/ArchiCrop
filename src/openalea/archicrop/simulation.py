@@ -11,6 +11,7 @@ import xarray as xr
 from scipy.stats import qmc
 
 from .archicrop import ArchiCrop
+from .growth import dev_dist, demand_dist
 from .light_it import light_interception
 from .stics_io import get_stics_data
 from .viability import compute_viable_params
@@ -149,7 +150,7 @@ def compute_pot_growth(param_sets: dict, daily_dynamics: dict):
     return pot_la, pot_h, mtgs
     
 
-def simulate_plant_growth(param_sets: dict, daily_dynamics: dict):
+def simulate_plant_growth(param_sets: dict, daily_dynamics: dict, distribution_function):
     """ Simulate ArchiCrop plant growth constrained by daily dynamics.
     Parameters:
         param_sets (dict): List of parameter sets.
@@ -167,7 +168,7 @@ def simulate_plant_growth(param_sets: dict, daily_dynamics: dict):
     for id, params in param_sets.items():
         plant = ArchiCrop(daily_dynamics=daily_dynamics, **params)
         plant.generate_potential_plant()
-        growing_plant = plant.grow_plant()
+        growing_plant = plant.grow_plant(distribution_function=distribution_function)
         growing_plant_mtg = list(growing_plant.values())
         mtgs[id] = growing_plant_mtg
 
@@ -197,7 +198,9 @@ def define_archicrop_parameters(archi_params: dict,
     )
 
     # Complete ArchiCrop parameters with values from constraint
-    archi_params = constrain_archi_params(archi_params=archi_params, daily_dynamics=daily_dynamics, lifespan=lifespan, lifespan_early=lifespan_early, pot_factor=pot_factor)
+    archi_params = constrain_archi_params(archi_params=archi_params, daily_dynamics=daily_dynamics, 
+                                          lifespan=lifespan, lifespan_early=lifespan_early, 
+                                          pot_factor=pot_factor)
     
     # Generate samples for ArchiCrop parameters 
     param_sets = param_sampling(archi_params=archi_params, n_samples=n_samples, seed=seed, latin_hypercube=latin_hypercube)
@@ -213,12 +216,13 @@ def define_archicrop_parameters(archi_params: dict,
 
 def run_archicrop_and_light(param_sets: dict, daily_dynamics: dict, density: float,
              weather_file: str, location: dict,
+             distribution_function = dev_dist,
              inter_row: float = 0.7,
              light_inter: bool = True, zenith: bool = False, direct : bool = False, save_scenes: bool = False):
 
     # Simulate plant growth with fitting parameters
     pot_la, pot_h, _ = compute_pot_growth(param_sets=param_sets, daily_dynamics=daily_dynamics)
-    realized_la, realized_h, mtgs = simulate_plant_growth(param_sets=param_sets, daily_dynamics=daily_dynamics)
+    realized_la, realized_h, mtgs = simulate_plant_growth(param_sets=param_sets, daily_dynamics=daily_dynamics, distribution_function=distribution_function)
 
     # Compute light interception on 3D scenes through time
     if light_inter:
@@ -239,9 +243,11 @@ def run_archicrop_and_light(param_sets: dict, daily_dynamics: dict, density: flo
     return pot_la, pot_h, realized_la, realized_h, nrj_per_plant, mtgs
 
 def run_archicrop_and_light_parallel(id_sim, param_sets: dict, daily_dynamics: dict, density: float,
-             weather_file: str, location: dict, inter_row: float, light_inter: bool = True, direct: bool = False):
+             weather_file: str, location: dict, distribution_function, inter_row: float, light_inter: bool = True, direct: bool = False):
+    
     pot_la, pot_h, realized_la, realized_h, nrj_per_plant, _ = run_archicrop_and_light(param_sets, daily_dynamics, density, 
-                                                                                          weather_file, location, inter_row, light_inter, direct=direct)
+                                                                                      weather_file, location, distribution_function, inter_row, 
+                                                                                      light_inter, direct=direct)
     
     # first_key = list(param_sets.keys())[0]
     # filename = f"results_light_inter_{param_sets[first_key]['nb_phy']}"

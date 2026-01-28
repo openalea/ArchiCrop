@@ -27,11 +27,11 @@ height_stics = [value["Plant height"] for value in stics_output_data.values()]
 
 # Set ArchiCrop parameters
 archi = {
-        'height': 3*max(height_stics),
-        'leaf_area': 1.2*max(LA_stics),
-        'nb_phy': 10,
-        'nb_short_phy': 3,
-        'wl': 0.08,
+        'height': 1.5*max(height_stics),
+        'leaf_area': 1.5*max(LA_stics),
+        'nb_phy': 16,
+        'nb_short_phy': 4,
+        'wl': 0.12,
         'diam_base': 2.5,
         'diam_top': 1.5,
         'insertion_angle': 35,
@@ -41,8 +41,8 @@ archi = {
         'swmax': 0.55,
         'f1': 0.64,
         'f2': 0.92,
-        'stem_q': 1.1,
-        'rmax': 0.8,
+        'stem_q': 1,
+        'rmax': 0.7,
         'skew': 0.0005,
         'phyllotactic_angle': 180,
         'phyllotactic_deviation': 10,

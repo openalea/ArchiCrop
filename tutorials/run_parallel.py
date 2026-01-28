@@ -8,6 +8,7 @@ from multiprocessing import Pool
 sys.path.append('../data')
 from archi_dict import archi_sorghum_angles as archi
 
+from openalea.archicrop.growth import dev_dist, demand_dist
 from openalea.archicrop.simulation import define_archicrop_parameters, run_archicrop_and_light_parallel
 
 if __name__ == '__main__':
@@ -25,6 +26,7 @@ if __name__ == '__main__':
 
     n_cpu = 9
     id_sim = list(range(n_cpu))
+    distribution_function = dev_dist
     light_inter = True
     direct = False
 
@@ -32,8 +34,8 @@ if __name__ == '__main__':
                                                                                 tec_file = tec_file_xml, 
                                                                                 plant_file = plt_file_xml, 
                                                                                 dynamics_file = stics_output_file,
-                                                                                pot_factor = 1.5)
-                                                                                # end=80)
+                                                                                pot_factor = 1.4,
+                                                                                end=80)
 
     keys = list(param_sets.keys())
     chunk_size = ceil(len(keys) / n_cpu)
@@ -46,7 +48,7 @@ if __name__ == '__main__':
     with Pool(n_cpu) as p:
         start_time = t.time()
         p.starmap_async(run_archicrop_and_light_parallel, 
-                        [(id, params_sets_split[id], daily_dynamics, density, weather_file, location, inter_row, light_inter, direct) 
+                        [(id, params_sets_split[id], daily_dynamics, density, weather_file, location, distribution_function, inter_row, light_inter, direct) 
                         for id in id_sim]).get()
         end_time = t.time()
         elapsed_time = (end_time - start_time)/3600

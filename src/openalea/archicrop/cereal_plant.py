@@ -74,9 +74,11 @@ def cereal_leaf_properties(nb_phy, leaf_area, rmax, skew, insertion_angle, scurv
 
 def add_leaf_senescence(g, vid_leaf, leaf_lifespan, leaf_lifespan_early, end_juv):
     """Add leaf senescence time to the leaf vertex"""
+    if isinstance(leaf_lifespan_early, tuple):
+        leaf_lifespan_early = leaf_lifespan_early[0]
     if leaf_lifespan_early is not None and end_juv is not None: 
         if g.node(vid_leaf).start_tt < end_juv:
-            g.node(vid_leaf).senescence = g.node(vid_leaf).start_tt + leaf_lifespan_early[0]
+            g.node(vid_leaf).senescence = g.node(vid_leaf).start_tt + leaf_lifespan_early
         else:
             g.node(vid_leaf).senescence = g.node(vid_leaf).start_tt + leaf_lifespan
     else:
