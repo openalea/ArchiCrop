@@ -252,14 +252,14 @@ def run_archicrop_and_light(param_sets: dict,
     return daily_dynamics, density, inter_row, pot_la, pot_h, realized_la, realized_h, nrj_per_plant, mtgs
 
 def run_archicrop_and_light_parallel(id_sim, param_sets: dict, tec_file: str, plant_file: str, dynamics_file: str,
-             weather_file: str, location: dict, distribution_function, light_inter: bool = True, direct: bool = False):
+             weather_file: str, location: dict, distribution_function, end: int = -1, light_inter: bool = True, direct: bool = False):
     
     daily_dynamics, density, inter_row, pot_la, pot_h, realized_la, realized_h, nrj_per_plant, _ = run_archicrop_and_light(param_sets=param_sets, 
                                                                                        tec_file=tec_file, plant_file=plant_file, 
                                                                                        dynamics_file=dynamics_file, weather_file=weather_file, 
                                                                                        location=location, 
                                                                                        distribution_function=distribution_function,
-                                                                                       end=-1, light_inter=light_inter, direct=direct)
+                                                                                       end=end, light_inter=light_inter, direct=direct)
     
     # first_key = list(param_sets.keys())[0]
     # filename = f"results_light_inter_{param_sets[first_key]['nb_phy']}"

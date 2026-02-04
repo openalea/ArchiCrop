@@ -183,7 +183,7 @@ archi_sorghum = {
 
 
 archi_sorghum_angles = {
-    "nb_phy": [12,16,20], # [10,30], # number of phytomers on the main stem : [10,40] (Ndiaye et al., 2021; Lafarge and Tardieu, 2002; Clerget, 2008; Ganeme et al., 2022)
+    "nb_phy": [12,16,20,24,28], # [10,30], # number of phytomers on the main stem : [10,40] (Ndiaye et al., 2021; Lafarge and Tardieu, 2002; Clerget, 2008; Ganeme et al., 2022)
     "nb_short_phy": 4,
     "short_phy_height": 3,
 

@@ -25,7 +25,8 @@ if __name__ == '__main__':
     'altitude': 800,
     'timezone': 'Europe/Paris'}
 
-    n_cpu = 9
+    print("Nb CPU : ")
+    n_cpu = int(input())
     id_sim = list(range(n_cpu))
     pot_factor_lai = 1.4
     pot_factor_height = 3
