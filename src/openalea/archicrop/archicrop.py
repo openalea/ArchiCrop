@@ -172,7 +172,7 @@ class ArchiCrop:
                         gravitropism_coefficient=self.gravitropism_coefficient,
                         plant_orientation=self.plant_orientation)
     
-    def grow_plant(self, rate=True, distribution_function=demand_dist):
+    def grow_plant(self, rate=False, distribution_function=demand_dist):
         """
         Grow a plant following incremental constraints.
 

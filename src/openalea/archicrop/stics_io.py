@@ -74,6 +74,7 @@ def read_sti_file(file_sti, conv_unit=100, end=-1):
             # Convert the values to floats
             row = {col.strip(): float(value) for col, value in zip(stripped_header, values)}
             if row["hauteur"] > 0.0 and row["laisen(n)"] < row["laimax"]:
+
                 non_zero_height_encountered = True
                 
                 # Extract date values
@@ -85,6 +86,10 @@ def read_sti_file(file_sti, conv_unit=100, end=-1):
 
                 for col in stripped_header:
                     data_dict[col.strip()].append(row[col.strip()])
+
+            elif not non_zero_height_encountered:
+                prev_tt = float(row["somupvtsem"])
+
             if non_zero_height_encountered and (row["hauteur"] <= 0.0 or row["laisen(n)"] >= row["laimax"]):
                 break
 
@@ -95,7 +100,7 @@ def read_sti_file(file_sti, conv_unit=100, end=-1):
     density = data_dict["densite"][-1] # density = 20 plants/m2 = 0.002 plants/cm2
 
     # Thermal time
-    thermal_time = [float(i) for i in data_dict["somupvtsem"]][:end]
+    thermal_time = [float(i) - prev_tt for i in data_dict["somupvtsem"]][:end]
     thermal_time_incr = [thermal_time[0]] + [thermal_time[i+1]-thermal_time[i] for i in range(len(thermal_time[1:]))]
 
     # Green LAI
@@ -184,12 +189,12 @@ def get_pheno(daily_dynamics: dict):
         if value["Phenology"] == 'juvenile':
             next_key = key + 1
             if next_key in daily_dynamics and daily_dynamics[next_key]["Phenology"] == 'exponential':
-                end_juv = thermal_time[key-1] + thermal_time[0]
+                end_juv = thermal_time[key-1] # + thermal_time[0]
 
         elif value["Phenology"] == 'exponential':
             next_key = key + 1
             if next_key in daily_dynamics and daily_dynamics[next_key]["Phenology"] == 'repro':
-                end_veg = thermal_time[key-1] + thermal_time[0]
+                end_veg = thermal_time[key-1] # + thermal_time[0]
                 index_end_veg = key - 1
                 break
     

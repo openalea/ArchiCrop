@@ -8,15 +8,16 @@ from multiprocessing import Pool
 sys.path.append('../data')
 from archi_dict import archi_sorghum_angles as archi
 
-from openalea.archicrop.growth import dev_dist, demand_dist
+from openalea.archicrop.growth import dev_dist, demand_dist, demand_dist_bis
 from openalea.archicrop.simulation import define_archicrop_parameters, run_archicrop_and_light_parallel
 
 if __name__ == '__main__':
 
     # Define the inputs for the simulation
-    tec_file_xml='../data/02NT18SorgV2D1_tec.xml'
-    plt_file_xml='../data/sorgho_imp_M_v10_plt.xml'
+    tec_file='../data/02NT18SorgV2D1_tec.xml'
+    plant_file='../data/sorgho_imp_M_v10_plt.xml'
     stics_output_file='../data/mod_s02NT18SorgV2D1.sti'
+    stics_output_file_no_stress='../data/mod_s02NT18SorgV2D1_no_stress.sti'
     weather_file = '../data/ntarla_corr.2018'
     location = {  
     'longitude': 3.87,
@@ -26,16 +27,20 @@ if __name__ == '__main__':
 
     n_cpu = 9
     id_sim = list(range(n_cpu))
-    distribution_function = dev_dist
+    pot_factor_lai = 1.4
+    pot_factor_height = 3
+    distribution_function = demand_dist_bis
+    end = 80
     light_inter = True
     direct = False
 
-    daily_dynamics, param_sets, density, inter_row = define_archicrop_parameters(archi_params = archi, 
-                                                                                tec_file = tec_file_xml, 
-                                                                                plant_file = plt_file_xml, 
-                                                                                dynamics_file = stics_output_file,
-                                                                                pot_factor = 1.4,
-                                                                                end=80)
+    param_sets = define_archicrop_parameters(archi_params = archi, 
+                                            tec_file = tec_file, 
+                                            plant_file = plant_file, 
+                                            pot_dynamics_file = stics_output_file_no_stress,
+                                            pot_factor_lai = pot_factor_lai,
+                                            pot_factor_height = pot_factor_height,
+                                            end=end)
 
     keys = list(param_sets.keys())
     chunk_size = ceil(len(keys) / n_cpu)
@@ -48,7 +53,7 @@ if __name__ == '__main__':
     with Pool(n_cpu) as p:
         start_time = t.time()
         p.starmap_async(run_archicrop_and_light_parallel, 
-                        [(id, params_sets_split[id], daily_dynamics, density, weather_file, location, distribution_function, inter_row, light_inter, direct) 
+                        [(id, params_sets_split[id], tec_file, plant_file, stics_output_file, weather_file, location, distribution_function, end, light_inter, direct) 
                         for id in id_sim]).get()
         end_time = t.time()
         elapsed_time = (end_time - start_time)/3600

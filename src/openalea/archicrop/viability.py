@@ -50,13 +50,13 @@ def compute_skew(leaf_areas, rank, nb_phy, rmax):
     return math.exp(math.log(leaf_areas[rank-1]/max(leaf_areas))/(2*(rank/nb_phy - rmax)**2 + (rank/nb_phy - rmax)**3))
 
 
-def compute_viable_params(params_sets: dict, daily_dynamics: dict, pot_factor: float = 1.5) -> dict:
+def compute_viable_params(params_sets: dict, daily_dynamics: dict, pot_factor_lai: float = 1.5, pot_factor_height: float = 3) -> dict:
     """Compute viable parameters wrt the dynamic constraint of LAI and height."""
 
     # Dynamics of vegetative phase
     index_end_veg, end_veg, _ = get_pheno(daily_dynamics)
-    thermal_time = [value["Thermal time"] for value in daily_dynamics.values()][:index_end_veg+1]
-    leaf_area_plant = [value["Plant leaf area"] for value in daily_dynamics.values()][:index_end_veg+1]
+    thermal_time = [value["Thermal time"] for value in daily_dynamics.values()][:index_end_veg+2]
+    leaf_area_plant = [value["Plant leaf area"] for value in daily_dynamics.values()][:index_end_veg+2]
     
     # Viable values for parameters
     new_params_sets = {}
@@ -65,13 +65,15 @@ def compute_viable_params(params_sets: dict, daily_dynamics: dict, pot_factor: f
         leaf_duration = params["leaf_duration"] 
         nb_phy = params["nb_phy"]
         # Computes phyllochron
-        phyllochron = (end_veg-thermal_time[0])/(nb_phy + leaf_duration)
+        # phyllochron = (end_veg-thermal_time[0])/(nb_phy + leaf_duration)
+        phyllochron = (end_veg)/(nb_phy - 1 + leaf_duration)
 
         if min(params["phyllochron"]) <= phyllochron <= max(params["phyllochron"]): # Check that the value of skew is within an acceptable range for the species
             params_sets[id]["phyllochron"] = phyllochron
 
             # Compute organ development
-            starts = [i * phyllochron + thermal_time[0] for i in range(nb_phy)]
+            # starts = [i * phyllochron + thermal_time[0] for i in range(nb_phy)]
+            starts = [i * phyllochron for i in range(nb_phy)]
             ends = [start + phyllochron * leaf_duration for start in starts]
 
             # Interpolate growth dynamics and compute it at given points (instead of daily)
@@ -97,7 +99,7 @@ def compute_viable_params(params_sets: dict, daily_dynamics: dict, pot_factor: f
                         skew = compute_skew(rank=rank, nb_phy=nb_phy, rmax=rmax, leaf_areas=leaf_areas_norm) # Compute skew parameter, so that the bell shape curve passes through leaf area of rank rank
                         if params['skew'][0] < skew < params['skew'][1]: # Check that the value of skew is within an acceptable range
                             ok = True
-                            bell_shaped_leaf_areas = bell_shaped_dist(leaf_area_plant[-1]*pot_factor, nb_phy, rmax, skew) # Compute the bell shape with given (rmax, skew) and constrained plant-scale leaf area
+                            bell_shaped_leaf_areas = bell_shaped_dist(leaf_area_plant[-1]*pot_factor_lai, nb_phy, rmax, skew) # Compute the bell shape with given (rmax, skew) and constrained plant-scale leaf area
                             # Verify that the bell shape is greater or equal to the minimal solution 
                             for i,bs in enumerate(bell_shaped_leaf_areas):
                                 if bs <= min_leaf_areas[i]: 

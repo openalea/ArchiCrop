@@ -11,7 +11,7 @@ import xarray as xr
 from scipy.stats import qmc
 
 from .archicrop import ArchiCrop
-from .growth import dev_dist, demand_dist
+from .growth import dev_dist, demand_dist, demand_dist_bis
 from .light_it import light_interception
 from .stics_io import get_stics_data
 from .viability import compute_viable_params
@@ -20,14 +20,14 @@ from .viability import compute_viable_params
 
 def constrain_archi_params(archi_params: dict, daily_dynamics: dict, 
                            lifespan: float = None, lifespan_early: float = None, 
-                           pot_factor: float = 1.5) -> dict:
+                           pot_factor_lai: float = 1.5, pot_factor_height: float = 3) -> dict:
     """Complete ArchiCrop parameters with values from constraint."""
 
     if daily_dynamics is not None:
         leaf_area_plant = [value["Plant leaf area"] for value in daily_dynamics.values()]
         height_canopy = [value["Plant height"] for value in daily_dynamics.values()]
-        archi_params["height"] = pot_factor*max(height_canopy) 
-        archi_params["leaf_area"] = pot_factor*max(leaf_area_plant) 
+        archi_params["height"] = pot_factor_height*max(height_canopy) 
+        archi_params["leaf_area"] = pot_factor_lai*max(leaf_area_plant) 
 
     if lifespan is not None:
         archi_params["leaf_lifespan"] = lifespan
@@ -185,22 +185,22 @@ def simulate_plant_growth(param_sets: dict, daily_dynamics: dict, distribution_f
 
 
 def define_archicrop_parameters(archi_params: dict, 
-             tec_file: str, plant_file: str, dynamics_file: str,
+             tec_file: str, plant_file: str, pot_dynamics_file: str,
              n_samples: int = 10, seed: int = 42, latin_hypercube: bool = False,
-             pot_factor: float = 1.5, end: int = -1):
+             pot_factor_lai: float = 1.5, pot_factor_height: float = 3, end: int = -1):
 
     # Retrieve STICS management and senescence parameters
-    density, daily_dynamics, lifespan, lifespan_early, inter_row = get_stics_data(
+    _, pot_daily_dynamics, lifespan, lifespan_early, _ = get_stics_data(
         file_tec_xml=tec_file,  # Path to the STICS management XML file
         file_plt_xml=plant_file,  # Path to the STICS plant XML file
-        stics_output_file=dynamics_file,  # Path to the STICS output file
+        stics_output_file=pot_dynamics_file,  # Path to the STICS output file
         end=end
     )
 
     # Complete ArchiCrop parameters with values from constraint
-    archi_params = constrain_archi_params(archi_params=archi_params, daily_dynamics=daily_dynamics, 
+    archi_params = constrain_archi_params(archi_params=archi_params, daily_dynamics=pot_daily_dynamics, 
                                           lifespan=lifespan, lifespan_early=lifespan_early, 
-                                          pot_factor=pot_factor)
+                                          pot_factor_lai=pot_factor_lai, pot_factor_height=pot_factor_height)
     
     # Generate samples for ArchiCrop parameters 
     param_sets = param_sampling(archi_params=archi_params, n_samples=n_samples, seed=seed, latin_hypercube=latin_hypercube)
@@ -208,17 +208,26 @@ def define_archicrop_parameters(archi_params: dict,
     # Compute viable parameters wrt the dynamic constraint of LAI and height
     param_sets = compute_viable_params(
         params_sets=param_sets, 
-        daily_dynamics=daily_dynamics, 
-        pot_factor=pot_factor)
+        daily_dynamics=pot_daily_dynamics, 
+        pot_factor_lai=pot_factor_lai, pot_factor_height=pot_factor_height)
 
-    return daily_dynamics, param_sets, density, inter_row
+    return param_sets
 
 
-def run_archicrop_and_light(param_sets: dict, daily_dynamics: dict, density: float,
+def run_archicrop_and_light(param_sets: dict, 
+             tec_file: str, plant_file: str, dynamics_file: str,
              weather_file: str, location: dict,
-             distribution_function = dev_dist,
-             inter_row: float = 0.7,
+             distribution_function,
+             end: int = -1,
              light_inter: bool = True, zenith: bool = False, direct : bool = False, save_scenes: bool = False):
+
+    # Retrieve STICS management and senescence parameters
+    density, daily_dynamics, _, _, inter_row = get_stics_data(
+        file_tec_xml=tec_file,  # Path to the STICS management XML file
+        file_plt_xml=plant_file,  # Path to the STICS plant XML file
+        stics_output_file=dynamics_file,  # Path to the STICS output file
+        end=end
+    )
 
     # Simulate plant growth with fitting parameters
     pot_la, pot_h, _ = compute_pot_growth(param_sets=param_sets, daily_dynamics=daily_dynamics)
@@ -240,38 +249,49 @@ def run_archicrop_and_light(param_sets: dict, daily_dynamics: dict, density: flo
     else:
         nrj_per_plant = {k : [None] * len(realized_la[k]) for k in realized_la}
 
-    return pot_la, pot_h, realized_la, realized_h, nrj_per_plant, mtgs
+    return daily_dynamics, density, inter_row, pot_la, pot_h, realized_la, realized_h, nrj_per_plant, mtgs
 
-def run_archicrop_and_light_parallel(id_sim, param_sets: dict, daily_dynamics: dict, density: float,
-             weather_file: str, location: dict, distribution_function, inter_row: float, light_inter: bool = True, direct: bool = False):
+def run_archicrop_and_light_parallel(id_sim, param_sets: dict, tec_file: str, plant_file: str, dynamics_file: str,
+             weather_file: str, location: dict, distribution_function, light_inter: bool = True, direct: bool = False):
     
-    pot_la, pot_h, realized_la, realized_h, nrj_per_plant, _ = run_archicrop_and_light(param_sets, daily_dynamics, density, 
-                                                                                      weather_file, location, distribution_function, inter_row, 
-                                                                                      light_inter, direct=direct)
+    daily_dynamics, density, inter_row, pot_la, pot_h, realized_la, realized_h, nrj_per_plant, _ = run_archicrop_and_light(param_sets=param_sets, 
+                                                                                       tec_file=tec_file, plant_file=plant_file, 
+                                                                                       dynamics_file=dynamics_file, weather_file=weather_file, 
+                                                                                       location=location, 
+                                                                                       distribution_function=distribution_function,
+                                                                                       end=-1, light_inter=light_inter, direct=direct)
     
     # first_key = list(param_sets.keys())[0]
     # filename = f"results_light_inter_{param_sets[first_key]['nb_phy']}"
     filename = "results_light_inter"
     write_netcdf(filename, daily_dynamics, param_sets, 
                  pot_la, pot_h, realized_la, realized_h, nrj_per_plant, 
-                 density, id_sim, 
+                 density, inter_row, id_sim, 
                  dir = "../simulations_ArchiCrop/")
     
 
 def run_simulations(archi_params: dict, 
-             tec_file: str, plant_file: str, dynamics_file: str, weather_file: str, location: dict,
+             tec_file: str, plant_file: str, pot_dynamics_file: str, dynamics_file: str, weather_file: str, location: dict,
+             distribution_function,
              n_samples: int = 10, seed: int = 42, latin_hypercube: bool = False, 
-             pot_factor: float = 1.5,
+             pot_factor_lai: float = 1.5, pot_factor_height: float = 3,
              light_inter: bool = True, zenith: bool = False, direct : bool = False, save_scenes: bool = False):
 
-    daily_dynamics, param_sets, density, inter_row = define_archicrop_parameters(archi_params, tec_file, plant_file, dynamics_file, 
-                                                                                 n_samples, seed, latin_hypercube, pot_factor)
+    param_sets = define_archicrop_parameters(archi_params=archi_params, tec_file=tec_file, plant_file=plant_file, 
+                                            pot_dynamics_file=pot_dynamics_file, 
+                                            n_samples=n_samples, seed=seed, latin_hypercube=latin_hypercube, 
+                                            pot_factor_lai=pot_factor_lai, pot_factor_height=pot_factor_height)
+
     
     # print(len(param_sets), "simulations")
 
-    pot_la, pot_h, realized_la, realized_h, nrj_per_plant, mtgs = run_archicrop_and_light(param_sets, daily_dynamics, density,
-                                                                                          weather_file, location, inter_row,
-                                                                                          light_inter, zenith, direct, save_scenes)
+    daily_dynamics, density, inter_row, pot_la, pot_h, realized_la, realized_h, nrj_per_plant, mtgs = run_archicrop_and_light(param_sets=param_sets, 
+                                                                                       tec_file=tec_file, plant_file=plant_file, 
+                                                                                       dynamics_file=dynamics_file, weather_file=weather_file, 
+                                                                                       location=location, 
+                                                                                       distribution_function=distribution_function,
+                                                                                       end=-1, light_inter=light_inter, zenith=zenith, 
+                                                                                       direct=direct)
 
     return daily_dynamics, param_sets, pot_la, pot_h, realized_la, realized_h, nrj_per_plant, mtgs, density, inter_row
 
@@ -298,7 +318,7 @@ def compute_extinction_coef(nrj_crop: dict, par_incident: list, leaf_area_plant:
 
 def write_netcdf(filename: str, daily_dynamics: dict, params_sets: dict, 
                  pot_la: dict, pot_h: dict, realized_la: dict, realized_h: dict, nrj_per_leaf: dict, 
-                 density: float, seed: int, 
+                 density: float, inter_row: float, seed: int, 
                  dir: str = "../simulations_ArchiCrop/"):
     
     # Prepare the data for xarray Dataset
@@ -357,6 +377,7 @@ def write_netcdf(filename: str, daily_dynamics: dict, params_sets: dict,
             inc_par=("time", daily_dyn["Incident PAR"]),
             abs_par_stics=("time", daily_dyn["Absorbed PAR"]),
             density=density,
+            inter_row=inter_row,
             realized_la=(("id", "time"), df_realized_la),
             realized_h=(("id", "time"), df_realized_h),
             pot_la=(("id", "time"), df_pot_la),

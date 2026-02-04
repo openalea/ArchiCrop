@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 archi_maize = {
-    "nb_phy": 20, # number of phytomers on the main stem
+    "nb_phy": 16, # number of phytomers on the main stem
     "nb_short_phy": 4,
     "short_phy_height": 3,
     
@@ -17,18 +17,18 @@ archi_maize = {
     "skew": 0.001, # skewness for leaf area distribution along axis 
 
     # blade area
-    "wl": 0.15, # leaf blade width-to-length ratio 
+    "wl": 0.14, # leaf blade width-to-length ratio 
     "klig": 0.6, # parameter for leaf blade shape
     "swmax": 0.55, # relative position of maximal blade width
     "f1": 0.64, # parameter for leaf blade shape
     "f2": 0.92, # parameter for leaf blade shape
 
     # blade curvature
-    "insertion_angle": 35, # leaf blade insertion angle
-    "scurv": 0.8, #  relative position of inflexion point
-    "curvature": 30, # leaf blade insertion-to-tip angle
+    "insertion_angle": 40, # leaf blade insertion angle
+    "scurv": 0.6, #  relative position of inflexion point
+    "curvature": 120, # leaf blade insertion-to-tip angle
     "phyllotactic_angle": 180, # phyllotactic angle
-    "phyllotactic_deviation": 15, # half-deviation to phyllotactic angle
+    "phyllotactic_deviation": 20, # half-deviation to phyllotactic angle
 
     # Development
     "phyllochron": 40, # [20,55], # phyllochron, i.e. stem element appearance rate
@@ -85,10 +85,10 @@ archi_wheat = {
 
     # Tillering
     "nb_tillers": 6, # number of tillers : [0,6] (Lafarge et al., 2002)
-    "tiller_angle": 10,
+    "tiller_angle": 25,
     "tiller_delay": 1, # delay, as factor of phyllochron, between the appearance of a phytomer and the appearance of its tiller : [] ()
     "reduction_factor": 0.8, # reduction factor between tillers of consecutive order : [0.8,1] ()
-    "gravitropism_coefficient": 0.15 # 0.12
+    "gravitropism_coefficient": 0.3 # 0.12
 }
 
 
@@ -145,7 +145,7 @@ archi_sorghum = {
     # Stem
     "height": 200,
     "stem_q": 1, # parameter for ligule height distribution along axis : [1.1] (Kaitaniemi et al., 1999) 
-    "diam_base": 3.0, # stem base diameter : [2.2] (Ndiaye et al., 2021)
+    "diam_base": 4.0, # stem base diameter : [2.2] (Ndiaye et al., 2021)
     "diam_top": 1.5, # stem top diameter: [1.2] (Ndiaye et al., 2021)
 
     # Leaf area distribution along the stem
@@ -164,8 +164,8 @@ archi_sorghum = {
     "insertion_angle": 45, # leaf blade insertion angle : [10,50] (Truong et al., 2015; Kaitaniemi et al., 1999)
     "scurv": 0.75, # leaf blade relative inflexion point : [0.6, 0.8] ()
     "curvature": 90, # leaf blade insertion-to-tip angle : [0,130] [45, 135] (Kaitaniemi et al., 1999)
-    "phyllotactic_angle": 137.5, # phyllotactic angle : [180] (Davis et al., 2024)
-    "phyllotactic_deviation": 0, # half-deviation to phyllotactic angle : [0,90] (Davis et al., 2024)
+    "phyllotactic_angle": 180, # phyllotactic angle : [180] (Davis et al., 2024)
+    "phyllotactic_deviation": 20, # half-deviation to phyllotactic angle : [0,90] (Davis et al., 2024)
 
     # Development
     "phyllochron": 51, # [30,70], # phyllochron, i.e. stem element appearance rate : [40,65 then x1.6-2.5] (Clerget, 2008)
@@ -183,7 +183,7 @@ archi_sorghum = {
 
 
 archi_sorghum_angles = {
-    "nb_phy": [12,16,20,24], # [10,30], # number of phytomers on the main stem : [10,40] (Ndiaye et al., 2021; Lafarge and Tardieu, 2002; Clerget, 2008; Ganeme et al., 2022)
+    "nb_phy": [12,16,20], # [10,30], # number of phytomers on the main stem : [10,40] (Ndiaye et al., 2021; Lafarge and Tardieu, 2002; Clerget, 2008; Ganeme et al., 2022)
     "nb_short_phy": 4,
     "short_phy_height": 3,
 
@@ -195,7 +195,7 @@ archi_sorghum_angles = {
 
     # Leaf area distribution along the stem
     # "leaf_area": [1000,20000],
-    "rmax": [0.55,0.95], # parameter for leaf area distribution along axis : [0.6,0.8] (Kaitaniemi et al., 1999; Welcker et al., )
+    "rmax": [0.55,0.9], # parameter for leaf area distribution along axis : [0.6,0.8] (Kaitaniemi et al., 1999; Welcker et al., )
     "skew": [0.0005,0.1], # 0.0001 # parameter for leaf area distribution along axis : [0.0005,0.1] (Kaitaniemi et al., 1999; Welcker et al., )
     
     # blade area 
