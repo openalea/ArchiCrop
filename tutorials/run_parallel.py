@@ -31,7 +31,7 @@ if __name__ == '__main__':
     pot_factor_lai = 1.4
     pot_factor_height = 3
     distribution_function = demand_dist_bis
-    end = 80
+    end = -1
     light_inter = True
     direct = False
 
