@@ -92,6 +92,9 @@ def build_scene(
         scene.add(shape)
 
     nump = []
+
+    senesc_id = 10000000
+
     count = 0
     for i, (g, p, o) in enumerate(zip(cycle(mtg), position, cycle(orientation))):
         geometries = g.property("geometry")
@@ -99,13 +102,14 @@ def build_scene(
         labels = g.property("label")
 
         for vid, mesh in geometries.items():
-            geom2shape(vid, mesh, scene, colors, p, o, vid + count)
+            geom2shape(vid=vid, mesh=mesh, scene=scene, colors=colors, 
+                       position=p, orientation=o, shape_id=vid + count)
             nump.append({'plant':i, 'vid':vid, 'label':labels[vid], 'is_green':greeness[vid]})
 
         if senescence:
             sen_geometries = g.property("geometry_senescent")
             for vid, mesh in sen_geometries.items():
-                geom2shape(vid, mesh, scene, colors, p, o, vid + count, is_senescent=True)
+                geom2shape(vid, mesh, scene, colors, p, o, shape_id=(vid + count + senesc_id), is_senescent=True)
                 nump.append({'plant':i, 'vid':vid, 'label':labels[vid], 'is_green':False})
 
         count += len(g)

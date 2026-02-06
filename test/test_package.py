@@ -2,8 +2,8 @@ from __future__ import annotations
 
 import importlib.metadata
 
-import archicrop as m
+import openalea.archicrop as m
 
 
 def test_version():
-    assert importlib.metadata.version("archicrop") == m.__version__
+    assert importlib.metadata.version("openalea.archicrop") == m.__version__

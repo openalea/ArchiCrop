@@ -7,8 +7,8 @@ from openalea.astk.sky_sources import caribu_light_sources, sky_sources
 
 def test_day_to_hour():
 
-    fn = 'climsorj.meteo'
-    df = meteo_day()  
+    fn = '../data/climsorj.meteo'
+    df = meteo_day(fn)  
     location ={
     'longitude': 3.87,
     'latitude': 45,

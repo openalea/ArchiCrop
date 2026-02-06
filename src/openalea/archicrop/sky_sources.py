@@ -13,7 +13,7 @@ from .colormap import jet_colors
 
 def meteo_day(filename):
     names=['station', 'year', 'month', 'day', 'julian', 'min_temp', 'max_temp', 'rad', 'Penman PET', 'rainfall', 'wind', 'pressure', 'CO2']
-    df = pd.read_csv(filename,  header=None, sep='\s+', names=names)  # noqa: PD901
+    df = pd.read_csv(filename,  header=None, sep=r'\s+', names=names)  # noqa: PD901
     df["daydate"] = pd.to_datetime(df[["year", "month", "day"]])
     return df
 
