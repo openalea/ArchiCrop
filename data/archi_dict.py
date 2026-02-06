@@ -42,8 +42,6 @@ archi_maize = {
     "tiller_angle": 30, # degree
     "reduction_factor": 1, # reduction factor between tillers of consecutive order
     "gravitropism_coefficient": 0.05, # 0.12
-
-    "plant_orientation": 45 # degree
 }
 
 

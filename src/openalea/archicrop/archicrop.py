@@ -3,7 +3,7 @@ from __future__ import annotations
 from .cereal_plant import cereal
 from .display import build_scene
 from .growth import (
-    demand_dist,
+    demand_dist_bis,
     equal_dist,
     init_visible_variables,
     mtg_turtle_time_with_constraint,
@@ -172,7 +172,7 @@ class ArchiCrop:
                         gravitropism_coefficient=self.gravitropism_coefficient,
                         plant_orientation=self.plant_orientation)
     
-    def grow_plant(self, rate=False, distribution_function=demand_dist):
+    def grow_plant(self, rate=False, distribution_function=demand_dist_bis):
         """
         Grow a plant following incremental constraints.
 

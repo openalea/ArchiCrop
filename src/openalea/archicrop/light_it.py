@@ -154,7 +154,7 @@ def light_interception(weather_file, daily_dynamics, density, location, mtgs, ze
                     sun, sky = sky_sources(sky_type='clear_sky', sky_irradiance=irr, scale='global') #, source_irradiance='horizontal')
                     lights = caribu_light_sources(sun, sky)
                 # Build and illuminate scene
-                scene, labels = build_scene(mtg, senescence=False)
+                scene, labels = build_scene(mtg, senescence=True)
                 cs, raw, agg = illuminate(scene=scene, light=lights, labels=labels, domain=domain, direct=direct) # --> cf PARaggregators in caribu scene node
                 # Compute energy per leaf
                 df_mod = mean_leaf_irradiance(agg) 

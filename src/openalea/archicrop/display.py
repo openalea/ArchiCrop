@@ -106,7 +106,7 @@ def build_scene(
             sen_geometries = g.property("geometry_senescent")
             for vid, mesh in sen_geometries.items():
                 geom2shape(vid, mesh, scene, colors, p, o, vid + count, is_senescent=True)
-                nump.append({'plant':i, 'vid':vid, 'label':labels[vid], 'is_green':greeness[vid]})
+                nump.append({'plant':i, 'vid':vid, 'label':labels[vid], 'is_green':False})
 
         count += len(g)
 

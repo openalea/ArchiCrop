@@ -150,7 +150,7 @@ def compute_pot_growth(param_sets: dict, daily_dynamics: dict):
     return pot_la, pot_h, mtgs
     
 
-def simulate_plant_growth(param_sets: dict, daily_dynamics: dict, distribution_function):
+def simulate_plant_growth(param_sets: dict, daily_dynamics: dict, distribution_function = demand_dist_bis):
     """ Simulate ArchiCrop plant growth constrained by daily dynamics.
     Parameters:
         param_sets (dict): List of parameter sets.
@@ -272,7 +272,7 @@ def run_archicrop_and_light_parallel(id_sim, param_sets: dict, tec_file: str, pl
 
 def run_simulations(archi_params: dict, 
              tec_file: str, plant_file: str, pot_dynamics_file: str, dynamics_file: str, weather_file: str, location: dict,
-             distribution_function,
+             distribution_function = demand_dist_bis,
              n_samples: int = 10, seed: int = 42, latin_hypercube: bool = False, 
              pot_factor_lai: float = 1.5, pot_factor_height: float = 3,
              light_inter: bool = True, zenith: bool = False, direct : bool = False, save_scenes: bool = False):

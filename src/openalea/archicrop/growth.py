@@ -77,7 +77,7 @@ def get_growing_and_senescing_organs(g, time, prev_time):
         n.age = max(0.0, time - n.start_tt)
         # Update stem diameter 
         n_stem = n.parent() if n.label.startswith("Leaf") else n
-        n.stem_diameter = min(n.mature_stem_diameter/2 * (1+0.5*(time - n_stem.start_tt) / (n_stem.end_tt - n_stem.start_tt)), n.mature_stem_diameter) 
+        n.stem_diameter = min(n.mature_stem_diameter/2 * (0.5+0.5*(time - n_stem.start_tt) / (n_stem.end_tt - n_stem.start_tt)), n.mature_stem_diameter) 
         # If it is a stem element / internode
         if n.label.startswith("Stem"): 
             # If the internode is growing, or has finished growing in the last time step, according to development
