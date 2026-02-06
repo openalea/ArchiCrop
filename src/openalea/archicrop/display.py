@@ -93,7 +93,7 @@ def build_scene(
 
     nump = []
 
-    senesc_id = 1e7
+    senesc_id = 10000000
 
     count = 0
     for i, (g, p, o) in enumerate(zip(cycle(mtg), position, cycle(orientation))):

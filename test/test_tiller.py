@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from openalea.mtg import *  # noqa: F403
 from openalea.mtg.traversal import pre_order
-from openalea.mtg.turtle import traverse_with_turtle
+from openalea.mtg.plantframe.turtle import traverse_with_turtle
 
 
 def main_axis(n=10):

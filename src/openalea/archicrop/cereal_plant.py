@@ -5,7 +5,7 @@ from __future__ import annotations
 import numpy as np
 
 from openalea.mtg import MTG, fat_mtg
-from openalea.mtg.turtle import TurtleFrame
+from openalea.mtg.plantframe.turtle import TurtleFrame
 
 from .cereal_axis import bell_shaped_dist, geometric_dist
 from .cereal_leaf import parametric_cereal_leaf, shape_to_surface

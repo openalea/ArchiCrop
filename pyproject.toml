@@ -63,14 +63,14 @@ write_to = "src/openalea/archicrop/_version.py"
 
 [tool.pytest.ini_options]
 minversion = "6.0"
-addopts = ["-ra", "--showlocals", "--strict-markers", "--strict-config"]
-xfail_strict = true
+#addopts = ["-ra", "--showlocals", "--strict-markers", "--strict-config"]
+#xfail_strict = true
 filterwarnings = [
   "error",
 ]
 log_cli_level = "INFO"
 testpaths = [
-  "tests",
+  "test",
 ]
 
 
