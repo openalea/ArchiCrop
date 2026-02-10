@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<usms version="10.0">
+    <usm nom="02NT18SorgV2D1">
+        <datedebut>135</datedebut>
+        <datefin>365</datefin>
+        <finit>02NT18SorgV2D1_ini.xml</finit>
+        <nomsol>02V2D1</nomsol>
+        <fstation>StationNtarla_sta.xml</fstation>
+        <fclim1>ntarla_corr.2018</fclim1>
+        <fclim2>ntarla_corr.2018</fclim2>
+        <culturean>1</culturean>
+        <nbplantes>1</nbplantes>
+        <codesimul>0</codesimul>
+        <plante dominance="1">
+            <fplt>sorgho_imp_M_v10_plt.xml</fplt>
+            <ftec>02NT18SorgV2D1_tec.xml</ftec>
+            <flai>mais.lai</flai>
+            <fobs>02NT18SorgV2D1.obs</fobs>
+        </plante>
+        <plante dominance="2">
+            <fplt>null</fplt>
+            <ftec>null</ftec>
+            <flai>null</flai>
+            <fobs>null</fobs>
+        </plante>
+    </usm>
+    <usm nom="NT18Niebpur">
+        <datedebut>135</datedebut>
+        <datefin>365</datefin>
+        <finit>NT18niebpur_ini.xml</finit>
+        <nomsol>solNT18niebpur</nomsol>
+        <fstation>StationNtarla_sta.xml</fstation>
+        <fclim1>ntarla_corr.2018</fclim1>
+        <fclim2>ntarla_corr.2018</fclim2>
+        <culturean>1</culturean>
+        <nbplantes>1</nbplantes>
+        <codesimul>0</codesimul>
+        <plante dominance="1">
+            <fplt>niebe_imp_M_v10_plt.xml</fplt>
+            <ftec>NTniebpurF0_tec.xml</ftec>
+            <flai>mais.lai</flai>
+            <fobs>null</fobs>
+        </plante>
+        <plante dominance="2">
+            <fplt>sorgho_local_M_v10_plt.xml</fplt>
+            <ftec>NT18SorV1D1_tec.xml</ftec>
+            <flai>null</flai>
+            <fobs>null</fobs>
+        </plante>
+    </usm>
+    <usm nom="02NT18SorgV2D1_no_stress">
+        <datedebut>135</datedebut>
+        <datefin>365</datefin>
+        <finit>02NT18SorgV2D1_ini.xml</finit>
+        <nomsol>02V2D1</nomsol>
+        <fstation>StationNtarla_sta.xml</fstation>
+        <fclim1>ntarla_corr.2018</fclim1>
+        <fclim2>ntarla_corr.2018</fclim2>
+        <culturean>1</culturean>
+        <nbplantes>1</nbplantes>
+        <codesimul>0</codesimul>
+        <plante dominance="1">
+            <fplt>sorgho_imp_M_v10_plt.xml</fplt>
+            <ftec>02NT18SorgV2D1_tec.xml</ftec>
+            <flai>mais.lai</flai>
+            <fobs>02NT18SorgV2D1.obs</fobs>
+        </plante>
+        <plante dominance="2">
+            <fplt>null</fplt>
+            <ftec>null</ftec>
+            <flai>null</flai>
+            <fobs>null</fobs>
+        </plante>
+    </usm>
+</usms>

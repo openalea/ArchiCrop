@@ -29,7 +29,7 @@ from openalea.mtg.io import write_mtg
 
 def f_1(n_samples):
     tec_file_xml='../data/02NT18SorgV2D1_tec.xml'
-    plt_file_xml='../data/sorgho_imp_M_v10_plt.xml'
+    plt_file_xml='../data/plant/sorgho_imp_M_v10_plt.xml'
     stics_output_file='../data/mod_s02NT18SorgV2D1.sti'
 
     # Run the simulation
@@ -126,7 +126,7 @@ def f(n_samples, seed=1):
     print(f"Running simulation with seed {seed}")
     # Define the inputs for the simulation
     tec_file_xml='../data/Mais_tec.xml'
-    plt_file_xml='../data/corn_plt.xml'
+    plt_file_xml='../data/plant/corn_plt.xml'
     stics_output_file='../data/mod_smaize.sti'
     weather_file = '../data/climaisj.meteo'
     location = {  

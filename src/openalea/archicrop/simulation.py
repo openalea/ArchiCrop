@@ -297,7 +297,7 @@ def run_simulations(archi_params: dict,
 
 
 
-def compute_extinction_coef(nrj_crop: dict, par_incident: list, leaf_area_plant:list, density: float, conv_unit: float = 100):
+def compute_extinction_coef(nrj_crop: dict, par_incident: list, lai:list):
     '''Compute daily extinction coefficient of a crop.'''
 
     k_dict = {}
@@ -306,8 +306,8 @@ def compute_extinction_coef(nrj_crop: dict, par_incident: list, leaf_area_plant:
         for i,(nrj,par) in enumerate(zip(nrj_time_series, par_incident)):
             fapar = nrj/par
             if fapar <= 1:
-                lai = leaf_area_plant[i]*density/(conv_unit**2)
-                k = -1/lai * math.log(1-fapar)
+                # lai = leaf_area_plant[i]*density/(conv_unit**2)
+                k = -1/lai[i] * math.log(1-fapar)
             else:
                 k = 1
             k_per_sim.append(k)

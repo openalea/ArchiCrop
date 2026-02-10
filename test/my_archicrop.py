@@ -13,7 +13,7 @@ from openalea.plantgl.all import Color3, Material, surface
 # Retrieve STICS management and senescence parameters
 density, stics_output_data, lifespan, lifespan_early, interrow = get_stics_data(
     file_tec_xml='../data/02NT18SorgV2D1_tec.xml',  # Path to the STICS management XML file
-    file_plt_xml='../data/sorgho_imp_M_v10_plt.xml',  # Path to the STICS plant XML file
+    file_plt_xml='../data/plant/sorgho_imp_M_v10_plt.xml',  # Path to the STICS plant XML file
     stics_output_file='../data/mod_s02NT18SorgV2D1.sti'  # Path to the STICS output file
 )
 

@@ -11,10 +11,10 @@ archi_maize = {
     "diam_base": 5.0, # stem base diameter cm
     "diam_top": 1.5, # stem top diameter cm
 
-    # Leaf area distribution along the stem  
+    # Leaf area distribution along the stem 
     "leaf_area": 12000,
-    "rmax": 0.6, # relative position of largest leaf on the stem
-    "skew": 0.001, # skewness for leaf area distribution along axis 
+    "rmax": 0.75, # relative position of largest leaf on the stem
+    "skew": 0.007, # skewness for leaf area distribution along axis 
 
     # blade area
     "wl": 0.14, # leaf blade width-to-length ratio 
@@ -24,7 +24,7 @@ archi_maize = {
     "f2": 0.92, # parameter for leaf blade shape
 
     # blade curvature
-    "insertion_angle": 40, # leaf blade insertion angle
+    "insertion_angle": 50, # leaf blade insertion angle
     "scurv": 0.6, #  relative position of inflexion point
     "curvature": 120, # leaf blade insertion-to-tip angle
     "phyllotactic_angle": 180, # phyllotactic angle

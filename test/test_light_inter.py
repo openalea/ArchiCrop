@@ -17,7 +17,7 @@ seed(18)  # noqa: F405
 
 # Retrieve STICS management and senescence parameters
 tec_file='../data/02NT18SorgV2D1_tec.xml'
-plant_file='../data/sorgho_imp_M_v10_plt.xml'
+plant_file='../data/plant/sorgho_imp_M_v10_plt.xml'
 stics_output_file='../data/mod_s02NT18SorgV2D1.sti'
 stics_output_file_no_stress='../data/mod_s02NT18SorgV2D1_no_stress.sti'
 weather_file = '../data/ntarla_corr.2018'

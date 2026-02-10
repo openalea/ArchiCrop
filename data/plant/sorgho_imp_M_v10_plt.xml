@@ -180,7 +180,7 @@
   <formalisme nom="partitioning of biomass in organs">
     <param format="real" max="500.0" min="50.0" nom="slamin">180</param>
     <param format="real" max="0.5" min="0.0" nom="envfruit">0.1</param>
-    <param format="real" max="300.0" min="0.0" nom="sea">100.00000</param>
+    <param format="real" max="300.0" min="0.0" nom="sea">0.0</param>
     <option choix="2" nom="Simulation of Nitrogen and Carbon reserves" nomParam="code_acti_reserve">
       <choix code="1" nom="yes">
         <param format="real" max="1.0" min="0.0" nom="propresP">0.47</param>
