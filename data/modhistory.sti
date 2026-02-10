@@ -1,5 +1,5 @@
  -----------------------------------------------------------------------------------------
- Stics history file            Creation date: 2026/02/10-10:25:32
+ Stics history file            Creation date: 2026/02/10-15:31:27
  STICS Version: V10.0.0_r3391_2022-10-26                          
  -----------------------------------------------------------------------------------------
  
@@ -7,6 +7,8 @@
     
  GENERAL PARAMETERS USEFUL FOR THE SIMULATION
  *********************************************
+ Nitrogen stress actived            1
+ Water stress actived           1
  Depth for mineral N and water stocks calculation = profmes           1
  Climatic series = reset of the initial conditions           1
  Biomass and yield conservation after harvest           1
@@ -415,5 +417,5 @@ Initial values over the soil depth (155 cm):     SWC = 197. mm     SMN =  8.0 kg
  attention: there are no longer any effective roots, on day :          50
  Program end ... 
  -----------------------------------------------------------------------------------------
- Stics history file end            End date: 2026/02/10-10:25:32
+ Stics history file end            End date: 2026/02/10-15:31:27
  -----------------------------------------------------------------------------------------
