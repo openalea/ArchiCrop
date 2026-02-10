@@ -12,7 +12,7 @@ seed = 18
 
 # Define the inputs for the simulation
 tec_file_xml='../data/02NT18SorgV2D1_tec.xml'
-plt_file_xml='../data/sorgho_imp_M_v10_plt.xml'
+plt_file_xml='../data/plant/sorgho_imp_M_v10_plt.xml'
 stics_output_file='../data/mod_s02NT18SorgV2D1.sti'
 weather_file = '../data/ntarla_corr.2018'
 location = {  
