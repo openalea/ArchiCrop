@@ -81,7 +81,7 @@ def get_growing_and_senescing_organs(g, time, prev_time):
         # If it is a stem element / internode
         if n.label.startswith("Stem"): 
             # If the internode is growing, or has finished growing in the last time step, according to development
-            if (n.start_tt < time <= n.end_tt or prev_time < n.end_tt <= time) and n.visible_length < ml:
+            if (n.start_tt < time <= n.end_tt or prev_time < n.end_tt <= time) and n.visible_length < ml: 
                 growing_internodes[vid] = {"potential": ml, "visible": n.visible_length, "age": n.age}
         # If it is a leaf
         elif n.label.startswith("Leaf"):

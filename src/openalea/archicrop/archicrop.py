@@ -194,7 +194,8 @@ class ArchiCrop:
         self.g = init_visible_variables(self.g, daily_dynamics=self.daily_dynamics)
         for k,v in self.daily_dynamics.items():
             gtemp = mtg_turtle_time_with_constraint(self.g, k, v, rate=rate, distribution_function=distribution_function)
-            growing_plant[v["Date"]] = gtemp
+            # growing_plant[v["Date"]] = gtemp
+            growing_plant[k] = gtemp
             self.g = gtemp.copy() # copy
         
         return growing_plant
