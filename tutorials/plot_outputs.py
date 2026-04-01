@@ -246,11 +246,12 @@ def plot_faPAR_variance(dates, nrj_per_plant, par_incident, par_stics, parameter
 
     # Labels and legend
     # ax.set_xticks(np.arange(0, len(dates)+1, (len(dates)+1)/8))
+    ax.set_yticks([0.0,0.2,0.4,0.6,0.8])
     ax.set_xlabel("Days after emergence", fontsize=24) 
     ax.set_ylabel("faPAR", fontsize=24)
     ax1.set_ylabel("Relative mean difference", fontsize=24)
-    ax.tick_params(axis='both', labelsize=15)
-    ax1.tick_params(axis='both', labelsize=15)
+    ax.tick_params(axis='both', labelsize=30)
+    ax1.tick_params(axis='both', labelsize=30)
 
 
     # ax.legend(fontsize=14, loc='upper left')
@@ -346,7 +347,7 @@ def plot_faPAR_parameter(dates, nrj_per_plant, par_incident, par_stics, density,
     ax[1].set_yticks([])
     for i in range(2):
         ax[i].set_xlabel("Days after emergence", fontsize=24) 
-        ax[i].tick_params(axis='both', labelsize=15)
+        ax[i].tick_params(axis='both', labelsize=30)
     ax[0].set_ylabel("faPAR", fontsize=24)
 
     # # Add colorbar legend
@@ -429,7 +430,8 @@ def cumsum_nrj_per_plant(dates, nrj_per_plant, par_incident, par_stics, paramete
     # Labels and legend
     ax.set_xlabel("Days after emergence", fontsize=30) 
     ax.set_ylabel("Cum. aPAR (MJ/m²)", fontsize=30)
-    ax.tick_params(axis='both', labelsize=15)
+    ax.set_yticks([0,100,200,300,400,500])
+    ax.tick_params(axis='both', labelsize=30)
 
     # Add colorbar legend
     # sm = plt.cm.ScalarMappable(cmap=cmap, norm=norm)
@@ -569,7 +571,7 @@ def plot_faPAR_lai_parameter(lai, nrj_per_plant, par_incident, par_stics, densit
     # ax.set_xticks(np.arange(0, len(dates)+1, (len(dates)+1)/8))
     ax.set_xlabel("LAI", fontsize=24) 
     ax.set_ylabel("faPAR", fontsize=24)
-    ax.tick_params(axis='both', labelsize=15)
+    ax.tick_params(axis='both', labelsize=30)
     # ax.set_title(f"faPAR as a function of {parameter_name}", fontsize=16, fontname="Times New Roman")
 
     # Add colorbar legend
@@ -681,10 +683,19 @@ def plot_extinction_coef_parameter(extinP_stics, extin_coefs, dates, nrj_crop, a
             color = cmap(norm(parameter[k]))
             ax.scatter(parameter[k], np.mean(curve[start:end]), color=color, s=200)
         ax.set_yticks([0.6,0.7,0.8,0.9,1.0])
+        ax.set_xticks([10,30,50,70,90])
         ax.set_ylabel(r"\bar{k}", fontsize=24)
         ax.set_xlabel(r"$\theta_{leaf}$", fontsize=24)
     
     else:
+        x = list(parameter.values())
+        y = [np.mean(curve[start:end]) for curve in extin_coefs.values()]
+        poly_values = np.polyfit(x, y, 1)
+        print(f"k = {poly_values[0]:.4f} N + {poly_values[1]:.4f}")
+        p = np.poly1d(poly_values)
+        r2 = r2_score(y, p(x))
+        print("R2 = ", r2)
+        
         param_values = np.array([parameter[k] for k in nrj_crop])
         ax.plot([param_values.min()-1,param_values.max()+1],[0.7,0.7], color='orange', linewidth=6, label='STICS')
         for k,curve in extin_coefs.items():
@@ -695,7 +706,7 @@ def plot_extinction_coef_parameter(extinP_stics, extin_coefs, dates, nrj_crop, a
         ax.set_xticks([12,16,20,24,28])
         ax.set_xlabel(r"$N$", fontsize=24)
  
-    ax.tick_params(axis='both', labelsize=15)
+    ax.tick_params(axis='both', labelsize=30)
 
     # Save figure
     today_str = date.today().strftime("%Y-%m-%d")
@@ -753,7 +764,7 @@ def plot_extinction_coef_lai_parameter(extinP_stics, extin_coefs, lai, nrj_crop,
     # ax.set_xticks(np.arange(0, len(dates)+1, (len(dates)+1)/8))
     ax.set_xlabel("LAI", fontsize=35) 
     ax.set_ylabel(r"$k$", fontsize=35)
-    ax.tick_params(axis='both', labelsize=15)
+    ax.tick_params(axis='both', labelsize=30)
     # ax.set_title(f"Extinction coefficient as a function of {parameter_name}", fontsize=16, fontname="Times New Roman")
 
     # Add colorbar legend
