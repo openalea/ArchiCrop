@@ -39,7 +39,7 @@ def compute_rmax(nb_phy, end_veg, index_end_veg, thermal_time, leaf_area_plant, 
     la_starts = splev(starts, spl)
     la_ends = splev(ends, spl)
     
-    leaf_areas = resolve_organ_growth(nb_phy, ligul_factor, la_ends)
+    leaf_areas,_,_,_ = resolve_organ_growth(nb_phy, ligul_factor, la_ends)
        
     for i, la in enumerate(leaf_areas):
         if la == max(leaf_areas):

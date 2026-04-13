@@ -114,7 +114,7 @@ def compute_light_inter(scene, sky, pattern):
 #     'timezone': 'Europe/Paris'}
 
 def light_interception(weather_file, daily_dynamics, density, location, mtgs, zenith=False, direct=False, save_scenes=False, inter_row=0.7):
-    '''Compute light interception on plants with fitting parameters
+    '''Compute light interception on plants 
     Args:
         weather_file: path to the weather file
         daily_dynamics: daily dynamics from STICS

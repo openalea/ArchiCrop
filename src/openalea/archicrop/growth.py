@@ -35,25 +35,24 @@ def equal_dist(increment, growing_organs):
 
 def demand_dist(increment, growing_organs):
     '''return distribution of increment per organ proportionnal to potential dimension, i.e. length or area'''
-    sum_growing_organs = sum([value["potential"] for value in growing_organs.values()])
+    sum_growing_organs = sum([value["potential"] for value in growing_organs.values() if value["axis_order"]==0])
     return {vid: increment*values["potential"]/sum_growing_organs 
             for vid, values in growing_organs.items()}
 
 
 def demand_dist_bis(increment, growing_organs):
     '''return distribution of increment per organ proportionnal to potential dimension, i.e. length or area'''
-    sum_growing_organs = sum([value["potential"] - value["visible"] for value in growing_organs.values()])
+    sum_growing_organs = sum([value["potential"] - value["visible"] for value in growing_organs.values() if value["axis_order"]==0])
     return {vid: increment*(values["potential"] - values["visible"])/sum_growing_organs 
             for vid, values in growing_organs.items()}
 
 
 def dev_dist(increment, growing_organs):
     '''return distribution of increment per organ proportionnal to development advancement'''
-    sum_growing_organs = sum([1/value["age"] if value["age"] > 0. else 1 for value in growing_organs.values()])
+    sum_growing_organs = sum([1/value["age"] if value["age"] > 0. else 1 for value in growing_organs.values() if value["axis_order"]==0])
     return {vid: increment*(1/values["age"]/sum_growing_organs) if len(growing_organs) > 1 else increment
             if values["age"] > 0. else increment
-            for vid, values in growing_organs.items()
-            }
+            for vid, values in growing_organs.items()}
 
 
 def age_dist(increment, senescing_organs):
@@ -82,17 +81,17 @@ def get_growing_and_senescing_organs(g, time, prev_time):
         if n.label.startswith("Stem"): 
             # If the internode is growing, or has finished growing in the last time step, according to development
             if (n.start_tt < time <= n.end_tt or prev_time < n.end_tt <= time) and n.visible_length < ml: 
-                growing_internodes[vid] = {"potential": ml, "visible": n.visible_length, "age": n.age}
+                growing_internodes[vid] = {"potential": ml, "visible": n.visible_length, "age": n.age, "axis_order": g.order(g.parent(vid))}
         # If it is a leaf
         elif n.label.startswith("Leaf"):
             # Update leaf inclination 
             n.inclination = min(1.5*(time - n.start_tt) / (n.end_tt - n.start_tt), 1)
             # If the leaf is growing, or has finished growing in the last time step, according to development
             if (n.start_tt < time <= n.end_tt or prev_time < n.end_tt <= time) and n.visible_leaf_area < n.leaf_area:
-                growing_leaves[vid] = {"potential": n.leaf_area, "visible": n.visible_leaf_area, "age": n.age}
+                growing_leaves[vid] = {"potential": n.leaf_area, "visible": n.visible_leaf_area, "age": n.age, "axis_order": 0}
             # If the leaf is senescing, according to development
             if n.senescence <= time and n.visible_leaf_area > n.senescent_area: # not n.dead: # and n.srt > 0: 
-                senescing_leaves[vid] = {"potential": n.visible_leaf_area, "visible": n.senescent_area, "age": n.age}
+                senescing_leaves[vid] = {"potential": n.visible_leaf_area, "visible": n.senescent_area, "age": n.age, "axis_order": 0}
         
     return growing_internodes, growing_leaves, senescing_leaves
 
@@ -115,16 +114,19 @@ def distribute_among_organs(g, growing_organs, day, time, time_increment, increm
         for vid, val in incr_temp.items():
             # For each growing organ
             if vid in growing_organs:
-                # Set potential increment for organ growth to the minimal value between 
-                # the increment computed for this organ and the remaining bit to growth to reach potential
-                potential_increment = min(val, growing_organs[vid]["potential"] - growing_organs[vid]["visible"])
-                # Store the growth increment of the organ in a dict
-                increment_for_each_organ[vid] += potential_increment
-                # Update the dict of growing organs, adding the increment to the visible (i.e. current) dimension
-                growing_organs[vid]["visible"] += potential_increment
-                # Increment to distribute during the next iteration among the organs that have not reached their potential yet
-                # Not equal to zero if the organ has reached its potential
-                increment_to_distribute += val - potential_increment
+                n = g.node(vid)
+                if n.label == 'Leaf' or n.label == 'Stem':
+                    # Set potential increment for organ growth to the minimal value between 
+                    # the increment computed for this organ and the remaining bit to growth to reach potential
+                    potential_increment = min(val, growing_organs[vid]["potential"] - growing_organs[vid]["visible"])
+                    # Store the growth increment of the organ in a dict
+                    increment_for_each_organ[vid] += potential_increment
+                    # Update the dict of growing organs, adding the increment to the visible (i.e. current) dimension
+                    growing_organs[vid]["visible"] += potential_increment
+                    # Increment to distribute during the next iteration among the organs that have not reached their potential yet
+                    # Not equal to zero if the organ has reached its potential
+                    increment_to_distribute += val - potential_increment
+                # elif n.label == 'Stem' and vid in g.components(main_axis):
 
         # Filter growing_organs to keep only the ones that have not reached their potential dimension
         growing_organs = {vid: {"potential": values["potential"], "visible": values["visible"], "age": values["age"]} 

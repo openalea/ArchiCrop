@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<fichiertec version="10.0">
-  <formalisme nom="supply of organic residues">
+<fichiertec version="11.0.0">
+  <formalisme nom="supply of organic residus">
     <ta nb_interventions="1" nom="interventions">
       <ta_entete nb_colonnes="7">
         <colonne nom="julres"/>
@@ -12,13 +12,13 @@
         <colonne nom="eaures"/>
       </ta_entete>
       <intervention nb_colonnes="7">
-        <colonne nom="julres">112</colonne>
+        <colonne nom="julres">135</colonne>
         <colonne nom="coderes">1</colonne>
-        <colonne nom="qres">1.00</colonne>
-        <colonne nom="Crespc">42.00</colonne>
-        <colonne nom="CsurNres">60.00</colonne>
-        <colonne nom="Nminres">0.00</colonne>
-        <colonne nom="eaures">0.00</colonne>
+        <colonne nom="qres">1.5</colonne>
+        <colonne nom="Crespc">40</colonne>
+        <colonne nom="CsurNres">53</colonne>
+        <colonne nom="Nminres">0</colonne>
+        <colonne nom="eaures">0</colonne>
       </intervention>
     </ta>
   </formalisme>
@@ -37,21 +37,27 @@
         <colonne nom="proftrav"/>
       </ta_entete>
       <intervention nb_colonnes="3">
-        <colonne nom="jultrav">112</colonne>
+        <colonne nom="jultrav">172</colonne>
         <colonne nom="profres">0.00</colonne>
-        <colonne nom="proftrav">25.00</colonne>
+        <colonne nom="proftrav">35</colonne>
       </intervention>
     </ta>
   </formalisme>
   <formalisme nom="sowing">
-    <param format="integer" max="731" min="1" nom="iplt0">121</param>
-    <param format="real" max="10.0" min="0.0" nom="profsem">3.00000</param>
-    <param format="real" max="2000.0" min="0.05" nom="densitesem">10.00000</param>
+    <param format="integer" max="731" min="1" nom="iplt0">177</param>
+    <param format="real" max="10.0" min="0.0" nom="profsem">5.00000</param>
+    <param format="real" max="2000.0" min="0.05" nom="densitesem">6</param>
     <param format="integer" max="200" min="1" nom="variete">1</param>
-    <option choix="2" nom="planting structure (if radiative transfer)" nomParam="codetradtec">
+    <option choix="1" nom="planting structure (if radiative transfer)" nomParam="codetradtec">
       <choix code="1" nom="yes">
-        <param format="real" max="10.0" min="0.0" nom="interrang">0.00000</param>
-        <param format="real" max="6.28" min="0.0" nom="orientrang">0.00000</param>
+        <param format="real" max="10.0" min="0.0" nom="interrang">0.4</param>
+        <param format="real" max="6.28" min="0.0" nom="orientrang">0.0</param>
+        <option choix="2" nom="Is the crop sown in a strip design?" nomParam="code_strip">
+          <choix code="1" nom="yes">
+            <param format="integer" max="100" min="1" nom="nrow">1</param>
+          </choix>
+          <choix code="2" nom="no"/>
+        </option>
       </choix>
       <choix code="2" nom="no"/>
     </option>
@@ -67,9 +73,9 @@
     </option>
   </formalisme>
   <formalisme nom="phenological stages">
-    <option choix="2" nom="forcing" nomParam="codestade">
+    <option choix="1" nom="forcing" nomParam="codestade">
       <choix code="1" nom="yes">
-        <param format="integer" max="999" min="1" nom="ilev">999</param>
+        <param format="integer" max="999" min="1" nom="ilev">181</param>
         <param format="integer" max="999" min="1" nom="iamf">999</param>
         <param format="integer" max="999" min="1" nom="ilax">999</param>
         <param format="integer" max="999" min="1" nom="isen">999</param>
@@ -121,7 +127,7 @@
         <param format="integer" max="30" min="0" nom="locirrig">0</param>
       </choix>
     </option>
-    <param format="real" max="1000.0" min="10.0" nom="profmes">120.00000</param>
+    <param format="real" max="1000.0" min="10.0" nom="profmes">160</param>
   </formalisme>
   <formalisme nom="fertilisation">
     <param format="real" max="0.2" min="0.0" nom="concirr">0.11000</param>
@@ -135,16 +141,21 @@
         <param format="integer" max="200" min="0" nom="Qtot_N">100</param>
       </choix>
     </option>
-    <ta nb_interventions="1" nom="mineral nitrogen inputs">
+    <ta nb_interventions="2" nom="mineral nitrogen inputs">
       <ta_entete nb_colonnes="3">
         <colonne nom="julapN_or_sum_upvt"/>
         <colonne nom="absolute_value/%"/>
         <colonne nom="engrais"/>
       </ta_entete>
       <intervention nb_colonnes="3">
-        <colonne nom="julapN_or_sum_upvt">113</colonne>
-        <colonne nom="absolute_value/%">180.00</colonne>
-        <colonne nom="engrais">1</colonne>
+        <colonne nom="julapN_or_sum_upvt">192</colonne>
+        <colonne nom="absolute_value/%">15.00</colonne>
+        <colonne nom="engrais">3</colonne>
+      </intervention>
+      <intervention nb_colonnes="3">
+        <colonne nom="julapN_or_sum_upvt">213</colonne>
+        <colonne nom="absolute_value/%">23</colonne>
+        <colonne nom="engrais">3</colonne>
       </intervention>
     </ta>
     <option choix="1" nom="location of mineral nitrogen inputs" nomParam="codlocferti">
@@ -155,7 +166,7 @@
     </option>
   </formalisme>
   <formalisme nom="harvest">
-    <param format="integer" max="999" min="1" nom="irecbutoir">289</param>
+    <param format="integer" max="999" min="1" nom="irecbutoir">365</param>
     <param format="character" nom="ressuite">straw+roots</param>
     <option choix="2" nom="automatic calculation of crop aerial residues in function of user parameterization" nomParam="code_autoressuite">
       <choix code="1" nom="yes">
@@ -182,7 +193,7 @@
             <param format="real" max="1.0" min="0.05" nom="h2ograinmin">0.80000</param>
           </choix>
           <choix code="2" nom="maximum">
-            <param format="real" max="1.0" min="0.05" nom="h2ograinmax">0.20000</param>
+            <param format="real" max="1.0" min="0.05" nom="h2ograinmax">0.10</param>
           </choix>
         </option>
       </choix>

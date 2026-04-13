@@ -32,11 +32,20 @@ def geometric_dist(height, nb_phy, q, u0):
     return heights.tolist()
 
 
-def bell_shaped_dist(leaf_area, nb_phy, rmax, skew):
+def bell_shaped_dist_old(leaf_area, nb_phy, rmax, skew):
     """Compute leaf area of individual leaves along bell shaped model, so that the sum equals leaf_area"""
     k = -np.log(skew) * rmax
     r = np.linspace(1.0 / nb_phy, 1, nb_phy)
     relative_area = np.exp(-k / rmax * (2 * (r - rmax) ** 2 + (r - rmax) ** 3))
+    total_area = sum(relative_area)
+    normalized_leaf_areas = [area / total_area for area in relative_area]
+    return [leaf_area * la for la in normalized_leaf_areas]
+
+
+def bell_shaped_dist(leaf_area, nb_phy, rmax, skew):
+    """Compute leaf area of individual leaves along bell shaped model, so that the sum equals leaf_area"""
+    r = np.linspace(1.0 / nb_phy, 1, nb_phy)
+    relative_area = np.exp(skew * (r - rmax) ** 2)
     total_area = sum(relative_area)
     normalized_leaf_areas = [area / total_area for area in relative_area]
     return [leaf_area * la for la in normalized_leaf_areas]
