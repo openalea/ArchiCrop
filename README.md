@@ -31,9 +31,7 @@ The explicit spatial arrangement of crops is considered in ArchiCrop, thanks to 
 
 
 ## Tutorials
-Tutorial for simple use of ArchiCrop : [notebook](/tutorials/tutorial_archicrop_sole_crop.ipynb)  
-Tutorial for using ArchiCrop with crop model outputs : [notebook](/tutorials/tutorial_archicrop_sole_crop_from_pbm.ipynb)
-
+Script for simple use of ArchiCrop : [notebook](/tutorials/run_1_simul.py)  
 
 ## Status 
 [![Actions Status][actions-badge]][actions-link]
