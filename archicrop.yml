@@ -6,6 +6,7 @@ channels:
 dependencies:
   - openalea.astk
   - openalea.caribu
+  - openalea.libcaribu
   - numpy
   - openalea.mtg
   - openalea.plantgl
