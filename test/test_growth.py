@@ -30,7 +30,7 @@ def plant(la = 200, h = 100, phyllochron = 30, stem_duration = 2, leaf_duration 
         height=h,
         leaf_area=la,
         nb_short_phy=2,
-        short_phy_height=2,
+        short_phy_len=2,
         wl=0.1,
         diam_base=2.5,
         diam_top=1.5,
@@ -47,7 +47,7 @@ def plant(la = 200, h = 100, phyllochron = 30, stem_duration = 2, leaf_duration 
         phyllotactic_angle=137.5,
         phyllotactic_deviation=0,
         tiller_angle=30,
-        gravitropism_coefficient=0,
+        tropism_coefficient=0,
         plant_orientation=0,
         spiral=True,
         classic=False

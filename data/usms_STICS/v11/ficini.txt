@@ -1,5 +1,5 @@
 :nbplantes:
-1
+2
 :plante:
 snu
 0.0
@@ -18,20 +18,20 @@ code_acti_reserve
 0.0 0.0 0.0 0.0 0.0 
 :plante:
 snu
-
-
-
+0.0
+0.0
+0.0
 code_acti_reserve
 2
 0
 0
 0
 0
-
-
-
+0
+0
+0
 :densinitial:
-     
+0.0 0.0 0.0 0.0 0.0 
 :Hinitf:
 2.92 2.55 2.40 5.44 19.12 
 :NO3initf:

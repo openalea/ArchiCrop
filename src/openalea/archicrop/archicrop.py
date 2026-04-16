@@ -19,7 +19,7 @@ class ArchiCrop:
                  leaf_area,
                  nb_phy=10,
                  nb_short_phy=4,
-                 short_phy_height=3,
+                 short_phy_len=3,
                  wl=0.1,
                  diam_base=1,
                  diam_top=1,
@@ -43,7 +43,7 @@ class ArchiCrop:
                  nb_tillers=0,
                  tiller_delay=2,
                  tiller_angle=30,
-                 gravitropism_coefficient=0.12,
+                 tropism_coefficient=0.12,
                  plant_orientation=30,
                  reduction_factor=1,
                  daily_dynamics=None,
@@ -71,7 +71,7 @@ class ArchiCrop:
         :param nb_tillers: int, number of tillers
         :param tiller_delay: int, delay between the appearance of a phytomer and the appearance of a tiller from the lateral meristem (in phyllochron)
         :param tiller_angle: float, angle of the tiller wrt to tiller of prior order (in °)
-        :param gravitropism_coefficient: float, coefficient of gravitropism (in [0,1])
+        :param tropism_coefficient: float, coefficient of tropism (in [0,1])
         :param plant_orientation: float, orientation of the plant wrt to the North (in °)
         :param reduction_factor: float, reduction factor for tiller properties
         :param daily_dynamics: dict, daily dynamics of the plant, with keys as thermal time and values as dict containing:
@@ -95,7 +95,7 @@ class ArchiCrop:
         self.height = height
         self.leaf_area = leaf_area
         self.nb_short_phy = nb_short_phy
-        self.short_phy_height = short_phy_height
+        self.short_phy_len = short_phy_len
         self.wl = wl
         self.diam_base = diam_base
         self.diam_top = diam_top
@@ -121,7 +121,7 @@ class ArchiCrop:
         self.tiller_delay = tiller_delay
         self.reduction_factor = reduction_factor
         self.tiller_angle = tiller_angle
-        self.gravitropism_coefficient = gravitropism_coefficient
+        self.tropism_coefficient = tropism_coefficient
         self.plant_orientation = plant_orientation
 
         self.daily_dynamics = daily_dynamics
@@ -142,7 +142,7 @@ class ArchiCrop:
                         height=self.height,
                         leaf_area=self.leaf_area,
                         nb_short_phy=self.nb_short_phy,
-                        short_phy_height=self.short_phy_height,
+                        short_phy_len=self.short_phy_len,
                         wl=self.wl,
                         diam_base=self.diam_base,
                         diam_top=self.diam_top,
@@ -169,7 +169,7 @@ class ArchiCrop:
                         reduction_factor=self.reduction_factor,
                         tiller_delay=self.tiller_delay,
                         tiller_angle=self.tiller_angle,
-                        gravitropism_coefficient=self.gravitropism_coefficient,
+                        tropism_coefficient=self.tropism_coefficient,
                         plant_orientation=self.plant_orientation)
     
     def grow_plant(self, rate=False, distribution_function=demand_dist_bis):

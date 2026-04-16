@@ -17,15 +17,15 @@ from .plant import leaf_azimuth
 from .turtle import CerealsTurtle
 
 
-def cereal_stem_properties(nb_phy, nb_short_phy, short_phy_height, height, stem_q, diam_top, diam_base, ntop):
+def cereal_stem_properties(nb_phy, nb_short_phy, short_phy_len, height, stem_q, diam_top, diam_base, ntop):
     '''
     Return dict of stem element properties
     '''
-    # short_phy_height = 2
-    pseudostem_height = nb_short_phy * short_phy_height
+    # short_phy_len = 2
+    pseudostem_height = nb_short_phy * short_phy_len
 
-    pseudostem = np.array([short_phy_height*i for i in range(1, nb_short_phy+1)]) if nb_short_phy > 0 else np.array([])
-    stem = np.array(geometric_dist(height-pseudostem_height, nb_phy-nb_short_phy, q=stem_q, u0=short_phy_height))
+    pseudostem = np.array([short_phy_len*i for i in range(1, nb_short_phy+1)]) if nb_short_phy > 0 else np.array([])
+    stem = np.array(geometric_dist(height-pseudostem_height, nb_phy-nb_short_phy, q=stem_q, u0=short_phy_len))
     stem = np.array([h+pseudostem_height for h in stem])
     insertion_heights = np.concatenate((pseudostem, stem), axis=0) if nb_short_phy > 0 else stem
 
@@ -89,12 +89,12 @@ def add_leaf_senescence(g, vid_leaf, leaf_lifespan, leaf_lifespan_early, end_juv
 def add_tiller(g, vid, start_time, phyllochron, plastochron, 
                stem_duration, leaf_duration, leaf_lifespan, leaf_lifespan_early, end_juv, 
                tiller_delay, reduction_factor,  
-               height, leaf_area, nb_short_phy, short_phy_height, wl, diam_base, diam_top,
+               height, leaf_area, nb_short_phy, short_phy_len, wl, diam_base, diam_top,
                insertion_angle, scurv, curvature,
                klig, swmax, f1, f2,
                stem_q, rmax, skew, 
                phyllotactic_angle, phyllotactic_deviation,
-               tiller_angle, gravitropism_coefficient,
+               tiller_angle, tropism_coefficient,
                plant_orientation=45,
                spiral=True):
     """ Add a tiller to the plant at the given time
@@ -113,7 +113,7 @@ def add_tiller(g, vid, start_time, phyllochron, plastochron,
         height: height of the plant (in cm)
         leaf_area: maximal potential leaf area of the plant (in cm²)
         nb_short_phy: number of short phytomers
-        short_phy_height: height of the short phytomers (in cm)
+        short_phy_len: height of the short phytomers (in cm)
         wl: leaf width-to-length ratio
         diam_base: diameter of the base of the main stem (in cm)
         diam_top: diameter of the top of the main stem (in cm)
@@ -130,7 +130,7 @@ def add_tiller(g, vid, start_time, phyllochron, plastochron,
         phyllotactic_angle: angle between the midribs of two consecutive leaves around the stem (in °)
         phyllotactic_deviation: half-amplitude of deviation around phyllotactic angle (in °)
         tiller_angle: angle of the tiller wrt to tiller of prior order (in °)
-        gravitropism_coefficient: coefficient of gravitropism for the tiller
+        tropism_coefficient: coefficient of tropism for the tiller
         plant_orientation: orientation of the plant (in °)
         spiral: whether the phyllotaxy is spiral or not
         
@@ -153,7 +153,7 @@ def add_tiller(g, vid, start_time, phyllochron, plastochron,
     ntop = max(ranks) - np.array(ranks) + 1
 
     # see how properties change with reduction factor and order p.r^o
-    stem_prop = cereal_stem_properties(nb_phy, nb_short_phy, short_phy_height, height, stem_q, diam_top, diam_base, ntop)
+    stem_prop = cereal_stem_properties(nb_phy, nb_short_phy, short_phy_len, height, stem_q, diam_top, diam_base, ntop)
     leaf_prop = cereal_leaf_properties(nb_phy, leaf_area, rmax, skew, insertion_angle, scurv, curvature, 
                     klig, swmax, f1, f2, ntop, wl, phyllotactic_angle, phyllotactic_deviation, plant_orientation, spiral)
 
@@ -172,7 +172,7 @@ def add_tiller(g, vid, start_time, phyllochron, plastochron,
         if first:
             vid_stem, tid2 = g.add_child_and_complex(parent=vid, complex=tid, edge_type='+', **stem)
             g.node(vid_stem).tiller_angle = tiller_angle
-            g.node(vid_stem).gravitropism_coefficient = gravitropism_coefficient
+            g.node(vid_stem).tropism_coefficient = tropism_coefficient
             first = False
         else:
             vid_stem = g.add_child(parent=vid_stem, edge_type='<', **stem)
@@ -233,7 +233,7 @@ class CerealsVisitor:
             # print(n.label, n.visible_length, n.tiller_angle)
             angle = 2*n.tiller_angle if g.order(v) == 1 else n.tiller_angle 
             turtle.down(angle)
-            turtle.elasticity = n.gravitropism_coefficient 
+            turtle.elasticity = n.tropism_coefficient 
             turtle.tropism = (0, 0, 1)
 
         # incline turtle at the base of stems,
@@ -269,7 +269,7 @@ def cereal(nb_phy, phyllochron, plastochron, stem_duration, leaf_duration,
             height,
             leaf_area,
             nb_short_phy,
-            short_phy_height,
+            short_phy_len,
             wl,
             diam_base,
             diam_top,
@@ -283,7 +283,7 @@ def cereal(nb_phy, phyllochron, plastochron, stem_duration, leaf_duration,
             phyllotactic_angle,
             phyllotactic_deviation,
             tiller_angle,
-            gravitropism_coefficient,
+            tropism_coefficient,
             plant_orientation=45,
             spiral=True,
             classic=False):
@@ -327,7 +327,7 @@ def cereal(nb_phy, phyllochron, plastochron, stem_duration, leaf_duration,
     ranks = range(1, nb_phy + 1)
     ntop = max(ranks) - np.array(ranks) + 1
     # Dicts instead of a dataframe
-    stem_prop = cereal_stem_properties(nb_phy=nb_phy, nb_short_phy=nb_short_phy, short_phy_height=0.01, height=1, 
+    stem_prop = cereal_stem_properties(nb_phy=nb_phy, nb_short_phy=nb_short_phy, short_phy_len=0.01, height=1, 
                                         stem_q=stem_q, diam_top=diam_top, diam_base=diam_base, ntop=ntop)
     leaf_prop = cereal_leaf_properties(nb_phy=nb_phy, leaf_area=1, rmax=rmax, skew=skew, insertion_angle=insertion_angle, 
                                 scurv=scurv, curvature=curvature, klig=klig, swmax=swmax, f1=f1, f2=f2, ntop=ntop, wl=wl, 
@@ -356,7 +356,7 @@ def cereal(nb_phy, phyllochron, plastochron, stem_duration, leaf_duration,
         if first:
             vid_stem = g.add_component(vid_axis, **stem)
             g.node(vid_stem).tiller_angle = 0
-            g.node(vid_stem).gravitropism_coefficient = 0
+            g.node(vid_stem).tropism_coefficient = 0
             first = False
         else:
             vid_stem = g.add_child(vid_stem, edge_type="<", **stem)
@@ -385,11 +385,11 @@ def cereal(nb_phy, phyllochron, plastochron, stem_duration, leaf_duration,
                                 klig=klig, swmax=swmax, f1=f1, f2=f2,
                                 stem_q=stem_q, rmax=rmax, skew=skew, 
                                 phyllotactic_angle=phyllotactic_angle, phyllotactic_deviation=phyllotactic_deviation,
-                                tiller_angle=tiller_angle, gravitropism_coefficient=gravitropism_coefficient,
+                                tiller_angle=tiller_angle, tropism_coefficient=tropism_coefficient,
                                 plant_orientation=plant_orientation,
                                 spiral=True,
                                 nb_short_phy=nb_short_phy,
-                                short_phy_height=0.01) 
+                                short_phy_len=0.01) 
 
         tiller_points.extend(new_tillers)
         # Here we consider that the list is sorted by the time

@@ -1,9 +1,9 @@
 from __future__ import annotations
 
 archi_maize = {
-    "nb_phy": 22, # number of phytomers on the main stem
+    "nb_phy": 28, # number of phytomers on the main stem
     "nb_short_phy": 5,
-    "short_phy_height": 3,
+    "short_phy_len": 3,
     
     # Stem
     "height": 250,
@@ -14,7 +14,7 @@ archi_maize = {
     # Leaf area distribution along the stem 
     "leaf_area": 12000,
     "rmax": [0.5,0.9], # relative position of largest leaf on the stem
-    "skew": [0.0005,0.1], # skewness for leaf area distribution along axis 
+    "skew": [-10,0], # skewness for leaf area distribution along axis 
 
     # blade area
     "wl": 0.13, # leaf blade width-to-length ratio 
@@ -24,14 +24,14 @@ archi_maize = {
     "f2": 0.92, # parameter for leaf blade shape
 
     # blade curvature
-    "insertion_angle": 30, # leaf blade insertion angle
+    "insertion_angle": 45, # leaf blade insertion angle
     "scurv": 0.8, #  relative position of inflexion point
     "curvature": 120, # leaf blade insertion-to-tip angle
     "phyllotactic_angle": 180, # phyllotactic angle
     "phyllotactic_deviation": 20, # half-deviation to phyllotactic angle
 
     # Development
-    "phyllochron": [20,55], # phyllochron, i.e. stem element appearance rate
+    "phyllochron": [20,60], # phyllochron, i.e. stem element appearance rate
     # "plastochron": [30,60], # plastochron, i.e. leaf blade appearance rate
     "stem_duration": 1.6,
     "leaf_duration": 1.6,
@@ -41,14 +41,14 @@ archi_maize = {
     "tiller_delay": 1, # delay, as factor of phyllochron, between the appearance of a phytomer and the appearance of its tiller
     "tiller_angle": 30, # degree
     "reduction_factor": 1, # reduction factor between tillers of consecutive order
-    "gravitropism_coefficient": 0.05, # 0.12
+    "tropism_coefficient": 0.05, # 0.12
 }
 
 
 archi_wheat = {
     "nb_phy": 10, # number of phytomers on the main stem : [10,40] (Ndiaye et al., 2021; Lafarge and Tardieu, 2002; Clerget, 2008; Ganeme et al., 2022)
     "nb_short_phy": 5,
-    "short_phy_height": 3,
+    "short_phy_len": 3,
 
     # Stem
     "height": 90,
@@ -86,14 +86,14 @@ archi_wheat = {
     "tiller_angle": 5,
     "tiller_delay": 1, # delay, as factor of phyllochron, between the appearance of a phytomer and the appearance of its tiller : [] ()
     "reduction_factor": 0.8, # reduction factor between tillers of consecutive order : [0.8,1] ()
-    "gravitropism_coefficient": 0.12
+    "tropism_coefficient": 0.12
     }
 
 
 archi_rice = {
     "nb_phy": 14, # number of phytomers on the main stem : [10,40] (Ndiaye et al., 2021; Lafarge and Tardieu, 2002; Clerget, 2008; Ganeme et al., 2022)
     "nb_short_phy": 5,
-    "short_phy_height": 3,
+    "short_phy_len": 3,
 
     # Stem
     "height": 110,
@@ -131,14 +131,14 @@ archi_rice = {
     "tiller_angle": 15,
     "tiller_delay": 1, # delay, as factor of phyllochron, between the appearance of a phytomer and the appearance of its tiller : [] ()
     "reduction_factor": 0.93, # reduction factor between tillers of consecutive order : [0.8,1] ()
-    "gravitropism_coefficient": 0.12
+    "tropism_coefficient": 0.12
 }
 
 
 archi_sorghum = {
-    "nb_phy": 18, # number of phytomers on the main stem : [10,40] (Ndiaye et al., 2021; Lafarge and Tardieu, 2002; Clerget, 2008; Ganeme et al., 2022)
+    "nb_phy": 15, # number of phytomers on the main stem : [10,40] (Ndiaye et al., 2021; Lafarge and Tardieu, 2002; Clerget, 2008; Ganeme et al., 2022)
     "nb_short_phy": 5,
-    "short_phy_height": 3,
+    "short_phy_len": 3,
 
     # Stem
     "height": 200,
@@ -148,7 +148,7 @@ archi_sorghum = {
 
     # Leaf area distribution along the stem
     "leaf_area": 15000,
-    "rmax": [0.55,0.9], # parameter for leaf area distribution along axis : [0.6,0.8] (Kaitaniemi et al., 1999; Welcker et al., )
+    "rmax": [0.5,0.9], # parameter for leaf area distribution along axis : [0.6,0.8] (Kaitaniemi et al., 1999; Welcker et al., )
     "skew": [-10,0], # parameter for leaf area distribution along axis : [0.0005,0.1] (Kaitaniemi et al., 1999; Welcker et al., )
     
     # blade area 
@@ -175,15 +175,15 @@ archi_sorghum = {
     "nb_tillers": 0,#2, # number of tillers : [0,6] (Lafarge et al., 2002)
     "tiller_angle": 20,
     "tiller_delay": 1, # delay, as factor of phyllochron, between the appearance of a phytomer and the appearance of its tiller : [] ()
-    "reduction_factor": 0.9, # reduction factor between tillers of consecutive order : [0.8,1] ()
-    "gravitropism_coefficient": 0.12
+    "reduction_factor": 0.5, # reduction factor between tillers of consecutive order : [0.8,1] ()
+    "tropism_coefficient": 0.12
 }
 
 
 archi_sorghum_angles = {
     "nb_phy": [12,16,20,24,28], # [10,30], # number of phytomers on the main stem : [10,40] (Ndiaye et al., 2021; Lafarge and Tardieu, 2002; Clerget, 2008; Ganeme et al., 2022)
     "nb_short_phy": 4,
-    "short_phy_height": 3,
+    "short_phy_len": 3,
 
     # Stem
     # "height": [50,400],
@@ -229,7 +229,7 @@ archi_sorghum_angles = {
 archi_sorghum_PMA = {
     "nb_phy": 16, # number of phytomers on the main stem : [10,40] (Ndiaye et al., 2021; Lafarge and Tardieu, 2002; Clerget, 2008; Ganeme et al., 2022)
     "nb_short_phy": 5,
-    "short_phy_height": 3,
+    "short_phy_len": 3,
 
     # Stem
     "height": 200,
@@ -274,7 +274,7 @@ archi_sorghum_PMA = {
 archi_cowpea = {
     "nb_phy": 30, # number of phytomers on the main stem
     "nb_short_phy": 2,
-    "short_phy_height": 3,
+    "short_phy_len": 3,
     
     # Stem
     "height": 100,
@@ -312,5 +312,5 @@ archi_cowpea = {
     "tiller_delay": 1, # delay, as factor of phyllochron, between the appearance of a phytomer and the appearance of its tiller
     "tiller_angle": 30, # degree
     "reduction_factor": 1, # reduction factor between tillers of consecutive order
-    "gravitropism_coefficient": 0.05, # 0.12
+    "tropism_coefficient": 0.05, # 0.12
 }

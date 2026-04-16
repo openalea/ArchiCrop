@@ -169,7 +169,7 @@
     </option>
   </formalisme>
   <formalisme nom="radiation interception">
-    <option choix="1" nom="radiation interception" nomParam="codetransrad">
+    <option choix="2" nom="radiation interception" nomParam="codetransrad">
       <choix code="1" nom="Beer's law"/>
       <choix code="2" nom="radiation transfers">
         <param format="integer" max="3" min="1" nom="forme">1</param>

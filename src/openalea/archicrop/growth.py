@@ -363,7 +363,7 @@ class CerealsVisitorGrowth(CerealsVisitor):
             # TODO : vary as function of age and species(e.g. rice)
             angle = 2*n.tiller_angle if g.order(v) == 1 else n.tiller_angle 
             turtle.down(angle)
-            turtle.elasticity = n.gravitropism_coefficient 
+            turtle.elasticity = n.tropism_coefficient 
             turtle.tropism = (0, 0, 1)
 
 

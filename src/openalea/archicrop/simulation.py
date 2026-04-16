@@ -214,6 +214,32 @@ def define_archicrop_parameters(archi_params: dict,
     return param_sets
 
 
+def define_params_1_plant(dynamics_file, plant_file, tec_file, archi_params, end=-1, pot_factor_lai=3, pot_factor_height=3):    
+    # Retrieve STICS management and senescence parameters
+    _, daily_dynamics, lifespan, lifespan_early, _ = get_stics_data(
+        file_tec_xml=tec_file,  # Path to the STICS management XML file
+        file_plt_xml=plant_file,  # Path to the STICS plant XML file
+        stics_output_file=dynamics_file,  # Path to the STICS output file
+        end=end
+    )
+
+    # Complete ArchiCrop parameters with values from constraint
+    archi_params = constrain_archi_params(archi_params=archi_params, daily_dynamics=daily_dynamics, 
+                                            lifespan=lifespan, lifespan_early=lifespan_early, 
+                                            pot_factor_lai=pot_factor_lai, pot_factor_height=pot_factor_height)
+    
+    # Generate samples for ArchiCrop parameters 
+    param_sets = param_sampling(archi_params=archi_params, n_samples=1)
+
+    # Compute viable parameters wrt the dynamic constraint of LAI and height
+    param_sets = compute_viable_params(
+        params_sets=param_sets, 
+        daily_dynamics=daily_dynamics, 
+        pot_factor_lai=pot_factor_lai, pot_factor_height=pot_factor_height)
+    
+    return param_sets[1]
+
+
 def run_archicrop_and_light(param_sets: dict, 
              tec_file: str, plant_file: str, dynamics_file: str,
              weather_file: str, location: dict,

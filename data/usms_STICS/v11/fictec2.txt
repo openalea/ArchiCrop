@@ -21,11 +21,11 @@ densitesem
 variete
 1
 codetradtec
-2
+1
 interrang
-0.4
+0.7
 orientrang
-1.57
+0.0
 code_strip
 2
 nrow
@@ -43,7 +43,7 @@ eau_mini_decisemis
 humirac_decisemis
 0.75
 codestade
-1
+2
 ilev
 181
 iamf

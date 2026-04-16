@@ -220,7 +220,8 @@ def compute_viable_params(params_sets: dict, daily_dynamics: dict, pot_factor_la
                 if la == max(min_leaf_areas):
                     id_max = i+1
                     break
-            rmax_int = np.linspace(max(0,max((id_max-1)/nb_phy, params['rmax'][0])), min(1,min((id_max+1)/nb_phy, params['rmax'][1])), 10)
+            rmax_int = np.linspace(max(0,min(max((id_max-1)/nb_phy, params['rmax'][0]), params['rmax'][1])), min(1,max(min((id_max+1)/nb_phy, params['rmax'][1]), params['rmax'][0])), 10)
+            print(rmax_int)
 
             # Find viable (rmax, skew) pairs
             leaf_areas_norm = [la/max(min_leaf_areas) for la in min_leaf_areas]
@@ -239,7 +240,7 @@ def compute_viable_params(params_sets: dict, daily_dynamics: dict, pot_factor_la
                                     break
                             if ok:
                                 skews_rmax_ok.append((skew, rmax))
-                    
+                         
             # Build new parameter set with updated 'skew' and 'rmax'
             for (s,r) in skews_rmax_ok[:1]: #################### All realized leaf area distributions are the same no matter the (rmax,skew) given
                 new_param = {}

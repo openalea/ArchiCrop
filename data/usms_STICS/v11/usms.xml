@@ -75,7 +75,7 @@
     <usm nom="inter_sorghum_maize">
         <datedebut>135</datedebut>
         <datefin>365</datefin>
-        <finit>02NT18SorgV2D1_ini.xml</finit>
+        <finit>inter-sorghum-maize_ini.xml</finit>
         <nomsol>02V2D1</nomsol>
         <fstation>StationNtarla_inter_sta.xml</fstation>
         <fclim1>ntarla_corr.2018</fclim1>
@@ -85,13 +85,13 @@
         <codesimul>0</codesimul>
         <plante dominance="1">
             <fplt>sorgho_imp_M_v10_plt.xml</fplt>
-            <ftec>02NT18SorgV2D1_tec.xml</ftec>
+            <ftec>inter-sorghum-maize_tec.xml</ftec>
             <flai>null</flai>
             <fobs>null</fobs>
         </plante>
         <plante dominance="2">
             <fplt>corn_plt.xml</fplt>
-            <ftec>02NT18SorgV2D1_tec.xml</ftec>
+            <ftec>inter-sorghum-maize_tec.xml</ftec>
             <flai>null</flai>
             <fobs>null</fobs>
         </plante>

@@ -12,20 +12,20 @@ def minimal_mtg():
     g1 = cereal(
         nb_phy=2, phyllochron=30, plastochron=30, stem_duration=2, leaf_duration=2,
         leaf_lifespan=100, leaf_lifespan_early=80, end_juv=50, nb_tillers=0, tiller_delay=2, reduction_factor=1,
-        height=10, leaf_area=20, nb_short_phy=1, short_phy_height=1, wl=0.1,
+        height=10, leaf_area=20, nb_short_phy=1, short_phy_len=1, wl=0.1,
         diam_base=2.5, diam_top=1.5, insertion_angle=35, scurv=0.7, curvature=120,
         klig=0.6, swmax=0.55, f1=0.64, f2=0.92, stem_q=1.0, rmax=0.7, skew=0.005,
         phyllotactic_angle=137.5, phyllotactic_deviation=0, tiller_angle=30,
-        gravitropism_coefficient=0, plant_orientation=0, spiral=True, classic=False
+        tropism_coefficient=0, plant_orientation=0, spiral=True, classic=False
     )
     g2 = cereal(
         nb_phy=4, phyllochron=30, plastochron=30, stem_duration=2, leaf_duration=2,
         leaf_lifespan=100, leaf_lifespan_early=80, end_juv=50, nb_tillers=0, tiller_delay=2, reduction_factor=1,
-        height=10, leaf_area=20, nb_short_phy=1, short_phy_height=1, wl=0.1,
+        height=10, leaf_area=20, nb_short_phy=1, short_phy_len=1, wl=0.1,
         diam_base=2.5, diam_top=1.5, insertion_angle=35, scurv=0.7, curvature=120,
         klig=0.6, swmax=0.55, f1=0.64, f2=0.92, stem_q=1.0, rmax=0.7, skew=0.005,
         phyllotactic_angle=137.5, phyllotactic_deviation=0, tiller_angle=30,
-        gravitropism_coefficient=0, plant_orientation=0, spiral=True, classic=False
+        tropism_coefficient=0, plant_orientation=0, spiral=True, classic=False
     )
     # 3 time steps, 2 plants
     return {0:[g1,g1,g1], 1:[g2,g2,g2]}
