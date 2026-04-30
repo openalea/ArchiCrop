@@ -1,5 +1,5 @@
  -----------------------------------------------------------------------------------------
- Stics history file Creation date: 2026/04/14-20:10:37
+ Stics history file Creation date: 2026/04/29-18:06:41
  STICS Version: v11.0.0-rc1_2026-02-03                            
  -----------------------------------------------------------------------------------------
  
@@ -129,8 +129,8 @@
  P_variete            1
  P_interrang   0.699999988    
  P_orientrang    0.00000000    
- P_code_strip            2
- P_nrow            1
+ P_code_strip            1
+ P_nrow            2
  P_effirr    1.00000000    
  nap            0
  P_codlocirrig            1
@@ -158,7 +158,7 @@
     
  PLANT PARAMETERS NEEDED FOR THE SIMULATION
  *********************************************************
- P_fplt sorgho_imp_M_v10_plt.xml
+ P_fplt sorgho_trop_plt.xml
  P_codeplante sor
  monocotyledon            1
  P_tdmin    10.0000000    
@@ -208,13 +208,8 @@
  P_dltamsmaxsen    9.99999978E-03
  P_dltamsminsen   0.150000006    
  P_alphaphot    200.000000    
- p%P_codetransrad           2
+ p%P_codetransrad           1
  p%P_codebeso           2
- P_adfol    1.00000000    
- P_dfolbas    5.00000000    
- P_dfolhaut    5.00000000    
- P_forme            1
- P_rapforme    4.53999996    
  temin=tcmin and temax=tcmax
  P_temax    45.0000000    
  P_teoptbis    25.0000000    
@@ -289,25 +284,26 @@
  stadebbchdebdes75
  stadebbchmat89
  stadebbchrec99
- P_codevar Grinka
- P_stlevamf    300.000000    
- P_stamflax    433.000000    
- P_stlevdrp    980.000000    
- P_stflodrp    60.0000000    
+ P_codevar Tiandougou
+ P_stlevamf    380.000000    
+ P_stamflax    700.000000    
+ P_stlevdrp    1180.00000    
+ P_stflodrp    70.0000000    
  P_stdrpdes    600.000000    
  P_sensiphot   0.600000024    
  P_phobase    14.0000000    
  P_phosat    12.7500000    
- P_adens    0.00000000    
+ P_adens  -0.500000000    
  P_bdens    6.00000000    
  P_hautbase    0.00000000    
- P_hautmax    2.00000000    
+ P_hautmax    2.50000000    
  P_khaut  0.699999988    
- P_durvieF    420.000000    
+ P_durvieF    280.000000    
  P_dlaimaxbrut    1.27999997E-03
  P_innsen   0.280000001    
  P_rapsenturg   0.500000000    
- P_ktrou   0.699999988    
+ radiation interception = Beers law
+ P_extin   0.699999988    
  P_temin    11.0000000    
  P_teopt    25.0000000    
  P_slamax    250.000000    
@@ -319,13 +315,13 @@
  P_deshydbase    8.00000038E-03
  P_nbjgrain           10
  P_nbgrmin    0.00000000    
- P_nbgrmax    25000.0000    
- P_stdrpmat    575.000000    
+ P_nbgrmax    60000.0000    
+ P_stdrpmat    400.000000    
  P_vitircarb    9.99999978E-03
- P_croirac   0.150000006    
- P_tgellev10   -1.00000000      -1.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000    
- P_tgeljuv10   -1.00000000      -1.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000    
- P_tgelveg10   -1.00000000      -1.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000    
+ P_croirac   0.200000003    
+ P_tgellev10   -1.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000    
+ P_tgeljuv10   -1.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000    
+ P_tgelveg10   -1.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000    
  P_psisto    25.0000000    
  P_psiturg    15.0000000    
  P_swfacmin  0.100000001    
@@ -346,8 +342,8 @@
  P_variete            1
  P_interrang   0.699999988    
  P_orientrang    0.00000000    
- P_code_strip            2
- P_nrow            1
+ P_code_strip            1
+ P_nrow            2
  P_effirr    1.00000000    
  nap            0
  P_codlocirrig            1
@@ -375,7 +371,7 @@
     
  PLANT PARAMETERS NEEDED FOR THE SIMULATION
  *********************************************************
- P_fplt corn_plt.xml
+ P_fplt corn_trop_plt.xml
  P_codeplante mai
  monocotyledon            1
  P_tdmin    6.00000000    
@@ -488,10 +484,10 @@
  stadebbchdebdes75
  stadebbchmat89
  stadebbchrec99
- P_codevar DK250
- P_stlevamf    225.000000    
- P_stamflax    450.000000    
- P_stlevdrp    995.000000    
+ P_codevar banguy
+ P_stlevamf    280.000000    
+ P_stamflax    465.000000    
+ P_stlevdrp    1015.00000    
  P_stflodrp    250.000000    
  P_stdrpdes    650.000000    
  P_adens  -0.119999997    
@@ -508,15 +504,15 @@
  P_teopt    24.0000000    
  P_slamax    250.000000    
  P_tigefeuil   0.250000000    
- P_pgrainmaxi   0.312999994    
+ P_pgrainmaxi   0.280000001    
  P_vitpropsucre    0.00000000    
  P_vitprophuile    0.00000000    
  P_vitirazo    1.09999999E-02
  P_deshydbase    8.00000038E-03
  P_nbjgrain           20
  P_nbgrmin    1500.00000    
- P_nbgrmax    4000.00000    
- P_stdrpmat    640.000000    
+ P_nbgrmax    4500.00000    
+ P_stdrpmat    780.000000    
  P_vitircarbT    1.09999999E-03
  P_croirac   0.150000006    
  P_psisto    12.0000000    
@@ -614,10 +610,10 @@
  For intercrop radiation interception is done with radiation transfer
  problem with your profile output dates --> they have been recalculated
  Initial values over the soil depth (155 cm):     SWC = 197. mm     SMN =  8.0 kg N/ha
- crop height A > crop height P          55
- crop height A > crop height P         138
- crop height A > crop height P         139
+ crop height A > crop height P          56
+ crop height A > crop height P         146
+ crop height A > crop height P         147
  Program end ... 
  -----------------------------------------------------------------------------------------
- Stics history file end End date: 2026/04/14-20:10:38
+ Stics history file end End date: 2026/04/29-18:06:41
  -----------------------------------------------------------------------------------------

@@ -1,2 +1,6 @@
 P_usm;wlieu;ansemis;P_iwater;ancours;ifin;nbdays;P_ichsl;group;P_codeplante;stade;nomversion;masec(n);mafruit;iflos;imats;irecs;laimax;cprecip;cet;QNplante;Qles
 02NT18SorgV2D1                          ;                             ntarla_corr; 2018;  135; 2018;  301;  167;    1;    1;sor;recphy    ;V10.0.0_r3391_2022-10-26      ;     8.560;     1.926;   262.000;   301.000;   301.000;     1.942;   613.700;   439.375;    72.085;     0.727
+P_usm;wlieu;ansemis;P_iwater;ancours;ifin;nbdays;P_ichsl;group;P_codeplante;stade;nomversion;masec(n);mafruit;iflos;imats;irecs;laimax;cprecip;cet;QNplante;Qles
+02NT18SorgV2D1                          ;                             ntarla_corr; 2018;  135; 2018;  302;  168;    1;    2;sor;recphy    ;V10.0.0_r3391_2022-10-26      ;     6.612;     1.504;   275.000;   302.000;   302.000;     2.417;   613.700;   450.258;    71.526;     1.919
+P_usm;wlieu;ansemis;P_iwater;ancours;ifin;nbdays;P_ichsl;group;P_codeplante;stade;nomversion;masec(n);mafruit;iflos;imats;irecs;laimax;cprecip;cet;QNplante;Qles
+02NT18SorgV2D1_no_stress                ;                             ntarla_corr; 2018;  135; 2018;  302;  168;    1;    2;sor;recphy    ;V10.0.0_r3391_2022-10-26      ;     8.270;     1.874;   275.000;   302.000;   302.000;     2.747;   613.700;   452.869;    71.765;     1.905

@@ -84,14 +84,38 @@
         <nbplantes>2</nbplantes>
         <codesimul>0</codesimul>
         <plante dominance="1">
-            <fplt>sorgho_imp_M_v10_plt.xml</fplt>
+            <fplt>sorgho_trop_plt.xml</fplt>
             <ftec>inter-sorghum-maize_tec.xml</ftec>
             <flai>null</flai>
             <fobs>null</fobs>
         </plante>
         <plante dominance="2">
-            <fplt>corn_plt.xml</fplt>
+            <fplt>corn_trop_plt.xml</fplt>
             <ftec>inter-sorghum-maize_tec.xml</ftec>
+            <flai>null</flai>
+            <fobs>null</fobs>
+        </plante>
+    </usm>
+    <usm nom="inter_sorghum_maize_strip">
+        <datedebut>135</datedebut>
+        <datefin>365</datefin>
+        <finit>inter-sorghum-maize_ini.xml</finit>
+        <nomsol>02V2D1</nomsol>
+        <fstation>StationNtarla_inter_sta.xml</fstation>
+        <fclim1>ntarla_corr.2018</fclim1>
+        <fclim2>ntarla_corr.2018</fclim2>
+        <culturean>1</culturean>
+        <nbplantes>2</nbplantes>
+        <codesimul>0</codesimul>
+        <plante dominance="1">
+            <fplt>sorgho_trop_plt.xml</fplt>
+            <ftec>inter-sorghum-maize_strip_tec.xml</ftec>
+            <flai>null</flai>
+            <fobs>null</fobs>
+        </plante>
+        <plante dominance="2">
+            <fplt>corn_trop_plt.xml</fplt>
+            <ftec>inter-sorghum-maize_strip_tec.xml</ftec>
             <flai>null</flai>
             <fobs>null</fobs>
         </plante>

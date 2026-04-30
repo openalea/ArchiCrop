@@ -7,7 +7,7 @@ culture
 :nbplantes
 2
 :nom
-inter_sorghum_maize
+inter_sorghum_maize_strip
 :datedebut
 135
 :datefin
@@ -29,14 +29,14 @@ ntarla_corr.2018
 :culturean
 1
 :fplt1
-sorgho_imp_M_v10_plt.xml
+sorgho_trop_plt.xml
 :ftec1
-inter-sorghum-maize_tec.xml
+inter-sorghum-maize_strip_tec.xml
 :flai1
 null
 :fplt2
-corn_plt.xml
+corn_trop_plt.xml
 :ftec2
-inter-sorghum-maize_tec.xml
+inter-sorghum-maize_strip_tec.xml
 :flai2
 null

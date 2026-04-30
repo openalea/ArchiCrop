@@ -79,7 +79,7 @@
     </formalisme>
     <formalisme nom="Intercropping">
             
-        <param format="real" max="1.0" min="0.05" nom="hauteur_threshold">0.2</param>
+        <param format="real" max="1.0" min="0.0" nom="hauteur_threshold">0.2</param>
     </formalisme>
     <formalisme nom="Radiation interception">
             

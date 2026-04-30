@@ -47,7 +47,7 @@
     <param format="integer" max="731" min="1" nom="iplt0">177</param>
     <param format="real" max="10.0" min="0.0" nom="profsem">5.00000</param>
     <param format="real" max="2000.0" min="0.05" nom="densitesem">6</param>
-    <param format="integer" max="200" min="1" nom="variete">1</param>
+    <param format="integer" max="200" min="1" nom="variete">2</param>
     <option choix="2" nom="planting structure (if radiative transfer)" nomParam="codetradtec">
       <choix code="1" nom="yes">
         <param format="real" max="10.0" min="0.0" nom="interrang">0.4</param>

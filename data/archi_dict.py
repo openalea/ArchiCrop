@@ -13,7 +13,7 @@ archi_maize = {
 
     # Leaf area distribution along the stem 
     "leaf_area": 12000,
-    "rmax": [0.5,0.9], # relative position of largest leaf on the stem
+    "rmax": [0.5,1.0], # relative position of largest leaf on the stem
     "skew": [-10,0], # skewness for leaf area distribution along axis 
 
     # blade area
@@ -25,7 +25,7 @@ archi_maize = {
 
     # blade curvature
     "insertion_angle": 45, # leaf blade insertion angle
-    "scurv": 0.8, #  relative position of inflexion point
+    "scurv": 0.3, #  relative position of inflexion point
     "curvature": 120, # leaf blade insertion-to-tip angle
     "phyllotactic_angle": 180, # phyllotactic angle
     "phyllotactic_deviation": 20, # half-deviation to phyllotactic angle
@@ -136,7 +136,7 @@ archi_rice = {
 
 
 archi_sorghum = {
-    "nb_phy": 15, # number of phytomers on the main stem : [10,40] (Ndiaye et al., 2021; Lafarge and Tardieu, 2002; Clerget, 2008; Ganeme et al., 2022)
+    "nb_phy": 20, # number of phytomers on the main stem : [10,40] (Ndiaye et al., 2021; Lafarge and Tardieu, 2002; Clerget, 2008; Ganeme et al., 2022)
     "nb_short_phy": 5,
     "short_phy_len": 3,
 
@@ -148,7 +148,7 @@ archi_sorghum = {
 
     # Leaf area distribution along the stem
     "leaf_area": 15000,
-    "rmax": [0.5,0.9], # parameter for leaf area distribution along axis : [0.6,0.8] (Kaitaniemi et al., 1999; Welcker et al., )
+    "rmax": [0.5,1.0], # parameter for leaf area distribution along axis : [0.6,0.8] (Kaitaniemi et al., 1999; Welcker et al., )
     "skew": [-10,0], # parameter for leaf area distribution along axis : [0.0005,0.1] (Kaitaniemi et al., 1999; Welcker et al., )
     
     # blade area 
@@ -160,7 +160,7 @@ archi_sorghum = {
 
     # Leaf blade position in space
     "insertion_angle": 60, # leaf blade insertion angle : [10,50] (Truong et al., 2015; Kaitaniemi et al., 1999)
-    "scurv": 0.75, # leaf blade relative inflexion point : [0.6, 0.8] ()
+    "scurv": 0.4, # leaf blade relative inflexion point : [0.6, 0.8] ()
     "curvature": 90, # leaf blade insertion-to-tip angle : [0,130] [45, 135] (Kaitaniemi et al., 1999)
     "phyllotactic_angle": 180, # phyllotactic angle : [180] (Davis et al., 2024)
     "phyllotactic_deviation": 20, # half-deviation to phyllotactic angle : [0,90] (Davis et al., 2024)
@@ -193,7 +193,7 @@ archi_sorghum_angles = {
 
     # Leaf area distribution along the stem
     # "leaf_area": [1000,20000],
-    "rmax": [0.55,0.9], # parameter for leaf area distribution along axis : [0.6,0.8] (Kaitaniemi et al., 1999; Welcker et al., )
+    "rmax": [0.5,1.0], # parameter for leaf area distribution along axis : [0.6,0.8] (Kaitaniemi et al., 1999; Welcker et al., )
     "skew": [0.0005,0.1], # 0.0001 # parameter for leaf area distribution along axis : [0.0005,0.1] (Kaitaniemi et al., 1999; Welcker et al., )
     
     # blade area 
