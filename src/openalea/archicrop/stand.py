@@ -9,6 +9,59 @@ from numpy import cos, linspace, sin
 from numpy.random import vonmises
 
 
+def compute_inter_plant(inter_row, density):
+    return 1.0 / inter_row / density
+
+def compute_plant_per_row(inter_plant, length=1):
+    return max(1, int(round(float(length) / inter_plant)))
+
+def config_positions_intercrop(inter_row_1, inter_row_2, inter_plant_1, inter_plant_2, plant_per_row_1, plant_per_row_2, nrows_1, nrows_2, width=1, conv_coef=100):
+
+    dx = (inter_plant_1 * conv_coef, inter_plant_2 * conv_coef)
+    dy = (inter_row_1 * conv_coef, inter_row_2 * conv_coef)
+    plant_per_row = (plant_per_row_1, plant_per_row_2)
+    
+    if nrows_1 == 0 or nrows_2 == 0:
+        nrows = max(1, int(round(float(width) / inter_row_1))) 
+    else:
+        nrows = (nrows_1, nrows_2)
+        # Compute the width of each strip
+        wstrip_1 = (nrows_1-1) * inter_row_1 + max(inter_row_1, inter_row_2)
+        wstrip_2 = (nrows_2-1) * inter_row_2 + max(inter_row_1, inter_row_2)
+        wstrips = (wstrip_1, wstrip_2)
+        # compute number of pairs of strips within the width of the crop
+        nstrips = width / (wstrip_1 + wstrip_2)
+
+    positions_crop = []
+    if nrows_1 == 0 or nrows_2 == 0:
+        positions_crop = regular(nrows * plant_per_row_1, int(nrows), dx[0], dy[0], int(plant_per_row_1))[0]
+    else:
+        for i in range(int(nstrips)):
+            for j in [0,1]:
+                pos_tmp = regular(nrows[j] * plant_per_row[j], int(nrows[j]), dx[j], dy[j], int(plant_per_row[j]))[0]
+                # offset to pos_tmp depending on i and j
+                for k, (x,y,z) in enumerate(pos_tmp):
+                    pos_tmp[k] = (x, y - dy[j]/2 + (i * (wstrip_1 + wstrip_2) + j * wstrip_1) * conv_coef, z)
+                positions_crop += pos_tmp
+    positions_crop = sorted(positions_crop, key=itemgetter(1, 0)) # sorting by ranks
+    return positions_crop
+
+def config_list_intercrop(plant_1, plant_2, nrows_1, nrows_2, plant_per_row_1, plant_per_row_2):
+    if nrows_1 == 0 or nrows_2 == 0:
+        return [plant_1] + [plant_2]
+    else:
+        return [plant_1]*int(plant_per_row_1)*nrows_1 + [plant_2]*int(plant_per_row_2)*nrows_2
+    
+def config_crop_intercrop(crop_1, crop_2, inter_row_1, inter_row_2, density_1, density_2, nb_rows_1, nb_rows_2, width=1, length=1):    
+    inter_plant_1 = compute_inter_plant(inter_row_1, density_1)
+    inter_plant_2 = compute_inter_plant(inter_row_2, density_2)
+    plant_per_row_1 = compute_plant_per_row(inter_plant_1, length)
+    plant_per_row_2 = compute_plant_per_row(inter_plant_2, length)
+    positions_crop = config_positions_intercrop(inter_row_1, inter_row_2, inter_plant_1, inter_plant_2, plant_per_row_1, plant_per_row_2, nb_rows_1, nb_rows_2, width)
+    list_of_graphs = config_list_intercrop(crop_1, crop_2, nb_rows_1, nb_rows_2, plant_per_row_1, plant_per_row_2)
+    return list_of_graphs, positions_crop
+
+
 def compute_domain(density: float, inter_row: float = 0.7, conv_coef: float = 100) -> tuple:
     """
     Calculate the domain of a single plant based on the sowing density and inter-row distance.

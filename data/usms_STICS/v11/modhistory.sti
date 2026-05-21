@@ -1,5 +1,5 @@
  -----------------------------------------------------------------------------------------
- Stics history file Creation date: 2026/04/29-18:06:41
+ Stics history file Creation date: 2026/05/21-15:26:58
  STICS Version: v11.0.0-rc1_2026-02-03                            
  -----------------------------------------------------------------------------------------
  
@@ -117,337 +117,149 @@
    
  TECHNICAL PARAMETERS NEEDED FOR THE SIMULATION, file: fictec1.txt
  *********************************************************
+ jultrav=0 thus qres set to 0
  P_nbjtrav            1
  P_jultrav P_profres P_proftrav 
-    172      35.      35.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+      0      18.      20.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
  P_nbjres            1
  P_julres P_coderes P_qres  P_Crespc  P_CsurNres P_Nminres  P_eaures
-    135      1      1.5     40.0     53.0      0.0      0.0                                                                                                                                                                                                                                                                                                                                                                                                                                                          
- P_iplt0          177
- P_profsem    5.00000000    
- P_densitesem    6.00000000    
+      0      1      1.0     42.0     60.0      0.0      0.0                                                                                                                                                                                                                                                                                                                                                                                                                                                          
+ P_iplt0          124
+ P_profsem    1.00000000    
+ P_densitesem    253.000000    
  P_variete            1
- P_interrang   0.699999988    
- P_orientrang    0.00000000    
- P_code_strip            1
- P_nrow            2
  P_effirr    1.00000000    
- nap            0
+ nap           19
+  P_julapI,P_doseI          118   20.0000000                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+  P_julapI,P_doseI          128   100.000000                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+  P_julapI,P_doseI          138   30.0000000                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+  P_julapI,P_doseI          148   30.0000000                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+  P_julapI,P_doseI          158   30.0000000                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+  P_julapI,P_doseI          168   30.0000000                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+  P_julapI,P_doseI          178   30.0000000                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+  P_julapI,P_doseI          183   30.0000000                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+  P_julapI,P_doseI          193   30.0000000                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+  P_julapI,P_doseI          198   30.0000000                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+  P_julapI,P_doseI          203   30.0000000                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+  P_julapI,P_doseI          208   30.0000000                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+  P_julapI,P_doseI          213   30.0000000                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+  P_julapI,P_doseI          218   30.0000000                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+  P_julapI,P_doseI          223   30.0000000                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+  P_julapI,P_doseI          228   30.0000000                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+  P_julapI,P_doseI          233   30.0000000                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+  P_julapI,P_doseI          243   30.0000000                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+  P_julapI,P_doseI          253   30.0000000                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
  P_codlocirrig            1
- P_profmes   160.000000    
- P_concirr   0.109999999    
+ P_profmes   120.000000    
+ P_concirr    0.00000000    
  napN            2
-  P_julapN,P_doseN,P_engrais          192   15.0000000               3                                                                                                                                                                                                                                                                                                                                                                                                                                               
- P_engamm   1.00000000    
- P_orgeng   38.0000000    
- P_deneng  0.100000001    
- P_voleng  0.349999994    
-  P_julapN,P_doseN,P_engrais          213   23.0000000               3                                                                                                                                                                                                                                                                                                                                                                                                                                               
- P_engamm   1.00000000    
- P_orgeng   38.0000000    
- P_deneng  0.100000001    
- P_voleng  0.349999994    
+  P_julapN,P_doseN,P_engrais          168   100.000000               2                                                                                                                                                                                                                                                                                                                                                                                                                                               
+ P_engamm  0.750000000    
+ P_orgeng   42.0000000    
+ P_deneng  0.129999995    
+ P_voleng  0.300000012    
+  P_julapN,P_doseN,P_engrais          213   50.0000000               2                                                                                                                                                                                                                                                                                                                                                                                                                                               
+ P_engamm  0.750000000    
+ P_orgeng   42.0000000    
+ P_deneng  0.129999995    
+ P_voleng  0.300000012    
  P_codlocferti            1
- P_irecbutoir          365
+ P_irecbutoir          300
  P_ressuite straw+roots
  P_code_autoressuite            2
  harvest = all plant harvest
      harvest at physiological maturity
  P_codejourdes           2
- In CAS simulation mode, the codebeso has to be set to 2. It is forced.
     
  PLANT PARAMETERS NEEDED FOR THE SIMULATION
  *********************************************************
- P_fplt sorgho_trop_plt.xml
- P_codeplante sor
+ P_fplt proto_rice_plt.xml
+ P_codeplante riz
  monocotyledon            1
- P_tdmin    10.0000000    
- P_tdmax    40.0000000    
+ P_tdmin    12.0000000    
+ P_tdmax    30.0000000    
  P_codetemp            2
  driving temperature, crop
- P_coeflevamf    1.44000006    
- P_coefamflax    1.07000005    
+ P_coeflevamf    1.00000000    
+ P_coefamflax    1.00000000    
  P_coeflaxsen    1.00000000    
- P_coefsenlan    1.10000002    
- P_coeflevdrp    1.13000000    
- P_coefdrpmat    1.02999997    
+ P_coefsenlan    1.00000000    
+ P_coeflevdrp    1.00000000    
+ P_coefdrpmat    1.00000000    
  P_coefflodrp    1.00000000    
- P_codephot            1
- P_codephot_part            2
- P_tgmin    8.00000000    
- P_codeperenne            1
- annual
- germination or latency = yes 
- P_stpltger    35.0000000    
- plantlet growth = hypocotyle growth 
- P_belong    2.19999999E-02
- P_celong    2.03999996    
- P_elmax    8.00000000    
- P_nlevlim1           10
- P_nlevlim2           50
- P_vigueurbat   1.00000000    
- P_phyllotherme    70.0000000    
- P_laicomp    1.00000000    
- P_tcmin    11.0000000    
- P_tcmax    40.0000000    
- P_tcxstop    100.000000    
- leaf dynamics = LAI 
- P_vlaimax    2.09999990    
- P_pentlaimax    5.50000000    
- P_udlaimax    2.79999995    
- P_ratiodurvieI   0.800000012    
- P_ratiosen   0.639999986    
- P_abscission    0.00000000    
- P_parazofmorte    13.0000000    
- P_innturgmin   -1.00000000    
- P_dlaimin    7.99999980E-04
- LAI calculation option, LAInet=LAIbrut-senes 
- P_durviesupmax   0.400000006    
- effect of photoperiod on senescence
- P_phobasesen    12.0000000    
- P_dltamsmaxsen    9.99999978E-03
- P_dltamsminsen   0.150000006    
- P_alphaphot    200.000000    
- p%P_codetransrad           1
- p%P_codebeso           2
- temin=tcmin and temax=tcmax
- P_temax    45.0000000    
- P_teoptbis    25.0000000    
- P_efcroijuv    1.50000000    
- P_efcroiveg    3.20000005    
- P_efcroirepro    3.20000005    
- P_coefmshaut    5.00000000    
- slamin    180.000000    
- P_envfruit   0.100000001    
- P_sea    0.00000000    
- P_code_acti_reserve           2
- growing dynamics = determinate growing plant
- P_cgrain    4.50000018E-02
- P_cgrainv0    0.00000000    
- P_irazomax    1.00000000    
- unit Harvest Index = days
- P_irmax   0.509999990    
- P_sensanox    1.00000000    
- P_stoprac lax
- P_sensrsec    0.00000000    
- P_contrdamax   0.300000012    
- P_rayon    1.99999996E-02
- root driving temperature = soil
- root density = true density
- P_draclong    100.000000    
- P_debsenrac    1500.00000    
- P_lvfront    1.99999996E-02
- P_longsperac    9091.00000    
- P_tletale   -5.00000000    
- P_tdebgel    0.00000000    
- plantlet or emergence frost
- P_nbfgellev            3
- P_tgellev90   -4.00000000    
- leaf frost at juvenile phase (till AMF)
- P_tgeljuv90   -4.00000000    
- leaf frost at adult phase
- P_tgelveg90   -4.00000000    
- flower/fruit frost (from FLO)
- P_tgelflo10    0.00000000    
- P_tgelflo90   -1.00000000    
- P_h2ofeuilverte   0.899999976    
- P_h2ofeuiljaune   0.150000006    
- P_h2otigestruc   0.600000024    
- P_h2oreserve   0.699999988    
- P_h2ofrvert   0.400000006    
- P_tempdeshyd    4.99999989E-03
- water requirements = resistance approach
- P_rsmin    20.0000000    
- P_Vmax1    9.89999995E-03
- P_Kmabs1    50.0000000    
- P_Vmax2   0.100000001    
- P_Kmabs2    40000.0000    
- P_adil    3.50000000    
- P_bdil   0.370000005    
- P_masecNmax    2.00000000    
- P_INNmin   0.300000012    
- P_INNimin  -0.500000000    
- P_inngrain1   0.300000012    
- P_inngrain2    1.00000000    
- P_bdilmax   0.370000005    
- calculation nitrogen requirements = dense canopies (initial)
- P_adilmax    5.44000006    
- nitrogen effect on nb fruit and grain
- stadebbchplt00
- stadebbchger05
- stadebbchlev09
- stadebbchamf35
- stadebbchlax55
- stadebbchsen85
- stadebbchflo65
- stadebbchdrp71
- stadebbchdebdes75
- stadebbchmat89
- stadebbchrec99
- P_codevar Tiandougou
- P_stlevamf    380.000000    
- P_stamflax    700.000000    
- P_stlevdrp    1180.00000    
- P_stflodrp    70.0000000    
- P_stdrpdes    600.000000    
- P_sensiphot   0.600000024    
- P_phobase    14.0000000    
- P_phosat    12.7500000    
- P_adens  -0.500000000    
- P_bdens    6.00000000    
- P_hautbase    0.00000000    
- P_hautmax    2.50000000    
- P_khaut  0.699999988    
- P_durvieF    280.000000    
- P_dlaimaxbrut    1.27999997E-03
- P_innsen   0.280000001    
- P_rapsenturg   0.500000000    
- radiation interception = Beers law
- P_extin   0.699999988    
- P_temin    11.0000000    
- P_teopt    25.0000000    
- P_slamax    250.000000    
- P_tigefeuil    1.00000000    
- P_pgrainmaxi    2.70000007E-02
- P_vitpropsucre    0.00000000    
- P_vitprophuile    0.00000000    
- P_vitirazo    2.88699996E-02
- P_deshydbase    8.00000038E-03
- P_nbjgrain           10
- P_nbgrmin    0.00000000    
- P_nbgrmax    60000.0000    
- P_stdrpmat    400.000000    
- P_vitircarb    9.99999978E-03
- P_croirac   0.200000003    
- P_tgellev10   -1.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000    
- P_tgeljuv10   -1.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000    
- P_tgelveg10   -1.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000    
- P_psisto    25.0000000    
- P_psiturg    15.0000000    
- P_swfacmin  0.100000001    
- with the option laibrut the residuel lai disappears entirely on the first day of senescence
- no bud break if no dormancy
-   
- TECHNICAL PARAMETERS NEEDED FOR THE SIMULATION, file: fictec2.txt
- *********************************************************
- P_nbjtrav            1
- P_jultrav P_profres P_proftrav 
-    172      35.      35.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
- P_nbjres            1
- P_julres P_coderes P_qres  P_Crespc  P_CsurNres P_Nminres  P_eaures
-    135      1      1.5     40.0     53.0      0.0      0.0                                                                                                                                                                                                                                                                                                                                                                                                                                                          
- P_iplt0          177
- P_profsem    5.00000000    
- P_densitesem    6.00000000    
- P_variete            1
- P_interrang   0.699999988    
- P_orientrang    0.00000000    
- P_code_strip            1
- P_nrow            2
- P_effirr    1.00000000    
- nap            0
- P_codlocirrig            1
- P_profmes   160.000000    
- P_concirr   0.109999999    
- napN            2
-  P_julapN,P_doseN,P_engrais          192   15.0000000               3                                                                                                                                                                                                                                                                                                                                                                                                                                               
- P_engamm   1.00000000    
- P_orgeng   38.0000000    
- P_deneng  0.100000001    
- P_voleng  0.349999994    
-  P_julapN,P_doseN,P_engrais          213   23.0000000               3                                                                                                                                                                                                                                                                                                                                                                                                                                               
- P_engamm   1.00000000    
- P_orgeng   38.0000000    
- P_deneng  0.100000001    
- P_voleng  0.349999994    
- P_codlocferti            1
- P_irecbutoir          365
- P_ressuite straw+roots
- P_code_autoressuite            2
- harvest = all plant harvest
-     harvest at physiological maturity
- P_codejourdes           2
- In CAS simulation mode, the codebeso has to be set to 2. It is forced.
-    
- PLANT PARAMETERS NEEDED FOR THE SIMULATION
- *********************************************************
- P_fplt corn_trop_plt.xml
- P_codeplante mai
- monocotyledon            1
- P_tdmin    6.00000000    
- P_tdmax    32.0000000    
- P_codetemp            1
- driving temperature, air 
- day temperature
  P_codephot            2
- P_tgmin    8.00000000    
+ P_tgmin    0.00000000    
  P_codeperenne            1
  annual
  germination or latency = yes 
- P_stpltger    35.0000000    
+ P_stpltger    50.0000000    
  plantlet growth = hypocotyle growth 
- P_belong    2.19999999E-02
- P_celong    2.03999996    
- P_elmax    8.00000000    
- P_nlevlim1           50
- P_nlevlim2           50
+ P_belong    6.00000005E-03
+ P_celong    2.00000000    
+ P_elmax    6.50000000    
+ P_nlevlim1           10
+ P_nlevlim2           20
  P_vigueurbat   1.00000000    
- P_phyllotherme    70.0000000    
- P_laicomp    0.00000000    
- P_tcmin    8.00000000    
- P_tcmax    32.0000000    
- P_tcxstop    35.0000000    
+ P_phyllotherme    120.000000    
+ P_laicomp   0.305000007    
+ P_tcmin    12.0000000    
+ P_tcmax    30.0000000    
+ P_tcxstop    36.0000000    
  leaf dynamics = LAI 
  P_vlaimax    2.20000005    
  P_pentlaimax    5.50000000    
  P_udlaimax    3.00000000    
- P_ratiodurvieI    1.00000000    
- P_ratiosen   0.800000012    
+ P_ratiodurvieI   0.800000012    
+ P_ratiosen   0.280000001    
  P_abscission    0.00000000    
  P_parazofmorte    13.0000000    
- P_innturgmin   0.300000012    
+ P_innturgmin   0.100000001    
  P_dlaimin    0.00000000    
  LAI calculation option, LAInet=LAIbrut-senes 
  P_durviesupmax   0.400000006    
- p%P_codetransrad           2
+ p%P_codetransrad           1
  p%P_codebeso           2
- P_adfol    1.00000000    
- P_dfolbas    5.00000000    
- P_dfolhaut    5.00000000    
- P_forme            1
- P_rapforme    4.53999996    
  temin=tcmin and temax=tcmax
- P_temax    32.0000000    
- P_teoptbis    32.0000000    
- P_efcroijuv    1.89999998    
- P_efcroiveg    3.79999995    
- P_efcroirepro    3.79999995    
+ P_temax    38.1483002    
+ P_teoptbis    27.4022999    
+ P_efcroijuv    2.95420003    
+ P_efcroiveg    3.20000005    
+ P_efcroirepro    2.79999995    
  P_coefmshaut    0.00000000    
  slamin    180.000000    
- P_envfruit   0.100000001    
- P_sea    100.000000    
+ P_envfruit   0.200000003    
+ P_sea    0.00000000    
  P_code_acti_reserve           2
  growing dynamics = determinate growing plant
- P_cgrain    5.00000007E-02
- P_cgrainv0   0.111000001    
- P_irazomax   0.565999985    
+ P_cgrain    3.55000012E-02
+ P_cgrainv0    0.00000000    
+ P_irazomax    1.00000000    
  unit Harvest Index = degree days
  thermal stress on filling
- P_tminremp    0.00000000    
- P_tmaxremp    40.0000000    
+ P_tminremp    12.0000000    
+ P_tmaxremp    36.0000000    
  P_sensanox    0.00000000    
- P_stoprac lax
- P_sensrsec    0.00000000    
- P_contrdamax    0.00000000    
+ P_stoprac sen
+ P_sensrsec   0.800000012    
+ P_contrdamax   0.340000004    
  P_rayon    1.99999996E-02
  root driving temperature = soil
- root density = true density
- P_draclong    5000.00000    
- P_debsenrac    1500.00000    
- P_lvfront    5.00000007E-02
- P_longsperac    11000.0000    
- P_tletale   -5.00000000    
- P_tdebgel    0.00000000    
+ root density = standard profile
+ P_zlabour    25.0000000    
+ P_zpente    28.0000000    
+ P_zprlim    30.0000000    
+ P_tletale   -25.0000000    
+ P_tdebgel   -4.00000000    
+ plantlet or emergence frost
+ P_nbfgellev            2
+ P_tgellev90   -20.0000000    
+ leaf frost at juvenile phase (till AMF)
+ P_tgeljuv90   -20.0000000    
+ leaf frost at adult phase
+ P_tgelveg90   -10.0000000    
+ flower/fruit frost (from FLO)
+ P_tgelflo10   -4.50000000    
+ P_tgelflo90   -6.50000000    
  P_h2ofeuilverte   0.899999976    
  P_h2ofeuiljaune   0.150000006    
  P_h2otigestruc   0.600000024    
@@ -455,144 +267,105 @@
  P_h2ofrvert   0.400000006    
  P_tempdeshyd    4.99999989E-03
  water requirements = resistance approach
- P_rsmin   -999.000000    
+ P_rsmin    200.000000    
  P_Vmax1    1.79999997E-03
  P_Kmabs1    50.0000000    
- P_Vmax2    1.70000009E-02
+ P_Vmax2    5.00000007E-02
  P_Kmabs2    25000.0000    
- P_adil    3.50000000    
- P_bdil   0.370000005    
- P_masecNmax    1.00000000    
+ P_adil    5.34999990    
+ P_bdil   0.439999998    
+ P_masecNmax    1.53999996    
  P_INNmin   0.300000012    
  P_INNimin  -0.500000000    
- P_inngrain1    2.00000000    
- P_inngrain2    2.00000000    
- P_bdilmax   0.370000005    
- calculation nitrogen requirements = isolated plants (new calculation)
- P_Nmeta    4.80000019    
- P_masecmeta    3.99999991E-02
- P_Nreserve    1.50000000    
+ P_inngrain1    0.00000000    
+ P_inngrain2    0.00000000    
+ P_bdilmax   0.439999998    
+ calculation nitrogen requirements = dense canopies (initial)
+ P_adilmax    8.50000000    
  nitrogen effect on nb fruit and grain
- stadebbchplt00
- stadebbchger05
- stadebbchlev09
- stadebbchamf35
- stadebbchlax55
- stadebbchsen85
- stadebbchflo65
- stadebbchdrp71
- stadebbchdebdes75
- stadebbchmat89
  stadebbchrec99
- P_codevar banguy
- P_stlevamf    280.000000    
- P_stamflax    465.000000    
- P_stlevdrp    1015.00000    
- P_stflodrp    250.000000    
- P_stdrpdes    650.000000    
- P_adens  -0.119999997    
- P_bdens    5.00000000    
+ P_codevar cigalon
+ P_stlevamf    430.000000    
+ P_stamflax    310.000000    
+ P_stlevdrp    740.000000    
+ P_stflodrp    0.00000000    
+ P_stdrpdes    250.000000    
+ P_adens   -1.00000000    
+ P_bdens    34.4987984    
  P_hautbase    0.00000000    
- P_hautmax    2.50000000    
+ P_hautmax    1.00000000    
  P_khaut  0.699999988    
- P_durvieF    200.000000    
- P_dlaimaxbrut    1.59999996E-03
- P_innsen    1.00000000    
- P_rapsenturg    0.00000000    
- P_ktrou   0.699999988    
- P_temin    8.00000000    
- P_teopt    24.0000000    
- P_slamax    250.000000    
- P_tigefeuil   0.250000000    
- P_pgrainmaxi   0.280000001    
+ P_durvieF    120.000000    
+ P_dlaimaxbrut    6.00000028E-04
+ P_innsen   0.349999994    
+ P_rapsenturg   0.500000000    
+ radiation interception = Beers law
+ P_extin   0.500000000    
+ P_temin    11.7121000    
+ P_teopt    20.2656994    
+ P_slamax    500.000000    
+ P_tigefeuil    3.50000000    
+ P_pgrainmaxi    2.85999998E-02
  P_vitpropsucre    0.00000000    
  P_vitprophuile    0.00000000    
- P_vitirazo    1.09999999E-02
+ P_vitirazo    1.70000009E-02
  P_deshydbase    8.00000038E-03
- P_nbjgrain           20
- P_nbgrmin    1500.00000    
- P_nbgrmax    4500.00000    
- P_stdrpmat    780.000000    
- P_vitircarbT    1.09999999E-03
+ P_nbjgrain           30
+ P_nbgrmin    5000.00000    
+ P_nbgrmax    30000.0000    
+ P_stdrpmat    460.000000    
+ P_vitircarbT    1.20000006E-03
  P_croirac   0.150000006    
- P_psisto    12.0000000    
- P_psiturg    5.00000000    
+ P_tgellev10   -4.00000000      -4.00000000      -4.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000    
+ P_tgeljuv10   -10.0000000      -10.0000000      -10.0000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000    
+ P_tgelveg10   -4.50000000      -4.50000000      -4.50000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000    
+ P_psisto    20.0000000    
+ P_psiturg    4.00000000    
  P_swfacmin  0.100000001    
  with the option laibrut the residuel lai disappears entirely on the first day of senescence
  no bud break if no dormancy
  ******** file station ********
- P_zr   4.00000000    
+ P_zr   2.50000000    
  P_NH3ref   0.00000000    
  P_concRR   1.99999996E-02
  P_ra   50.0000000    
  P_aangst  0.180000007    
  P_bangst  0.620000005    
  P_albveg  0.230000004    
- P_latitude   12.5799999    
+ P_latitude   43.0000000    
  P_patm   1000.00000    
  P_corecTrosee   1.00000000    
- P_codeclichange           2
- P_codeetp           3
- P_codeetp Shuttleworth and Wallace
+ P_codeclichange           1
+ P_codeetp           1
+ P_codeetp Penman reading
  P_alphapt   1.25999999    
  P_codernet           2
  P_codecaltemp           1
- P_codaltitude           2
- P_altistation   440.000000    
- P_altisimul   800.000000    
- P_codadret           1
- P_gradtn -0.500000000    
- P_gradtx -0.550000012    
- P_altinversion   500.000000    
- P_gradtninv   1.29999995    
- P_cielclair  0.800000012    
- P_ombragetx  -1.39999998    
- P_alphaCO2   1.05999994    
+ P_codaltitude           1
+ In the station file you have not activated the Shuttleworth and Wallace calculation option of the Potential EvapoTranspiration.'Thus, you have to choose the crop coefficient approach for water requirements calculation in your plant file (codebeso should be 1)
  
  SOIL PARAMETERS 
  *********************************************************
  P_typsol          P_argi      P_Norg   P_profhum      P_calc        P_pH  P_concseuil    P_albedo        P_q0  P_ruisolnu  P_obstarac  P_pluiebat P_mulchbat      P_zesx      P_cfes   P_z0solnu  P_CsurNsol  P_finert  P_penterui
- 02V2D1             10.70        0.01       35.00        0.00        5.80        0.00        0.30       20.00        0.00      200.00       50.00        0.50       60.00        5.00        0.01       13.00        0.00        0.33                      
+ soil_rice          20.00        0.10       20.00       32.50        5.00        0.00        0.25       11.00        0.00       50.00       50.00        0.50       60.00        5.00        0.01        0.00        0.65        0.33                      
    P_codecailloux P_codemacropor P_codefente P_codrainage P_coderemontcap P_codenitrif P_codedenit
  (1 active , 2 inactive)
-                2               2               2               2               2               1               2                                                                                                                                          
+                2               1               2               2               2               2               2                                                                                                                                          
    P_profimper P_ecartdrain P_ksol P_profdrain P_capiljour P_humcapil P_profdenit P_vpotdenit
-         10.00         0.00         0.00         0.00         0.00        10.00        20.00        16.00                                                                                                                                                  
+         10.00         0.00         0.00         0.00         0.00        10.00        20.00         1.00                                                                                                                                                  
           P_epc        P_hccf       P_hminf         P_daf      P_cailloux  P_typecailloux     P_infil         P_epd
-          15.00         13.70          4.80          1.16          0.00             1         30.00            10                                                                                                                                          
-          20.00         19.00          7.80          1.29          0.00             1         30.00            10                                                                                                                                          
-          20.00         19.00          8.20          1.15          0.00             1         30.00            10                                                                                                                                          
-          30.00         19.00         10.80          1.15          0.00             1         30.00            10                                                                                                                                          
-          70.00         19.00         10.80          1.20          0.00             1         10.00            10                                                                                                                                          
- P_hminn  0.300000012    
- P_hoptn  0.899999976    
- P_fnx  0.800000012    
- P_pHminnit   4.00000000    
- P_pHmaxnit   7.19999981    
- P_tnitmin   5.00000000    
- P_tnitopt   30.0000000    
- P_tnitmax   58.0000000    
- NH4initf1   0.00000000    
- NH4initf2   0.00000000    
- NH4initf3   0.00000000    
- NH4initf4   0.00000000    
- NH4initf5   0.00000000    
+          20.00         15.00          7.00          1.40          0.00             1         10.00             1                                                                                                                                          
+           5.00         15.00          7.00          1.60          0.00             1          0.01             1                                                                                                                                          
+           0.00          0.00          0.00          0.00          0.00             1         50.00             1                                                                                                                                          
+           0.00          0.00          0.00          0.00          0.00             1         50.00             1                                                                                                                                          
+           0.00          0.00          0.00          0.00          0.00             1         50.00             1                                                                                                                                          
     
  Parameters of param_newform
  *********************************************
  calculation of hourly dew temperature : linear interpolation(actual calculation)
  P_code_humirac           1
  obstarac too big : obstarac = soil depth
- 
- *********************************************
- INITIALISATIONS PLANT
- codeinstal :            0
- masec(0) :    0.00000000       0.00000000       0.00000000    
- lai(0) :    0.00000000       0.00000000       0.00000000    
- P_QNplantenp0 :    0.00000000       0.00000000       0.00000000    
- P_zrac0 :    0.00000000    
- P_stade0 : snu
- INN0 :    0.00000000       0.00000000       0.00000000    
+ zesx > profsol then zesx=profsol 
  
  *********************************************
  INITIALISATIONS PLANT
@@ -604,16 +377,10 @@
  P_stade0 : snu
  INN0 :    0.00000000       0.00000000       0.00000000    
  Attention humcapil  > hcc : risk of excess water
- Depth of measurement (profmes) > soil depth (profsol). Then profmes = profsol =         155
- For intercrop radiation interception is done with radiation transfer
- Depth of measurement (profmes) > soil depth (profsol). Then profmes = profsol =         155
- For intercrop radiation interception is done with radiation transfer
+ Depth of measurement (profmes) > soil depth (profsol). Then profmes = profsol =          25
  problem with your profile output dates --> they have been recalculated
- Initial values over the soil depth (155 cm):     SWC = 197. mm     SMN =  8.0 kg N/ha
- crop height A > crop height P          56
- crop height A > crop height P         146
- crop height A > crop height P         147
+ Initial values over the soil depth ( 25 cm):     SWC =  54. mm     SMN = 20.0 kg N/ha
  Program end ... 
  -----------------------------------------------------------------------------------------
- Stics history file end End date: 2026/04/29-18:06:41
+ Stics history file end End date: 2026/05/21-15:26:58
  -----------------------------------------------------------------------------------------

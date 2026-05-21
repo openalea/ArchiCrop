@@ -1,7 +1,7 @@
 nbinterventions
 1
 julres coderes qres Crespc CsurNres Nminres eaures 
-135 1 1.5 40 53 0 0 
+0 1 1.00 42.00 60.00 0.00 0.00 
 code_auto_profres
 1
 resk
@@ -11,21 +11,21 @@ resz
 nbinterventions
 1
 jultrav profres proftrav 
-172 0.00 35 
+0 0.00 20.00 
 iplt0
-177
+124
 profsem
-5.00000
+1.00000
 densitesem
-6
+253.00000
 variete
-2
-codetradtec
 1
+codetradtec
+2
 interrang
-0.4
+2.00000
 orientrang
-1.57
+0.00000
 codedecisemis
 2
 nbjmaxapressemis
@@ -39,25 +39,25 @@ eau_mini_decisemis
 humirac_decisemis
 0.75
 codestade
-1
+2
 ilev
-181
+131
 iamf
-999
+193
 ilax
-999
+207
 isen
 999
 ilan
 999
 iflo
-999
+207
 idrp
-999
+207
 imat
-999
+249
 irec
-999
+266
 effirr
 1.00000
 codecalirrig
@@ -75,21 +75,59 @@ datedeb_irrigauto
 datefin_irrigauto
 0
 stage_start_irrigauto
-null
+0
 stage_end_irrigauto
-null
+0
 codedateappH2O
 2
 nbinterventions
-0
+19
+julapI_or_sum_upvt amount 
+118 20.00 
+julapI_or_sum_upvt amount 
+128 100.00 
+julapI_or_sum_upvt amount 
+138 30.00 
+julapI_or_sum_upvt amount 
+148 30.00 
+julapI_or_sum_upvt amount 
+158 30.00 
+julapI_or_sum_upvt amount 
+168 30.00 
+julapI_or_sum_upvt amount 
+178 30.00 
+julapI_or_sum_upvt amount 
+183 30.00 
+julapI_or_sum_upvt amount 
+193 30.00 
+julapI_or_sum_upvt amount 
+198 30.00 
+julapI_or_sum_upvt amount 
+203 30.00 
+julapI_or_sum_upvt amount 
+208 30.00 
+julapI_or_sum_upvt amount 
+213 30.00 
+julapI_or_sum_upvt amount 
+218 30.00 
+julapI_or_sum_upvt amount 
+223 30.00 
+julapI_or_sum_upvt amount 
+228 30.00 
+julapI_or_sum_upvt amount 
+233 30.00 
+julapI_or_sum_upvt amount 
+243 30.00 
+julapI_or_sum_upvt amount 
+253 30.00 
 codlocirrig
 1
 locirrig
 0
 profmes
-160
+120.00000
 concirr
-0.11000
+0.00000
 codedateappN
 2
 codefracappN
@@ -99,15 +137,15 @@ Qtot_N
 nbinterventions
 2
 julapN_or_sum_upvt absolute_value/% engrais 
-192 15.00 3 
+168 100.00 2 
 julapN_or_sum_upvt absolute_value/% engrais 
-213 23 3 
+213 50.00 2 
 codlocferti
 1
 locferti
 0
 irecbutoir
-365
+300
 ressuite
 straw+roots
 code_autoressuite
@@ -127,7 +165,7 @@ codeaumin
 h2ograinmin
 0.80000
 h2ograinmax
-0.10
+0.32000
 sucrerec
 0.25000
 CNgrainrec
