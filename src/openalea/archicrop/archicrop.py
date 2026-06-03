@@ -32,7 +32,7 @@ class ArchiCrop:
                  f2=0.92,
                  stem_q=1,
                  rmax=0.8,
-                 skew=0.0005,
+                 skew=-5,
                  phyllotactic_angle=137.5,
                  phyllotactic_deviation=0,
                  phyllochron=40,

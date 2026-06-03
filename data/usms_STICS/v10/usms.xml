@@ -86,7 +86,7 @@
         <plante dominance="1">
             <fplt>wheat_plt.xml</fplt>
             <ftec>Ble_tec.xml</ftec>
-            <flai>ble.lai</flai>
+            <flai>null</flai>
             <fobs>wheat.obs</fobs>
         </plante>
         <plante dominance="2">
@@ -207,6 +207,102 @@
             <fplt>proto_rice_plt.xml</fplt>
             <ftec>proto_rice_tec.xml</ftec>
             <flai>null</flai>
+            <fobs>null</fobs>
+        </plante>
+        <plante dominance="2">
+            <fplt>null</fplt>
+            <ftec>null</ftec>
+            <flai>null</flai>
+            <fobs>null</fobs>
+        </plante>
+    </usm>
+    <usm nom="sorghum_ntarla_1984">
+        <datedebut>135</datedebut>
+        <datefin>365</datefin>
+        <finit>02NT18SorgV2D1_ini.xml</finit>
+        <nomsol>02V2D1</nomsol>
+        <fstation>StationNtarla_sta.xml</fstation>
+        <fclim1>Ntarla.1984</fclim1>
+        <fclim2>Ntarla.1984</fclim2>
+        <culturean>1</culturean>
+        <nbplantes>1</nbplantes>
+        <codesimul>0</codesimul>
+        <plante dominance="1">
+            <fplt>sorgho_imp_M_v10_plt.xml</fplt>
+            <ftec>02NT18SorgV2D1_tec.xml</ftec>
+            <flai>mais.lai</flai>
+            <fobs>null</fobs>
+        </plante>
+        <plante dominance="2">
+            <fplt>null</fplt>
+            <ftec>null</ftec>
+            <flai>null</flai>
+            <fobs>null</fobs>
+        </plante>
+    </usm>
+    <usm nom="sorghum_ntarla_1986">
+        <datedebut>135</datedebut>
+        <datefin>365</datefin>
+        <finit>02NT18SorgV2D1_ini.xml</finit>
+        <nomsol>02V2D1</nomsol>
+        <fstation>StationNtarla_sta.xml</fstation>
+        <fclim1>Ntarla.1986</fclim1>
+        <fclim2>Ntarla.1986</fclim2>
+        <culturean>1</culturean>
+        <nbplantes>1</nbplantes>
+        <codesimul>0</codesimul>
+        <plante dominance="1">
+            <fplt>sorgho_imp_M_v10_plt.xml</fplt>
+            <ftec>02NT18SorgV2D1_tec.xml</ftec>
+            <flai>mais.lai</flai>
+            <fobs>null</fobs>
+        </plante>
+        <plante dominance="2">
+            <fplt>null</fplt>
+            <ftec>null</ftec>
+            <flai>null</flai>
+            <fobs>null</fobs>
+        </plante>
+    </usm>
+    <usm nom="sorghum_ntarla_1987">
+        <datedebut>135</datedebut>
+        <datefin>365</datefin>
+        <finit>02NT18SorgV2D1_ini.xml</finit>
+        <nomsol>02V2D1</nomsol>
+        <fstation>StationNtarla_sta.xml</fstation>
+        <fclim1>Ntarla.1987</fclim1>
+        <fclim2>Ntarla.1987</fclim2>
+        <culturean>1</culturean>
+        <nbplantes>1</nbplantes>
+        <codesimul>0</codesimul>
+        <plante dominance="1">
+            <fplt>sorgho_imp_M_v10_plt.xml</fplt>
+            <ftec>02NT18SorgV2D1_tec.xml</ftec>
+            <flai>mais.lai</flai>
+            <fobs>null</fobs>
+        </plante>
+        <plante dominance="2">
+            <fplt>null</fplt>
+            <ftec>null</ftec>
+            <flai>null</flai>
+            <fobs>null</fobs>
+        </plante>
+    </usm>
+    <usm nom="sorghum_ntarla_2024">
+        <datedebut>135</datedebut>
+        <datefin>365</datefin>
+        <finit>02NT18SorgV2D1_ini.xml</finit>
+        <nomsol>02V2D1</nomsol>
+        <fstation>StationNtarla_sta.xml</fstation>
+        <fclim1>Ntarla.2024</fclim1>
+        <fclim2>Ntarla.2024</fclim2>
+        <culturean>1</culturean>
+        <nbplantes>1</nbplantes>
+        <codesimul>0</codesimul>
+        <plante dominance="1">
+            <fplt>sorgho_imp_M_v10_plt.xml</fplt>
+            <ftec>02NT18SorgV2D1_tec.xml</ftec>
+            <flai>mais.lai</flai>
             <fobs>null</fobs>
         </plante>
         <plante dominance="2">

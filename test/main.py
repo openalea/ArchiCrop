@@ -115,9 +115,9 @@ def f_2(id_sim, daily_dynamics, param_sets, density, inter_row, light_inter=Fals
     ds = xr.merge([ds, ds_archi]) #, ds_filters])
 
     # Save the dataset to a NetCDF file
-    today_str = date.today().strftime("%Y-%m-%d")
-    os.makedirs(f"{today_str}", exist_ok=True)  # noqa: PTH103
-    ds.to_netcdf(f"{today_str}/results_{id_sim}.nc")
+    
+    os.makedirs(f"", exist_ok=True)  
+    ds.to_netcdf(f"results_{id_sim}.nc")
 
     # ds.to_netcdf(f"results_{id_sim}.nc")
     
@@ -242,8 +242,8 @@ if __name__ == '__main__':
         end_time = t.time()
         print(f"Time taken with {n_cpu} CPU: {end_time - start_time:.2f} seconds")
 
-    today_str = date.today().strftime("%Y-%m-%d")
-    directory = f"{today_str}/"
+    
+    directory = f""
     files = [directory+f for f in os.listdir(directory) if f.startswith("results_") and f.endswith(".nc")]
     ds = read_and_merge_netcdf_files(files)
 

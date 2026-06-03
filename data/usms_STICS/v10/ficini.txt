@@ -2,22 +2,22 @@
 1
 :plante:
 snu
-0
-0
-0
+0.0
+0.0
+0.0
 code_acti_reserve
 2
 0
 0
 0
 0
-0
-0
-0
+0.0
+0.0
+0.0
 :densinitial:
-0 0 0 0 0 
+0.0 0.0 0.0 0.0 0.0 
 :plante:
-
+snu
 
 
 
@@ -33,11 +33,11 @@ code_acti_reserve
 :densinitial:
      
 :Hinitf:
-0 0 0 0 0 
+2.92 2.55 2.40 5.44 19.12 
 :NO3initf:
-10 10 0 0 0 
+8.0 0.0 0.0 0.0 0.0 
 :NH4initf:
-0 0 0 0 0 
+0.0 0.0 0.0 0.0 0.0 
 :snow:
 Sdepth0
 0.0

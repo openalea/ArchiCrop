@@ -3,6 +3,7 @@ from __future__ import annotations
 import itertools
 import math
 import os
+import time
 from datetime import date
 
 import numpy as np
@@ -15,6 +16,26 @@ from .growth import dev_dist, demand_dist, demand_dist_bis
 from .light_it import light_interception
 from .stics_io import get_stics_data
 from .viability import compute_viable_params
+
+
+
+def compute_1_growing_plant(archi, d, daily_dynamics, leaf_area_plant_pot, height_canopy_pot, pot_factor=2):
+
+    archi['leaf_area'] = max(leaf_area_plant_pot)*pot_factor
+    archi['height'] = max(height_canopy_pot)*pot_factor
+    archi['plant_orientation'] = 0
+    archi['phyllochron'] = d[archi['nb_phy']][0][0]
+    archi['rmax'] = d[archi['nb_phy']][0][1]
+    archi['skew'] = -5
+
+    start = time.time()
+    plant = ArchiCrop(daily_dynamics=daily_dynamics, **archi)
+    plant.generate_potential_plant()
+    growing_plant = plant.grow_plant()
+    end = time.time()
+    print(f"Time for 1 simulation of {len(growing_plant)} days: {end-start}")
+
+    return growing_plant
 
 
 
@@ -420,9 +441,9 @@ def write_netcdf(filename: str, daily_dynamics: dict, params_sets: dict,
     ds = xr.merge([ds, ds_archi]) 
 
     # Save the dataset to a NetCDF file
-    today_str = date.today().strftime("%Y-%m-%d")
-    os.makedirs(dir+f"{today_str}", exist_ok=True)  # noqa: PTH103
-    ds.to_netcdf(dir+f"{today_str}/{filename}_{seed}.nc")
+    
+    os.makedirs(dir+f"", exist_ok=True)  
+    ds.to_netcdf(dir+f"{filename}_{seed}.nc")
 
 
 def concat_ds(files: list):

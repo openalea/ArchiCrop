@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 archi_maize = {
-    "nb_phy": 28, # number of phytomers on the main stem
+    "nb_phy": 20, # number of phytomers on the main stem
     "nb_short_phy": 5,
     "short_phy_len": 3,
     
@@ -25,7 +25,7 @@ archi_maize = {
 
     # blade curvature
     "insertion_angle": 45, # leaf blade insertion angle
-    "scurv": 0.3, #  relative position of inflexion point
+    "scurv": 0.6, #  relative position of inflexion point
     "curvature": 120, # leaf blade insertion-to-tip angle
     "phyllotactic_angle": 180, # phyllotactic angle
     "phyllotactic_deviation": 20, # half-deviation to phyllotactic angle
@@ -46,9 +46,9 @@ archi_maize = {
 
 
 archi_wheat = {
-    "nb_phy": 10, # number of phytomers on the main stem : [10,40] (Ndiaye et al., 2021; Lafarge and Tardieu, 2002; Clerget, 2008; Ganeme et al., 2022)
+    "nb_phy": 9, # number of phytomers on the main stem : [10,40] (Ndiaye et al., 2021; Lafarge and Tardieu, 2002; Clerget, 2008; Ganeme et al., 2022)
     "nb_short_phy": 5,
-    "short_phy_len": 3,
+    "short_phy_len": 1,
 
     # Stem
     "height": 90,
@@ -58,8 +58,8 @@ archi_wheat = {
 
     # Leaf area distribution along the stem
     "leaf_area": 1500,
-    "rmax": 0.83, # parameter for leaf area distribution along axis : [0.6,0.8] (Kaitaniemi et al., 1999; Welcker et al., )
-    "skew": 0.001, # parameter for leaf area distribution along axis : [0.0005,0.1] (Kaitaniemi et al., 1999; Welcker et al., )
+    "rmax": [0.7,1.0], # 0.83, # parameter for leaf area distribution along axis : [0.6,0.8] (Kaitaniemi et al., 1999; Welcker et al., )
+    "skew": [-10,0], # parameter for leaf area distribution along axis : [0.0005,0.1] (Kaitaniemi et al., 1999; Welcker et al., )
     
     # blade area 
     "wl": 0.079, # leaf blade width-to-length ratio : 
@@ -76,22 +76,22 @@ archi_wheat = {
     "phyllotactic_deviation": 90, # half-deviation to phyllotactic angle : [0,90] (Davis et al., 2024)
 
     # Development
-    "phyllochron": 40, # [30,70], # phyllochron, i.e. stem element appearance rate : [40,65 then x1.6-2.5] (Clerget, 2008)
+    "phyllochron": 44, # [30,70], # phyllochron, i.e. stem element appearance rate : [40,65 then x1.6-2.5] (Clerget, 2008)
     # "plastochron": [40,65], # plastochron, i.e. leaf blade appearance rate : [34,46 then 80-93] (Rami Kumar et al., 2009)
     "stem_duration": 1.6,
     "leaf_duration": 1.6,
 
     # Tillering
-    "nb_tillers": 6, # number of tillers : [0,6] (Lafarge et al., 2002)
+    "nb_tillers": 3, # number of tillers : [0,6] (Lafarge et al., 2002)
     "tiller_angle": 5,
     "tiller_delay": 1, # delay, as factor of phyllochron, between the appearance of a phytomer and the appearance of its tiller : [] ()
-    "reduction_factor": 0.8, # reduction factor between tillers of consecutive order : [0.8,1] ()
+    "reduction_factor": 1, # reduction factor between tillers of consecutive order : [0.8,1] ()
     "tropism_coefficient": 0.12
     }
 
 
 archi_rice = {
-    "nb_phy": 14, # number of phytomers on the main stem : [10,40] (Ndiaye et al., 2021; Lafarge and Tardieu, 2002; Clerget, 2008; Ganeme et al., 2022)
+    "nb_phy": 8, # number of phytomers on the main stem : [10,40] (Ndiaye et al., 2021; Lafarge and Tardieu, 2002; Clerget, 2008; Ganeme et al., 2022)
     "nb_short_phy": 5,
     "short_phy_len": 3,
 
@@ -103,8 +103,8 @@ archi_rice = {
 
     # Leaf area distribution along the stem
     "leaf_area": 3000,
-    "rmax": 0.78, # parameter for leaf area distribution along axis : [0.6,0.8] (Kaitaniemi et al., 1999; Welcker et al., )
-    "skew": 0.0001, # parameter for leaf area distribution along axis : [0.0005,0.1] (Kaitaniemi et al., 1999; Welcker et al., )
+    "rmax": [0.5,1.0], # 0.78, # parameter for leaf area distribution along axis : [0.6,0.8] (Kaitaniemi et al., 1999; Welcker et al., )
+    "skew": [-10,0], # parameter for leaf area distribution along axis : [0.0005,0.1] (Kaitaniemi et al., 1999; Welcker et al., )
     
     # blade area 
     "wl": 0.03, # leaf blade width-to-length ratio : [0.1, 0.12] ()
@@ -127,7 +127,7 @@ archi_rice = {
     "leaf_duration": 1.6,
 
     # Tillering
-    "nb_tillers": 19, # number of tillers : [0,6] (Lafarge et al., 2002)
+    "nb_tillers": 6, # number of tillers : [0,6] (Lafarge et al., 2002)
     "tiller_angle": 15,
     "tiller_delay": 1, # delay, as factor of phyllochron, between the appearance of a phytomer and the appearance of its tiller : [] ()
     "reduction_factor": 0.93, # reduction factor between tillers of consecutive order : [0.8,1] ()
@@ -136,7 +136,7 @@ archi_rice = {
 
 
 archi_sorghum = {
-    "nb_phy": 20, # number of phytomers on the main stem : [10,40] (Ndiaye et al., 2021; Lafarge and Tardieu, 2002; Clerget, 2008; Ganeme et al., 2022)
+    "nb_phy": 14, # number of phytomers on the main stem : [10,40] (Ndiaye et al., 2021; Lafarge and Tardieu, 2002; Clerget, 2008; Ganeme et al., 2022)
     "nb_short_phy": 5,
     "short_phy_len": 3,
 
@@ -172,7 +172,7 @@ archi_sorghum = {
     "leaf_duration": 1.6,
 
     # Tillering
-    "nb_tillers": 0,#2, # number of tillers : [0,6] (Lafarge et al., 2002)
+    "nb_tillers": 0, #2, # number of tillers : [0,6] (Lafarge et al., 2002)
     "tiller_angle": 20,
     "tiller_delay": 1, # delay, as factor of phyllochron, between the appearance of a phytomer and the appearance of its tiller : [] ()
     "reduction_factor": 0.5, # reduction factor between tillers of consecutive order : [0.8,1] ()
@@ -272,23 +272,23 @@ archi_sorghum_PMA = {
 
 
 archi_maize_theo = {
-    "nb_phy": 28, # number of phytomers on the main stem
-    "nb_short_phy": 5,
+    "nb_phy": 16, # number of phytomers on the main stem
+    "nb_short_phy": 4,
     "short_phy_len": 3,
     
     # Stem
     "height": 250,
     "stem_q": 1, # parameter for ligule height geometric distribution along axis
-    "diam_base": 5.0, # stem base diameter cm
-    "diam_top": 1.5, # stem top diameter cm
+    "diam_base": 4.0, # stem base diameter cm
+    "diam_top": 1.0, # stem top diameter cm
 
     # Leaf area distribution along the stem 
     "leaf_area": 12000,
-    "rmax": 0.65, # relative position of largest leaf on the stem
-    "skew": -8, # skewness for leaf area distribution along axis 
+    "rmax": 0.95, # relative position of largest leaf on the stem
+    "skew": -5, # skewness for leaf area distribution along axis 
 
     # blade area
-    "wl": 0.13, # leaf blade width-to-length ratio 
+    "wl": 0.12, # leaf blade width-to-length ratio 
     "klig": 0.6, # parameter for leaf blade shape
     "swmax": 0.55, # relative position of maximal blade width
     "f1": 0.64, # parameter for leaf blade shape
@@ -302,7 +302,7 @@ archi_maize_theo = {
     "phyllotactic_deviation": 20, # half-deviation to phyllotactic angle
 
     # Development
-    "phyllochron": 40, # phyllochron, i.e. stem element appearance rate
+    "phyllochron": 50, # phyllochron, i.e. stem element appearance rate
     # "plastochron": [30,60], # plastochron, i.e. leaf blade appearance rate
     "stem_duration": 1.6,
     "leaf_duration": 1.6,
@@ -329,7 +329,7 @@ archi_wheat_theo = {
 
     # Leaf area distribution along the stem
     "leaf_area": 1500,
-    "rmax": 0.83, # parameter for leaf area distribution along axis : [0.6,0.8] (Kaitaniemi et al., 1999; Welcker et al., )
+    "rmax": 0.75, # parameter for leaf area distribution along axis : [0.6,0.8] (Kaitaniemi et al., 1999; Welcker et al., )
     "skew": -3, # parameter for leaf area distribution along axis : [0.0005,0.1] (Kaitaniemi et al., 1999; Welcker et al., )
     
     # blade area 
@@ -347,13 +347,13 @@ archi_wheat_theo = {
     "phyllotactic_deviation": 90, # half-deviation to phyllotactic angle : [0,90] (Davis et al., 2024)
 
     # Development
-    "phyllochron": 40, # [30,70], # phyllochron, i.e. stem element appearance rate : [40,65 then x1.6-2.5] (Clerget, 2008)
+    "phyllochron": 44, # [30,70], # phyllochron, i.e. stem element appearance rate : [40,65 then x1.6-2.5] (Clerget, 2008)
     # "plastochron": [40,65], # plastochron, i.e. leaf blade appearance rate : [34,46 then 80-93] (Rami Kumar et al., 2009)
     "stem_duration": 1.6,
     "leaf_duration": 1.6,
 
     # Tillering
-    "nb_tillers": 6, # number of tillers : [0,6] (Lafarge et al., 2002)
+    "nb_tillers": 4, # number of tillers : [0,6] (Lafarge et al., 2002)
     "tiller_angle": 5,
     "tiller_delay": 1, # delay, as factor of phyllochron, between the appearance of a phytomer and the appearance of its tiller : [] ()
     "reduction_factor": 0.8, # reduction factor between tillers of consecutive order : [0.8,1] ()
@@ -362,7 +362,7 @@ archi_wheat_theo = {
 
 
 archi_rice_theo_1 = {
-    "nb_phy": 12, # number of phytomers on the main stem : [10,40] (Ndiaye et al., 2021; Lafarge and Tardieu, 2002; Clerget, 2008; Ganeme et al., 2022)
+    "nb_phy": 8, # number of phytomers on the main stem : [10,40] (Ndiaye et al., 2021; Lafarge and Tardieu, 2002; Clerget, 2008; Ganeme et al., 2022)
     "nb_short_phy": 5,
     "short_phy_len": 3,
 
@@ -374,7 +374,7 @@ archi_rice_theo_1 = {
 
     # Leaf area distribution along the stem
     "leaf_area": 3000,
-    "rmax": 0.78, # parameter for leaf area distribution along axis : [0.6,0.8] (Kaitaniemi et al., 1999; Welcker et al., )
+    "rmax": 0.9, # parameter for leaf area distribution along axis : [0.6,0.8] (Kaitaniemi et al., 1999; Welcker et al., )
     "skew": -5, # parameter for leaf area distribution along axis : [0.0005,0.1] (Kaitaniemi et al., 1999; Welcker et al., )
     
     # blade area 
@@ -392,13 +392,13 @@ archi_rice_theo_1 = {
     "phyllotactic_deviation": 90, # half-deviation to phyllotactic angle : [0,90] (Davis et al., 2024)
 
     # Development
-    "phyllochron": 60, # [30,70], # phyllochron, i.e. stem element appearance rate : [40,65 then x1.6-2.5] (Clerget, 2008)
+    "phyllochron": 85, # [30,70], # phyllochron, i.e. stem element appearance rate : [40,65 then x1.6-2.5] (Clerget, 2008)
     # "plastochron": [40,65], # plastochron, i.e. leaf blade appearance rate : [34,46 then 80-93] (Rami Kumar et al., 2009)
     "stem_duration": 1.6,
     "leaf_duration": 1.6,
 
     # Tillering
-    "nb_tillers": 20, # number of tillers : [0,6] (Lafarge et al., 2002)
+    "nb_tillers": 6, # number of tillers : [0,6] (Lafarge et al., 2002)
     "tiller_angle": 15,
     "tiller_delay": 1, # delay, as factor of phyllochron, between the appearance of a phytomer and the appearance of its tiller : [] ()
     "reduction_factor": 0.93, # reduction factor between tillers of consecutive order : [0.8,1] ()
