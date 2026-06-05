@@ -13,8 +13,9 @@ from scipy.stats import qmc
 
 from .archicrop import ArchiCrop
 from .growth import dev_dist, demand_dist, demand_dist_bis
-from .light_it import light_interception
-from .stics_io import get_stics_data
+from .light_it import light_interception, light_interception_IC
+from .stand import config_crop_intercrop
+from .stics_io import get_stics_data, get_stics_data_IC
 from .viability import compute_viable_params
 
 
@@ -235,6 +236,39 @@ def define_archicrop_parameters(archi_params: dict,
     return param_sets
 
 
+def define_archicrop_parameters_IC(archi_params: dict, 
+             tec_file: str, plant_file: str, d_outputs: dict, usm: str, algo: str, plant: str,
+             n_samples: int = 10, seed: int = 42, latin_hypercube: bool = False,
+             pot_factor_lai: float = 3, pot_factor_height: float = 5):
+
+    # Retrieve STICS management and senescence parameters
+    _, pot_daily_dynamics, lifespan, lifespan_early, _ = get_stics_data_IC(
+        file_tec_xml=tec_file,  # Path to the STICS management XML file
+        file_plt_xml=plant_file,  # Path to the STICS plant XML file
+        d_outputs=d_outputs, 
+        usm=usm, 
+        algo=algo, 
+        plant=plant
+    )
+
+    # Complete ArchiCrop parameters with values from constraint
+    archi_params = constrain_archi_params(archi_params=archi_params, daily_dynamics=pot_daily_dynamics, 
+                                          lifespan=lifespan, lifespan_early=lifespan_early, 
+                                          pot_factor_lai=pot_factor_lai, pot_factor_height=pot_factor_height)
+    
+    # Generate samples for ArchiCrop parameters 
+    param_sets = param_sampling(archi_params=archi_params, n_samples=n_samples, seed=seed, latin_hypercube=latin_hypercube)
+
+    # Compute viable parameters wrt the dynamic constraint of LAI and height
+    param_sets = compute_viable_params(
+        params_sets=param_sets, 
+        daily_dynamics=pot_daily_dynamics, 
+        pot_factor_lai=pot_factor_lai, pot_factor_height=pot_factor_height)
+
+    return param_sets
+
+
+
 def define_params_1_plant(dynamics_file, plant_file, tec_file, archi_params, end=-1, pot_factor_lai=3, pot_factor_height=3):    
     # Retrieve STICS management and senescence parameters
     _, daily_dynamics, lifespan, lifespan_early, _ = get_stics_data(
@@ -305,6 +339,59 @@ def run_archicrop_and_light_parallel(id_sim, param_sets: dict, tec_file: str, pl
                                                                                        tec_file=tec_file, plant_file=plant_file, 
                                                                                        dynamics_file=dynamics_file, weather_file=weather_file, 
                                                                                        location=location, 
+                                                                                       distribution_function=distribution_function,
+                                                                                       end=end, light_inter=light_inter, direct=direct)
+    
+    # first_key = list(param_sets.keys())[0]
+    # filename = f"results_light_inter_{param_sets[first_key]['nb_phy']}"
+    filename = "results_light_inter"
+    write_netcdf(filename, daily_dynamics, param_sets, 
+                 pot_la, pot_h, realized_la, realized_h, nrj_per_plant, 
+                 density, inter_row, id_sim, 
+                 dir = "../simulations_ArchiCrop/")
+    
+
+def run_archicrop_and_light(param_sets: dict, 
+             daily_dynamics: dict, stand: dict,
+             weather_file: str, location: dict,
+             distribution_function,
+             light_inter: bool = True, zenith: bool = False, direct : bool = False, save_scenes: bool = False, conv_coef = 100):
+
+
+    # Simulate plant growth with fitting parameters
+    pot_la, pot_h, _ = compute_pot_growth(param_sets=param_sets, daily_dynamics=daily_dynamics)
+    realized_la, realized_h, mtgs = simulate_plant_growth(param_sets=param_sets, daily_dynamics=daily_dynamics, distribution_function=distribution_function)
+
+    list_of_graphs, positions_crop = config_crop_intercrop(**stand)
+    domain = ((0, 0), (stand["width"] * conv_coef, stand["length"] * conv_coef))
+
+    # Compute light interception on 3D scenes through time
+    if light_inter:
+        nrj_per_plant = light_interception_IC(
+            weather_file=weather_file, 
+            daily_dynamics=daily_dynamics, 
+            list_of_graphs=list_of_graphs, 
+            positions_crop=positions_crop,
+            domain=domain,
+            location=location, 
+            mtgs=mtgs, 
+            zenith=zenith, 
+            direct=direct,
+            save_scenes=save_scenes, 
+        )
+    else:
+        nrj_per_plant = {k : [None] * len(realized_la[k]) for k in realized_la}
+
+    return daily_dynamics, pot_la, pot_h, realized_la, realized_h, nrj_per_plant, mtgs
+
+
+
+def run_archicrop_and_light_parallel_IC(id_sim, param_sets: dict, dynamics_file: dict, stand: dict,
+             weather_file: str, location: dict, distribution_function, end: int = -1, light_inter: bool = True, direct: bool = False):
+    
+    daily_dynamics, density, inter_row, pot_la, pot_h, realized_la, realized_h, nrj_per_plant, _ = run_archicrop_and_light(param_sets=param_sets,
+                                                                                       dynamics_file=dynamics_file, stand=stand,
+                                                                                       weather_file=weather_file, location=location, 
                                                                                        distribution_function=distribution_function,
                                                                                        end=end, light_inter=light_inter, direct=direct)
     
