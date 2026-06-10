@@ -46,19 +46,21 @@ def config_positions_intercrop(inter_row_1, inter_row_2, inter_plant_1, inter_pl
     positions_crop = sorted(positions_crop, key=itemgetter(1, 0)) # sorting by ranks
     return positions_crop
 
-def config_list_intercrop(plant_1, plant_2, nrows_1, nrows_2, plant_per_row_1, plant_per_row_2):
+def config_list_intercrop(growing_plant_1, growing_plant_2, nrows_1, nrows_2, plant_per_row_1, plant_per_row_2):
     if nrows_1 == 0 or nrows_2 == 0:
-        return [plant_1] + [plant_2]
+        return [[plant_1] + [plant_2] 
+                for plant_1, plant_2 in zip(growing_plant_1, growing_plant_2)]
     else:
-        return [plant_1]*int(plant_per_row_1)*nrows_1 + [plant_2]*int(plant_per_row_2)*nrows_2
+        return [[plant_1]*int(plant_per_row_1)*nrows_1 + [plant_2]*int(plant_per_row_2)*nrows_2 
+                for plant_1, plant_2 in zip(growing_plant_1, growing_plant_2)]
     
-def config_crop_intercrop(crop_1, crop_2, inter_row_1, inter_row_2, density_1, density_2, nb_rows_1, nb_rows_2, width=1, length=1):    
+def config_crop_intercrop(growing_plant_1, growing_plant_2, inter_row_1, inter_row_2, density_1, density_2, nb_rows_1, nb_rows_2, width=1, length=1):    
     inter_plant_1 = compute_inter_plant(inter_row_1, density_1)
     inter_plant_2 = compute_inter_plant(inter_row_2, density_2)
     plant_per_row_1 = compute_plant_per_row(inter_plant_1, length)
     plant_per_row_2 = compute_plant_per_row(inter_plant_2, length)
     positions_crop = config_positions_intercrop(inter_row_1, inter_row_2, inter_plant_1, inter_plant_2, plant_per_row_1, plant_per_row_2, nb_rows_1, nb_rows_2, width)
-    list_of_graphs = config_list_intercrop(crop_1, crop_2, nb_rows_1, nb_rows_2, plant_per_row_1, plant_per_row_2)
+    list_of_graphs = config_list_intercrop(growing_plant_1, growing_plant_2, nb_rows_1, nb_rows_2, plant_per_row_1, plant_per_row_2)
     return list_of_graphs, positions_crop
 
 

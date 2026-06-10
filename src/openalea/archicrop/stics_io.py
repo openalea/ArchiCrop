@@ -144,7 +144,7 @@ def read_sti_file(file_sti, conv_unit=100, end=-1):
     }, density
 
 
-def read_csv_file_intercrop(file_csv, conv_unit=100):
+def read_csv_file_IC(file_csv, conv_unit=100):
     """Reads a STICS .csv output file of several USMs and builds a dictionary.
     
     :param file: str, input file of STICS outputs :
@@ -278,6 +278,37 @@ def read_csv_file_intercrop(file_csv, conv_unit=100):
                 for key in list(range(0,k_emerg))+list(range(k_harv,366)):
                     plt.pop(key, None)  # avoids KeyError if key is absent
 
+    return nested_dict
+
+
+def read_doe_intercrop(file_csv):
+    """Reads a .csv DOE file of several USMs and builds a dictionary."""
+    
+    df = pd.read_csv(file_csv)
+
+    variables = [
+        "species_principal",
+        "species_secondary",
+        "design",
+        "row_orientation",
+        "interrow_distance_principal",
+        "interrow_distance_secondary",
+        "n_rows_principal",
+        "n_rows_secondary",
+        "intrarow_distance"
+    ]
+
+    nested_dict = {}
+    
+    i = 1
+    for _, row in df.iterrows():
+
+        nested_dict[f"usm_{i}"] = {
+                    var: row[var]
+                    for var in variables
+                }
+        i+=1
+    
     return nested_dict
 
 

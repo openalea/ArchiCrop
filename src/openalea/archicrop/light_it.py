@@ -4,10 +4,11 @@ from __future__ import annotations
 
 import numpy as np
 import pandas as pd
+from itertools import chain
 from openalea.caribu.CaribuScene import CaribuScene
 
 from openalea.archicrop.display import build_scene
-from openalea.archicrop.stand import compute_domain
+from openalea.archicrop.stand import compute_domain, config_crop_intercrop
 from openalea.archicrop.stics_io import stics_weather_3d
 from openalea.astk.sky_irradiance import sky_irradiance
 from openalea.astk.sky_sources import caribu_light_sources, sky_sources
@@ -189,7 +190,7 @@ def light_interception(weather_file, daily_dynamics, density, location, mtgs, ze
 
 
 
-def light_interception_IC(weather_file, daily_dynamics, list_of_graphs, positions_crop, domain, location, mtgs, zenith=False, direct=False, save_scenes=False):
+def light_interception_IC(weather_file, daily_dynamics, stand, location, mtgs, zenith=False, direct=False, save_scenes=False, conv_coef=100):
     '''Compute light interception on plants 
     Args:
         weather_file: path to the weather file
@@ -202,6 +203,7 @@ def light_interception_IC(weather_file, daily_dynamics, list_of_graphs, position
     Returns:
         nrj_per_plant: list of energy per plant
     '''
+
     # Read weather data
     df_weather = stics_weather_3d(filename=weather_file, daily_dynamics=daily_dynamics)
 
@@ -210,34 +212,51 @@ def light_interception_IC(weather_file, daily_dynamics, list_of_graphs, position
 
     # Compute light interception for each plant at each time step
     nrj_per_plant = {}
+    list_of_graphs = {}
+    positions_crop = {}
     # For each plant
-    for k, mtgs_plant in mtgs.items():
-        if mtgs_plant[0] is None:
-            nrj_per_plant[k] = [None] * len(incident_rads)
-        else:
-            nrj_per_leaf = []
-            # For each time step
-            for i,(mtg, incident_rad) in enumerate(zip(mtgs_plant, incident_rads)):
-                par = incident_rad.rad * 0.48 * 0.95
-                # Compute light sources
-                if zenith:
-                    lights = [(par,(0,0,-1))]
-                else:
-                    irr = sky_irradiance(daydate=incident_rad.daydate, day_ghi=par, **location)
-                    sun, sky = sky_sources(sky_type='clear_sky', sky_irradiance=irr, scale='global') #, source_irradiance='horizontal')
-                    lights = caribu_light_sources(sun, sky)
-                # Build and illuminate scene
-                scene, labels = build_scene(mtg, senescence=True)
-                cs, raw, agg = illuminate(scene=scene, light=lights, labels=labels, domain=domain, direct=direct) # --> cf PARaggregators in caribu scene node
-                # Compute energy per leaf
-                df_mod = mean_leaf_irradiance(agg) 
-                nrj_per_leaf.append(agg.loc[(agg.is_green) & (agg['label'] == 'Leaf')]['Energy'].values)
-                # Save scene if required
-                if save_scenes:
-                    scene_tmp = cs.plot(raw, display=False)[0]
-                    scene_tmp.save(f'scene_{i}.png') # not as images !!!
+    for a, usm in mtgs.items():
+        nrj_per_plant[a] = {}
+        list_of_graphs[a] = {}
+        positions_crop[a] = {}
+        for b, algo in usm.items():
+            nrj_per_plant[a][b] = {}
+            for c, plant in algo.items():
+                nrj_per_plant[a][b][c] = {}
+                for k, mtgs_plant in plant.items():
+                    if mtgs_plant[0] is None:
+                        nrj_per_plant[a][b][c][k] = [None] * len(incident_rads)
+                    else:
+                        nrj_per_leaf = []
+                        # For each time step
+                        for i,(mtg, incident_rad) in enumerate(zip(mtgs_plant, incident_rads)):
+                            par = incident_rad.rad * 0.48 * 0.95
+                            # Compute light sources
+                            if zenith:
+                                lights = [(par,(0,0,-1))]
+                            else:
+                                irr = sky_irradiance(daydate=incident_rad.daydate, day_ghi=par, **location)
+                                sun, sky = sky_sources(sky_type='clear_sky', sky_irradiance=irr, scale='global') #, source_irradiance='horizontal')
+                                lights = caribu_light_sources(sun, sky)
+                            # Build and illuminate scene
+                            list_of_graphs[a][b], positions_crop[a][b] = config_crop_intercrop(growing_plant_1=mtgs[a][b][0], growing_plant_2=mtgs[a][b][1], **stand[a][b])
+                            domain = ((0, 0), (stand["width"] * conv_coef, stand["length"] * conv_coef))
+                            scene, labels = build_scene(mtg, senescence=True)
+                            cs, raw, agg = illuminate(scene=scene, light=lights, labels=labels, domain=domain, direct=direct) # --> cf PARaggregators in caribu scene node
+                            # Compute energy per leaf
+                            df_mod = mean_leaf_irradiance(agg) 
+                            nrj_per_leaf.append(agg.loc[(agg.is_green) & (agg['label'] == 'Leaf')]['Energy'].values)
+                            # Save scene if required
+                            if save_scenes:
+                                values = list(chain.from_iterable(raw.values()))
+                                v99 = np.percentile(values, 99)
+                                nvalues=np.array(values)
+                                nvalues[nvalues>v99]=v99
+                                raw_new = nvalues.tolist()
+                                scene_tmp = cs.plot(raw, maxval=max(raw_new), display=False)[0]
+                                scene_tmp.save(f'scene_{i}.png') # not as images !!!
 
-            # nrj_per_plant[k] = [sum(nrj) for nrj in nrj_per_leaf]
-            nrj_per_plant[k] = nrj_per_leaf
+                        # nrj_per_plant[k] = [sum(nrj) for nrj in nrj_per_leaf]
+                        nrj_per_plant[a][b][c][k] = nrj_per_leaf
 
-    return nrj_per_plant
+    return nrj_per_plant, list_of_graphs, positions_crop

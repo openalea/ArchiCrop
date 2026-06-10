@@ -242,7 +242,7 @@ def define_archicrop_parameters_IC(archi_params: dict,
              pot_factor_lai: float = 3, pot_factor_height: float = 5):
 
     # Retrieve STICS management and senescence parameters
-    _, pot_daily_dynamics, lifespan, lifespan_early, _ = get_stics_data_IC(
+    density, pot_daily_dynamics, lifespan, lifespan_early, _ = get_stics_data_IC(
         file_tec_xml=tec_file,  # Path to the STICS management XML file
         file_plt_xml=plant_file,  # Path to the STICS plant XML file
         d_outputs=d_outputs, 
@@ -265,7 +265,7 @@ def define_archicrop_parameters_IC(archi_params: dict,
         daily_dynamics=pot_daily_dynamics, 
         pot_factor_lai=pot_factor_lai, pot_factor_height=pot_factor_height)
 
-    return param_sets
+    return param_sets, density
 
 
 
@@ -351,28 +351,40 @@ def run_archicrop_and_light_parallel(id_sim, param_sets: dict, tec_file: str, pl
                  dir = "../simulations_ArchiCrop/")
     
 
-def run_archicrop_and_light(param_sets: dict, 
+def run_archicrop_and_light_IC(param_sets: dict, 
              daily_dynamics: dict, stand: dict,
              weather_file: str, location: dict,
-             distribution_function,
              light_inter: bool = True, zenith: bool = False, direct : bool = False, save_scenes: bool = False, conv_coef = 100):
 
 
     # Simulate plant growth with fitting parameters
-    pot_la, pot_h, _ = compute_pot_growth(param_sets=param_sets, daily_dynamics=daily_dynamics)
-    realized_la, realized_h, mtgs = simulate_plant_growth(param_sets=param_sets, daily_dynamics=daily_dynamics, distribution_function=distribution_function)
-
-    list_of_graphs, positions_crop = config_crop_intercrop(**stand)
-    domain = ((0, 0), (stand["width"] * conv_coef, stand["length"] * conv_coef))
+    pot_la = {}
+    pot_h = {}
+    realized_la = {}
+    realized_h = {}
+    mtgs = {}
+    for a,usm in param_sets.items():
+        pot_la[a] = {}
+        pot_h[a] = {}
+        realized_la[a] = {}
+        realized_h[a] = {}
+        mtgs[a] = {}
+        for b,algo in usm.items():
+            pot_la[a][b] = {}
+            pot_h[a][b] = {}
+            realized_la[a][b] = {}
+            realized_h[a][b] = {}
+            mtgs[a][b] = {}
+            for c,plant in algo.items():
+                pot_la[a][b][c], pot_h[a][b][c], _ = compute_pot_growth(param_sets=plant[0], daily_dynamics=daily_dynamics[a][b][c])
+                realized_la[a][b][c], realized_h[a][b][c], mtgs[a][b][c] = simulate_plant_growth(param_sets=plant[0], daily_dynamics=daily_dynamics[a][b][c])
 
     # Compute light interception on 3D scenes through time
     if light_inter:
-        nrj_per_plant = light_interception_IC(
+        nrj_per_plant, list_of_graphs, positions_crop = light_interception_IC(
             weather_file=weather_file, 
             daily_dynamics=daily_dynamics, 
-            list_of_graphs=list_of_graphs, 
-            positions_crop=positions_crop,
-            domain=domain,
+            stand=stand,
             location=location, 
             mtgs=mtgs, 
             zenith=zenith, 
@@ -380,27 +392,28 @@ def run_archicrop_and_light(param_sets: dict,
             save_scenes=save_scenes, 
         )
     else:
-        nrj_per_plant = {k : [None] * len(realized_la[k]) for k in realized_la}
+        nrj_per_plant = {a : {b : {c : {k : [None] * len(plant[k]) for k in plant} for c,plant in algo.items()} for b,algo in usm.items()} for a, usm in daily_dynamics.items()}
+        list_of_graphs = {a : {b : {k : None for k in range(len(algo))} for b,algo in usm.items()} for a, usm in daily_dynamics.items()}
+        positions_crop = {a : {b : None for b,algo in usm.items()} for a, usm in daily_dynamics.items()}
 
-    return daily_dynamics, pot_la, pot_h, realized_la, realized_h, nrj_per_plant, mtgs
+    return daily_dynamics, pot_la, pot_h, realized_la, realized_h, nrj_per_plant, list_of_graphs, positions_crop, mtgs
 
 
 
 def run_archicrop_and_light_parallel_IC(id_sim, param_sets: dict, dynamics_file: dict, stand: dict,
-             weather_file: str, location: dict, distribution_function, end: int = -1, light_inter: bool = True, direct: bool = False):
+             weather_file: str, location: dict, light_inter: bool = True, direct: bool = False):
     
-    daily_dynamics, density, inter_row, pot_la, pot_h, realized_la, realized_h, nrj_per_plant, _ = run_archicrop_and_light(param_sets=param_sets,
-                                                                                       dynamics_file=dynamics_file, stand=stand,
-                                                                                       weather_file=weather_file, location=location, 
-                                                                                       distribution_function=distribution_function,
-                                                                                       end=end, light_inter=light_inter, direct=direct)
+    daily_dynamics, pot_la, pot_h, realized_la, realized_h, nrj_per_plant, list_of_graphs, positions_crop, _ = run_archicrop_and_light_IC(param_sets=param_sets,
+                                                                                                                                        daily_dynamics=dynamics_file, stand=stand,
+                                                                                                                                        weather_file=weather_file, location=location, 
+                                                                                                                                        light_inter=light_inter, direct=direct)
     
     # first_key = list(param_sets.keys())[0]
     # filename = f"results_light_inter_{param_sets[first_key]['nb_phy']}"
     filename = "results_light_inter"
-    write_netcdf(filename, daily_dynamics, param_sets, 
-                 pot_la, pot_h, realized_la, realized_h, nrj_per_plant, 
-                 density, inter_row, id_sim, 
+    write_netcdf_IC(filename, daily_dynamics, param_sets, 
+                 pot_la, pot_h, realized_la, realized_h, nrj_per_plant,
+                 id_sim, 
                  dir = "../simulations_ArchiCrop/")
     
 
@@ -485,16 +498,12 @@ def write_netcdf(filename: str, daily_dynamics: dict, params_sets: dict,
     df_pot_h = pd.DataFrame.from_dict(pot_h, orient="index", columns=dates)
     # df_nrj_per_plant = pd.DataFrame.from_dict(nrj_per_plant, orient="index", columns=dates)
 
-    # print(df_realized_la)
-    # print(df_pot_la)
-    # print(df_nrj_per_plant)
 
     # # 3D array for nrj per leaf 
     ids = list(nrj_per_leaf.keys())
     n_id = len(ids)
     n_time = len(dates)
     n_leaf = max([len(nrj_per_leaf[id][-1]) for id in ids])  # length of inner list for a plant with all leaves
-
 
     nrj_leaf = np.zeros((n_id, n_time, n_leaf), dtype=float)
 
@@ -526,6 +535,122 @@ def write_netcdf(filename: str, daily_dynamics: dict, params_sets: dict,
     )
 
     ds = xr.merge([ds, ds_archi]) 
+
+    # Save the dataset to a NetCDF file
+    
+    os.makedirs(dir+f"", exist_ok=True)  
+    ds.to_netcdf(dir+f"{filename}_{seed}.nc")
+
+
+def write_netcdf_IC(filename: str, daily_dynamics: dict, params_sets: dict, 
+                 pot_la: dict, pot_h: dict, realized_la: dict, realized_h: dict, nrj_per_leaf: dict,
+                 seed: int, 
+                 dir: str = "../simulations_ArchiCrop/"):
+    
+    # Prepare the data for xarray Dataset
+    # Archi
+    records = []
+    for usm, algos in params_sets.items():
+        for algo, plants in algos.items():
+            for plant, ids in plants.items():
+                for id_, values in ids.items():
+                    row = {
+                        "usm": usm,
+                        "algo": algo,
+                        "plant": plant,
+                        "id": id_,
+                        **values
+                    }
+                    records.append(row)
+    df_archi = pd.DataFrame(records)
+    ds_archi = (df_archi
+        .set_index(["usm", "algo", "plant", "id"])
+        .to_xarray()
+    )
+
+    # Daily dynamics form STICS
+    records = []
+    for usm, algos in daily_dynamics.items():
+        for algo, plants in algos.items():
+            for plant, times in plants.items():
+                for t, values in times.items():
+                    records.append({
+                        "usm": usm,
+                        "algo": algo,
+                        "plant": plant,
+                        "time": t,
+                        **values
+                    })
+
+    df_stics = pd.DataFrame(records)
+    ds_stics = (
+        df_stics
+        .set_index(["usm", "algo", "plant", "time"])
+        .to_xarray()
+    )
+
+    # LA and H dynamics from ArchiCrop
+    df_la_h = []
+    ds_la_h = []
+    outputs = {
+        "pot_la" : pot_la,
+        "pot_h" : pot_h,
+        "realized_la" : realized_la,
+        "realized_h" : realized_h
+    }
+    for name, data in outputs.items():
+        records = []
+        for usm, algos in data.items():
+            for algo, plants in algos.items():
+                for plant, ids in plants.items():
+                    for id_, values in ids.items():
+                        for t, value in enumerate(values):
+                            records.append({
+                                "usm": usm,
+                                "algo": algo,
+                                "plant": plant,
+                                "id": id_,
+                                "time": t,
+                                name : value,
+                            })
+
+        df = pd.DataFrame(records)
+        ds = (
+            df
+            .set_index(["usm", "algo", "plant", "id", "time"])
+            .to_xarray()
+        )
+        df_la_h.append(df)
+        ds_la_h.append(ds)
+
+
+    # Leaf-resolved light interception dynamics
+    records = []
+    for usm, algos in nrj_per_leaf.items():
+        for algo, plants in algos.items():
+            for plant, ids in plants.items():
+                for id_, values in ids.items():
+                    for t, value in enumerate(values):
+                        for leaf, nrj in enumerate(value):
+                            records.append({
+                                "usm": usm,
+                                "algo": algo,
+                                "plant": plant,
+                                "id": id_,
+                                "time": t,
+
+                                "nrj_per_leaf": nrj,
+
+                            })
+
+    df_light = pd.DataFrame(records)
+    ds_light = (
+        df_light
+        .set_index(["usm", "algo", "plant", "id", "time"])
+        .to_xarray()
+    )    
+
+    ds = xr.merge([ds_archi, ds_stics, *ds_la_h, ds_light]) 
 
     # Save the dataset to a NetCDF file
     
