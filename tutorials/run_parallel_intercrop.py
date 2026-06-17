@@ -8,7 +8,8 @@ from multiprocessing import Pool
 from pathlib import Path
 
 sys.path.append('../data')
-from archi_dict import archi_sorghum, archi_maize as archi_1, archi_2
+from archi_dict import archi_sorghum as archi_1
+from archi_dict import archi_maize as archi_2
 
 from openalea.archicrop.growth import demand_dist_bis
 from openalea.archicrop.simulation import define_archicrop_parameters_IC, run_archicrop_and_light_parallel_IC
@@ -16,19 +17,33 @@ from openalea.archicrop.stics_io import read_csv_file_IC, read_doe_intercrop
 
 if __name__ == '__main__':
 
-    path = Path("D:/ArchiCrop_for_STICS-IC_light/0-data/workspace_v11_gen/")
+    path = Path("../data/usms_STICS/v11_IC_light/")
 
-    plant_1 = "sorgum"
+    plant_1 = "sorghum"
     plant_2 = "maize"
 
-    # Define the inputs for the simulation
-    tec_files_1=list(path.glob("sorghum_*_tec.xml"))[:1]
-    plant_file_1='D:/ArchiCrop_for_STICS-IC_light/0-data/workspace_v11_gen/plant/sorgho_imp_M_v10_plt.xml'
-    tec_files_2=list(path.glob("maize_*_tec.xml"))[:1]
-    plant_file_2='D:/ArchiCrop_for_STICS-IC_light/0-data/workspace_v11_gen/plant/corn_LI_step2_MANT_plt.xml'
+    # print("Nb CPU : ")
+    # n_cpu = int(input())
+    # id_sim = list(range(n_cpu))
+    # id_sim = [1,2,3,4,5,6,10,12,14,16,18,20,22,24,26]
+    id_sim = [1,26]
+    id_usm = [f"usm_{i}" for i in id_sim]
+    n_cpu = len(id_sim)
 
-    file_csv = "D:/ArchiCrop_for_STICS-IC_light/2-outputs/simulations_stics_intercrops.csv"
-    weather_file = '../data/ntarla_corr.2018'
+    # Define the inputs for the simulation
+    # tec_files_1=list(path.glob("sorghum_*_tec.xml"))
+    # tec_files_2=list(path.glob("maize_*_tec.xml"))
+    plant_file_1='../data/usms_STICS/v11_IC_light/plant/sorgho_imp_M_v10_plt.xml'
+    plant_file_2='../data/usms_STICS/v11_IC_light/plant/corn_LI_step2_MANT_plt.xml'
+
+    tec_files_1 = []
+    tec_files_2 = []
+    for i in id_sim:
+        tec_files_1.append(path.glob(f"{plant_1}_{i}_tec.xml"))
+        tec_files_2.append(path.glob(f"{plant_2}_{i}_tec.xml"))
+
+    file_csv = "../data/usms_STICS/v11_IC_light/simulations_stics_intercrops.csv"
+    weather_file = '../data/usms_STICS/v11_IC_light/ntarla_corr.2018'
     location = {  
     'longitude': 3.87,
     'latitude': 12.58,
@@ -37,23 +52,21 @@ if __name__ == '__main__':
 
     d_outputs = read_csv_file_IC(file_csv)
 
-    print("Nb CPU : ")
-    n_cpu = int(input())
-    id_sim = list(range(n_cpu))
-
-    pot_factor_lai = 3
-    pot_factor_height = 5
+    pot_factor_lai = 5
+    pot_factor_height = 10
     distribution_function = demand_dist_bis
-    light_inter = False
+    light_inter = True
     direct = True
 
     param_sets = {}
 
-    for i, t1, t2 in enumerate(zip(tec_files_1, tec_files_2)):
+    for i, (usm, t1, t2) in enumerate(zip(id_usm, tec_files_1, tec_files_2)):
 
-        usm = f"usm_{i+1}"
+        # usm = f"usm_{i+1}"
+        param_sets[usm] = {}
 
         for algo in ["Beer", "2.5D"]:
+            param_sets[usm][algo] = {}
 
             param_sets_1, density_1 = define_archicrop_parameters_IC(archi_params = archi_1, 
                                                     tec_file = t1, 
@@ -119,31 +132,34 @@ if __name__ == '__main__':
     }
     }
 
-    doe_file = "D:/ArchiCrop_for_STICS-IC_light/2-outputs/doe.csv"
+    doe_file = "../data/usms_STICS/v11_IC_light/doe.csv"
     doe = read_doe_intercrop(doe_file)
 
     doe_adapt = {}
 
     for usm,spat_conf in doe.items():
-        spat_conf["row_orientation"] = row_orientation_values[spat_conf["row_orientation"]]
-        spat_conf["interrow_distance_principal"] = interrow_distance_per_species[spat_conf["species_principal"]][spat_conf["interrow_distance_principal"]]
-        spat_conf["interrow_distance_secondary"] = interrow_distance_per_species[spat_conf["species_secondary"]][spat_conf["interrow_distance_secondary"]]
-        spat_conf["n_rows_principal"] = n_rows_per_species[spat_conf["species_principal"]][spat_conf["n_rows_principal"]]
-        spat_conf["n_rows_secondary"] = n_rows_per_species[spat_conf["species_secondary"]][spat_conf["n_rows_secondary"]]
-        spat_conf["intrarow_distance"] = intrarow_distance_per_species[spat_conf["species_principal"]][spat_conf["intrarow_distance"]]
+        if usm in id_usm:
+            spat_conf["row_orientation"] = row_orientation_values[spat_conf["row_orientation"]]
+            spat_conf["interrow_distance_principal"] = interrow_distance_per_species[spat_conf["species_principal"]][spat_conf["interrow_distance_principal"]]
+            spat_conf["interrow_distance_secondary"] = interrow_distance_per_species[spat_conf["species_secondary"]][spat_conf["interrow_distance_secondary"]]
+            spat_conf["n_rows_principal"] = n_rows_per_species[spat_conf["species_principal"]][spat_conf["n_rows_principal"]]
+            spat_conf["n_rows_secondary"] = n_rows_per_species[spat_conf["species_secondary"]][spat_conf["n_rows_secondary"]]
+            spat_conf["intrarow_distance"] = intrarow_distance_per_species[spat_conf["species_principal"]][spat_conf["intrarow_distance"]]
 
-        for algo in param_sets[usm]:
+            doe_adapt[usm] = {}
 
-            doe_adapt[usm][algo] = {
-                "density_1" : param_sets[usm][algo][plant_1][1],
-                "density_2" : param_sets[usm][algo][plant_2][1],
-                "inter_row_1" : spat_conf["interrow_distance_principal"],
-                "inter_row_2" : spat_conf["interrow_distance_secondary"],
-                "width" : 2 * spat_conf["interrow_distance_principal"] if spat_conf["row_orientation"] == "intercrop mixed" else (spat_conf["n_rows_principal"]+1) * spat_conf["interrow_distance_principal"] + (spat_conf["n_rows_secondary"]-1) * spat_conf["interrow_distance_secondary"],
-                "length" : 2 * spat_conf["intrarow_distance"] if spat_conf["row_orientation"] == "intercrop mixed" else spat_conf["intrarow_distance"],
-                "nb_rows_1" : spat_conf["n_rows_principal"],
-                "nb_rows_2" : spat_conf["n_rows_secondary"]
-            }
+            for algo in param_sets[usm]:
+
+                doe_adapt[usm][algo] = {
+                    "density_1" : param_sets[usm][algo][plant_1][1],
+                    "density_2" : param_sets[usm][algo][plant_2][1],
+                    "inter_row_1" : spat_conf["interrow_distance_principal"],
+                    "inter_row_2" : spat_conf["interrow_distance_secondary"],
+                    "width" : 2 * spat_conf["interrow_distance_principal"] if spat_conf["design"] == "intercrop mixed" else (spat_conf["n_rows_principal"]+1) * spat_conf["interrow_distance_principal"] + (spat_conf["n_rows_secondary"]-1) * spat_conf["interrow_distance_secondary"],
+                    "length" : 2 * spat_conf["intrarow_distance"] if spat_conf["design"] == "intercrop mixed" else spat_conf["intrarow_distance"],
+                    "nb_rows_1" : spat_conf["n_rows_principal"],
+                    "nb_rows_2" : spat_conf["n_rows_secondary"]
+                }
 
 
     # First trial on usms 1 to 6  
@@ -159,8 +175,8 @@ if __name__ == '__main__':
     with Pool(n_cpu) as p:
         start_time = t.time()
         p.starmap_async(run_archicrop_and_light_parallel_IC, 
-                        [(usm, param_sets[usm], d_outputs[usm], doe_adapt[usm], weather_file, location, distribution_function, light_inter, direct) 
-                        for usm in id_sim]).get()
+                        [(i, {usm:param_sets[usm]}, {usm:d_outputs[usm]}, {usm:doe_adapt[usm]}, weather_file, location, light_inter, direct) 
+                        for i,usm in enumerate(id_usm)]).get()
         end_time = t.time()
         elapsed_time = (end_time - start_time)/3600
         print(f"Simulation time: {elapsed_time:.2f} hours for {len(param_sets)*2} simulations on {n_cpu} CPU")

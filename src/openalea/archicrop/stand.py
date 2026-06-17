@@ -8,6 +8,8 @@ import numpy as np
 from numpy import cos, linspace, sin
 from numpy.random import vonmises
 
+from openalea.mtg import MTG
+
 
 def compute_inter_plant(inter_row, density):
     return 1.0 / inter_row / density
@@ -15,10 +17,8 @@ def compute_inter_plant(inter_row, density):
 def compute_plant_per_row(inter_plant, length=1):
     return max(1, int(round(float(length) / inter_plant)))
 
-def config_positions_intercrop(inter_row_1, inter_row_2, inter_plant_1, inter_plant_2, plant_per_row_1, plant_per_row_2, nrows_1, nrows_2, width=1, conv_coef=100):
-
-    dx = (inter_plant_1 * conv_coef, inter_plant_2 * conv_coef)
-    dy = (inter_row_1 * conv_coef, inter_row_2 * conv_coef)
+def config_positions_intercrop(inter_row_1, inter_row_2, inter_plant_1, inter_plant_2, plant_per_row_1, plant_per_row_2, nrows_1, nrows_2, width=1, orientation="N-S", conv_coef=100):
+    
     plant_per_row = (plant_per_row_1, plant_per_row_2)
     
     if nrows_1 == 0 or nrows_2 == 0:
@@ -33,44 +33,75 @@ def config_positions_intercrop(inter_row_1, inter_row_2, inter_plant_1, inter_pl
         nstrips = width / (wstrip_1 + wstrip_2)
 
     positions_crop = []
-    if nrows_1 == 0 or nrows_2 == 0:
-        positions_crop = regular(nrows * plant_per_row_1, int(nrows), dx[0], dy[0], int(plant_per_row_1))[0]
-    else:
-        for i in range(int(nstrips)):
-            for j in [0,1]:
-                pos_tmp = regular(nrows[j] * plant_per_row[j], int(nrows[j]), dx[j], dy[j], int(plant_per_row[j]))[0]
-                # offset to pos_tmp depending on i and j
-                for k, (x,y,z) in enumerate(pos_tmp):
-                    pos_tmp[k] = (x, y - dy[j]/2 + (i * (wstrip_1 + wstrip_2) + j * wstrip_1) * conv_coef, z)
-                positions_crop += pos_tmp
+    if orientation == "N-S":
+        dx = (inter_plant_1 * conv_coef, inter_plant_2 * conv_coef)
+        dy = (inter_row_1 * conv_coef, inter_row_2 * conv_coef)
+
+        if nrows_1 == 0 or nrows_2 == 0:
+            positions_crop = regular(int(nrows * plant_per_row_1), int(nrows), dx[0], dy[0], int(plant_per_row_1))[0]
+        else:
+            for i in range(int(nstrips)):
+                for j in [0,1]:
+                    pos_tmp = regular(int(nrows[j] * plant_per_row[j]), int(nrows[j]), dx[j], dy[j], int(plant_per_row[j]))[0]
+                    # offset to pos_tmp depending on i and j
+                    for k, (x,y,z) in enumerate(pos_tmp):
+                        pos_tmp[k] = (x, y - dy[j]/2 + (i * (wstrip_1 + wstrip_2) + j * wstrip_1) * conv_coef, z)
+                    positions_crop += pos_tmp
+
+    elif orientation == "E-W":
+        dy = (inter_plant_1 * conv_coef, inter_plant_2 * conv_coef)
+        dx = (inter_row_1 * conv_coef, inter_row_2 * conv_coef)
+
+        if nrows_1 == 0 or nrows_2 == 0:
+            positions_crop = regular(int(nrows * plant_per_row_1), int(plant_per_row_1), dx[0], dy[0], int(nrows))[0]
+        else:
+            for i in range(int(nstrips)):
+                for j in [0,1]:
+                    pos_tmp = regular(int(nrows[j] * plant_per_row[j]), int(plant_per_row[j]), dx[j], dy[j], int(nrows[j]))[0]
+                    # offset to pos_tmp depending on i and j
+                    for k, (x,y,z) in enumerate(pos_tmp):
+                        pos_tmp[k] = (x - dx[j]/2 + (i * (wstrip_1 + wstrip_2) + j * wstrip_1) * conv_coef, y, z)
+                    positions_crop += pos_tmp
+
     positions_crop = sorted(positions_crop, key=itemgetter(1, 0)) # sorting by ranks
+
     return positions_crop
 
-def config_list_intercrop(growing_plant_1, growing_plant_2, nrows_1, nrows_2, plant_per_row_1, plant_per_row_2):
-    if nrows_1 == 0 or nrows_2 == 0:
-        return [[plant_1] + [plant_2] 
-                for plant_1, plant_2 in zip(growing_plant_1, growing_plant_2)]
-    else:
-        return [[plant_1]*int(plant_per_row_1)*nrows_1 + [plant_2]*int(plant_per_row_2)*nrows_2 
-                for plant_1, plant_2 in zip(growing_plant_1, growing_plant_2)]
+def config_list_intercrop(dates, growing_plant_1, growing_plant_2, nrows_1, nrows_2, plant_per_row_1, plant_per_row_2):
     
-def config_crop_intercrop(growing_plant_1, growing_plant_2, inter_row_1, inter_row_2, density_1, density_2, nb_rows_1, nb_rows_2, width=1, length=1):    
+    gp1 = [[growing_plant_1[date]] 
+            if date in growing_plant_1 
+            else [MTG()]
+            for date in dates]
+    gp2 = [[growing_plant_2[date]] 
+            if date in growing_plant_2 
+            else [MTG()]
+            for date in dates]
+    
+    if nrows_1 == 0 or nrows_2 == 0:
+        return {date: g1 + g2
+                for date, g1, g2 in zip(dates, gp1, gp2)}
+    else:
+        return {date: g1*int(plant_per_row_1)*nrows_1 + g2*int(plant_per_row_2)*nrows_2 
+                for date, g1, g2 in zip(dates, gp1, gp2)}
+    
+def config_crop_intercrop(dates, growing_plant_1, growing_plant_2, inter_row_1, inter_row_2, density_1, density_2, nb_rows_1, nb_rows_2, width=1, length=1, orientation="N-S"):    
     inter_plant_1 = compute_inter_plant(inter_row_1, density_1)
     inter_plant_2 = compute_inter_plant(inter_row_2, density_2)
     plant_per_row_1 = compute_plant_per_row(inter_plant_1, length)
     plant_per_row_2 = compute_plant_per_row(inter_plant_2, length)
-    positions_crop = config_positions_intercrop(inter_row_1, inter_row_2, inter_plant_1, inter_plant_2, plant_per_row_1, plant_per_row_2, nb_rows_1, nb_rows_2, width)
-    list_of_graphs = config_list_intercrop(growing_plant_1, growing_plant_2, nb_rows_1, nb_rows_2, plant_per_row_1, plant_per_row_2)
+    positions_crop = config_positions_intercrop(inter_row_1, inter_row_2, inter_plant_1, inter_plant_2, plant_per_row_1, plant_per_row_2, nb_rows_1, nb_rows_2, width, orientation)
+    list_of_graphs = config_list_intercrop(dates, growing_plant_1, growing_plant_2, nb_rows_1, nb_rows_2, plant_per_row_1, plant_per_row_2)
     return list_of_graphs, positions_crop
 
 
-def compute_domain(density: float, inter_row: float = 0.7, conv_coef: float = 100) -> tuple:
+def compute_domain(density: float, inter_row: float, conv_coef: float = 100) -> tuple:
     """
     Calculate the domain of a single plant based on the sowing density and inter-row distance.
     
     Parameters:
     - density: Sowing density in plants per square meter.
-    - inter_row: Distance between rows in m (default is 0.7 m).
+    - inter_row: Distance between rows in m.
     
     Returns:
     - A tuple representing the domain of the sowing pattern.
