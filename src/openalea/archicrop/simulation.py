@@ -673,33 +673,41 @@ def write_netcdf_IC(filename: str, daily_dynamics: dict, params_sets: dict,
             for plant, ids in plants.items():
                 for id_, values in ids.items():
                     for t, value in enumerate(values):
-                        if value is not None:
-                            for leaf, nrj in enumerate(value):
-                                records.append({
-                                    "usm": usm,
-                                    "algo": algo,
-                                    "plant": plant,
-                                    "id": id_,
-                                    "time": t,
-                                    "leaf": leaf,
-                                    "nrj_per_leaf": nrj,
-                                })
-                        else:
-                            for leaf, nrj in enumerate([0,0,0,0,0]):
-                                records.append({
-                                        "usm": usm,
-                                        "algo": algo,
-                                        "plant": plant,
-                                        "id": id_,
-                                        "time": t,
-                                        "leaf": leaf,
-                                        "nrj_per_leaf": nrj,
-                                })
+                        records.append({
+                            "usm": usm,
+                            "algo": algo,
+                            "plant": plant,
+                            "id": id_,
+                            "time": t,
+                            "nrj_per_leaf": value,
+                        })
+                        # if value is not None:
+                            # for leaf, nrj in enumerate(value):
+                            #     records.append({
+                            #         "usm": usm,
+                            #         "algo": algo,
+                            #         "plant": plant,
+                            #         "id": id_,
+                            #         "time": t,
+                            #         "leaf": leaf,
+                            #         "nrj_per_leaf": nrj,
+                            #     })
+                        # else:
+                            # for leaf, nrj in enumerate([0,0,0,0,0]):
+                            #     records.append({
+                            #             "usm": usm,
+                            #             "algo": algo,
+                            #             "plant": plant,
+                            #             "id": id_,
+                            #             "time": t,
+                            #             "leaf": leaf,
+                            #             "nrj_per_leaf": nrj,
+                            #     })
 
     df_light = pd.DataFrame(records)
     ds_light = (
         df_light
-        .set_index(["usm", "algo", "plant", "id", "time", "leaf"])
+        .set_index(["usm", "algo", "plant", "id", "time"]) #, "leaf"])
         .to_xarray()
     )    
                                 
