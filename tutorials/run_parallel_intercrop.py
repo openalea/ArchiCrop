@@ -162,8 +162,6 @@ if __name__ == '__main__':
                 }
 
 
-    # First trial on usms 1 to 6  
-
     # keys = list(param_sets.keys())
     # chunk_size = ceil(len(keys)*2 / n_cpu)
     # params_sets_split = {
