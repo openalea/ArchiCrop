@@ -77,7 +77,7 @@ if __name__ == '__main__':
             
             param_sets_2, density_2 = define_archicrop_parameters_IC(archi_params = archi_2, 
                                                     tec_file = t2, 
-                                                    plant_file = plant_file_1, 
+                                                    plant_file = plant_file_2, 
                                                     d_outputs=d_outputs, usm=usm, algo=algo, plant=plant_2,
                                                     pot_factor_lai = pot_factor_lai,
                                                     pot_factor_height = pot_factor_height)
