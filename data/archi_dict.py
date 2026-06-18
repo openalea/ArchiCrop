@@ -136,7 +136,7 @@ archi_rice = {
 
 
 archi_sorghum = {
-    "nb_phy": 24, # number of phytomers on the main stem : [10,40] (Ndiaye et al., 2021; Lafarge and Tardieu, 2002; Clerget, 2008; Ganeme et al., 2022)
+    "nb_phy": 15, # number of phytomers on the main stem : [10,40] (Ndiaye et al., 2021; Lafarge and Tardieu, 2002; Clerget, 2008; Ganeme et al., 2022)
     "nb_short_phy": 5,
     "short_phy_len": 3,
 
