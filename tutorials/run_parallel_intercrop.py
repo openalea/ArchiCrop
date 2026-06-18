@@ -175,7 +175,7 @@ if __name__ == '__main__':
     with Pool(n_cpu) as p:
         start_time = t.time()
         p.starmap_async(run_archicrop_and_light_parallel_IC, 
-                        [(i, {usm:param_sets[usm]}, {usm:d_outputs[usm]}, {usm:doe_adapt[usm]}, weather_file, location, light_inter, direct) 
+                        [(usm, {usm:param_sets[usm]}, {usm:d_outputs[usm]}, {usm:doe_adapt[usm]}, weather_file, location, light_inter, direct) 
                         for i,usm in enumerate(id_usm)]).get()
         end_time = t.time()
         elapsed_time = (end_time - start_time)/3600
