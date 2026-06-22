@@ -86,7 +86,7 @@ class ArchiCrop:
         """
 
         if daily_dynamics is not None:
-            _, end_veg, end_juv = get_pheno(daily_dynamics)
+            index_end_veg, end_veg, end_juv = get_pheno(daily_dynamics)
         else:
             end_juv = 0
             end_veg = 1000

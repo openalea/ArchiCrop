@@ -199,10 +199,13 @@ def read_csv_file_IC(file_csv, conv_unit=100):
 
     output_dict = {}
     for a,sit in nested_dict.items():
+        # print("usm :", a)
         output_dict[a] = {}
         for b,algo in sit.items():
+            # print("algo :", b)
             output_dict[a][b] = {}
             for c,plt in algo.items():
+                # print("plant :", c)
                 output_dict[a][b][c] = {}
                 non_zero_height_encountered = False
                 thermal_time_prev = 0.0
@@ -278,7 +281,9 @@ def read_csv_file_IC(file_csv, conv_unit=100):
                             "Density": round(density,4),
                             "Emergence": day["ilevs"]
                             }
-
+                        
+                    # for empty_k in range(len(output_dict[a][b][c])+1,732):
+                    #     output_dict[a][b][c][empty_k] = None
 
     return output_dict
 
@@ -342,20 +347,22 @@ def get_stics_data(file_tec_xml, file_plt_xml, stics_output_file, end=-1):
     return density, stics_output_data, lifespan, lifespan_early, interrow
 
 
-def get_stics_data_IC(file_tec_xml, file_plt_xml, d_outputs, usm, algo, plant):
+def get_stics_data_IC(file_tec_xml, file_plt_xml, stics_output_data):
     """Retrieve STICS management and senescence parameters, and growth dynamics."""
     # tec_stics = get_stics_management_params(file_tec_xml)
     # interrow = tec_stics['interrang']
     interrow = None
     
-    stics_output_data = d_outputs[usm][algo][plant]
+    # stics_output_data = {i : d_outputs[usm][algo][plant][i] 
+    #                      for i in range(1,len(d_outputs[usm][algo][plant])+1) 
+    #                      if d_outputs[usm][algo][plant][i] is not None}
     density = stics_output_data[len(stics_output_data)]["Density"]
     
     sen_stics = get_stics_senescence_params(file_plt_xml)
     lifespan = sen_stics['durvieF']
     lifespan_early = sen_stics['ratiodurvieI'] * lifespan
     
-    return density, stics_output_data, lifespan, lifespan_early, interrow
+    return density, lifespan, lifespan_early, interrow
 
 
 def stics_weather_3d(filename, daily_dynamics):
@@ -382,19 +389,22 @@ def stics_weather_3d_bis(filename, dates):
 
 
 def get_pheno(daily_dynamics: dict):
-    thermal_time = [value["Thermal time"] for value in daily_dynamics.values()]
+    thermal_time = [value["Thermal time"] for value in daily_dynamics.values() if value is not None]
+
+    index_end_veg = len(thermal_time) - 1
+    end_veg = thermal_time[index_end_veg] 
 
     for key, value in daily_dynamics.items():
         if value["Phenology"] == 'juvenile':
             next_key = key + 1
             if next_key in daily_dynamics and daily_dynamics[next_key]["Phenology"] == 'exponential':
-                end_juv = thermal_time[key-1] 
+                end_juv = thermal_time[key] # -1] 
 
         elif value["Phenology"] == 'exponential':
             next_key = key + 1
             if next_key in daily_dynamics and daily_dynamics[next_key]["Phenology"] == 'repro':
-                end_veg = thermal_time[key-1] 
-                index_end_veg = key - 1
+                index_end_veg = next_key # key # - 1
+                end_veg = thermal_time[index_end_veg] 
                 break
     
     return index_end_veg, end_veg, end_juv
@@ -409,10 +419,10 @@ def stics_output(tec_file, plant_file, stics_output_file):
         stics_output_file=stics_output_file  # Path to the STICS output file
     )
 
-    thermal_time = [value["Thermal time"] for value in daily_dynamics.values()]
-    leaf_area_plant = [value["Plant leaf area"] for value in daily_dynamics.values()]
-    sen_leaf_area_plant = [value["Plant senescent leaf area"] for value in daily_dynamics.values()]
-    height_canopy = [value["Plant height"] for value in daily_dynamics.values()]
+    thermal_time = [value["Thermal time"] for value in daily_dynamics.values() if value is not None]
+    leaf_area_plant = [value["Plant leaf area"] for value in daily_dynamics.values() if value is not None]
+    sen_leaf_area_plant = [value["Plant senescent leaf area"] for value in daily_dynamics.values() if value is not None]
+    height_canopy = [value["Plant height"] for value in daily_dynamics.values() if value is not None]
 
     index_end_veg, end_veg, end_juv = get_pheno(daily_dynamics)
 

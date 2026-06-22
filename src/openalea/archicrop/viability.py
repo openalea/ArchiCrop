@@ -251,10 +251,13 @@ def compute_viable_params(params_sets: dict, daily_dynamics: dict, pot_factor_la
     """Compute viable parameters wrt the dynamic constraint of LAI and height."""
 
     # Dynamics of vegetative phase
-    thermal_time = [value["Thermal time"] for value in daily_dynamics.values()]
+    thermal_time = [value["Thermal time"] for value in daily_dynamics.values() if value is not None]
     index_end_veg, end_veg, _ = get_pheno(daily_dynamics)
-    thermal_time = [value["Thermal time"] for value in daily_dynamics.values()][:index_end_veg+2]
-    leaf_area_plant = [value["Plant leaf area"] for value in daily_dynamics.values()][:index_end_veg+2]
+    if index_end_veg == len(thermal_time) - 1:
+        leaf_area_plant = [value["Plant leaf area"] for value in daily_dynamics.values() if value is not None][:index_end_veg]
+    else:
+        thermal_time = [value["Thermal time"] for value in daily_dynamics.values() if value is not None][:index_end_veg+2]
+        leaf_area_plant = [value["Plant leaf area"] for value in daily_dynamics.values() if value is not None][:index_end_veg+2]
     
     # Viable values for parameters
     new_params_sets = {}
@@ -313,7 +316,7 @@ def compute_viable_params(params_sets: dict, daily_dynamics: dict, pot_factor_la
                                 skews_rmax_ok.append((skew, rmax))
                          
             # Build new parameter set with updated 'skew' and 'rmax'
-            for (s,r) in skews_rmax_ok[:1]: #################### All realized leaf area distributions are the same no matter the (rmax,skew) given
+            for (s,r) in skews_rmax_ok[:1]: 
                 new_param = {}
                 for key, value in params.items():
                     if key == "skew":

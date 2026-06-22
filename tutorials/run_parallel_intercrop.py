@@ -26,7 +26,7 @@ if __name__ == '__main__':
     # n_cpu = int(input())
     # id_sim = list(range(n_cpu))
     id_sim = [1,2,3,4,5,6,10,12,14,16,18,20,22,24,26]
-    # id_sim = [1,26]
+    # id_sim = [1,2,26]
     id_usm = [f"usm_{i}" for i in id_sim]
     n_cpu = len(id_sim)
 
@@ -71,14 +71,14 @@ if __name__ == '__main__':
             param_sets_1, density_1 = define_archicrop_parameters_IC(archi_params = archi_1, 
                                                     tec_file = t1, 
                                                     plant_file = plant_file_1, 
-                                                    d_outputs=d_outputs, usm=usm, algo=algo, plant=plant_1,
+                                                    d_outputs = d_outputs[usm][algo][plant_1],
                                                     pot_factor_lai = pot_factor_lai,
                                                     pot_factor_height = pot_factor_height)
             
             param_sets_2, density_2 = define_archicrop_parameters_IC(archi_params = archi_2, 
                                                     tec_file = t2, 
                                                     plant_file = plant_file_2, 
-                                                    d_outputs=d_outputs, usm=usm, algo=algo, plant=plant_2,
+                                                    d_outputs = d_outputs[usm][algo][plant_2],
                                                     pot_factor_lai = pot_factor_lai,
                                                     pot_factor_height = pot_factor_height)
             
@@ -97,7 +97,7 @@ if __name__ == '__main__':
         "middle" : 0.4,
         "low" : 0.2
     },
-    "maize" : {
+    "maize_trop" : {
         "high" : 0.8,
         "middle" : 0.4,
         "low" : 0.2
@@ -111,7 +111,7 @@ if __name__ == '__main__':
         "middle" : 4,
         "low" : 2
     },
-    "maize" : {
+    "maize_trop" : {
         "one" : 1,
         "high" : 6,
         "middle" : 4,
@@ -125,7 +125,7 @@ if __name__ == '__main__':
         "middle" : 0.4, # ~6 plants per m2 with 0.4m interrow distance, gives 0.41m intrarow distance
         "low" : 0.2
     },
-    "maize" : {
+    "maize_trop" : {
         "high" : 0.8,
         "middle" : 0.4,
         "low" : 0.2
