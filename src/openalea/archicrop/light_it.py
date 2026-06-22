@@ -216,20 +216,19 @@ def light_interception_IC(weather_file, daily_dynamics, stand, location, mtgs, z
         positions_crop[a] = {}
         domain_areas[a] = {}
         for b, algo in usm.items():
-
             plants = list(mtgs[a][b].keys())
             ids = list(mtgs[a][b][plants[0]].keys())
             nrj_per_plant[a][b] = {plants[0]:{},
                                    plants[1]:{}}
             nrj_per_leaf = {plants[0]:[],
                             plants[1]:[]}
-            
+
             dates1 = list(mtgs[a][b][plants[0]][ids[0]].keys())
             dates2 = list(mtgs[a][b][plants[1]][ids[0]].keys())
-            dates = list(dict.fromkeys(dates1 + dates2))
+            dates = sorted(list(dict.fromkeys(dates1 + dates2)))
             
             list_of_graphs[a][b], positions_crop[a][b] = config_crop_intercrop(dates, growing_plant_1=mtgs[a][b][plants[0]][ids[0]], growing_plant_2=mtgs[a][b][plants[1]][ids[0]], **stand[a][b])
-            
+
             domain = ((0, 0), (stand[a][b]["width"] * conv_coef, stand[a][b]["length"] * conv_coef))
             domain_area = (abs(domain[1][0] - domain[0][0])
                             / conv_coef
@@ -254,7 +253,12 @@ def light_interception_IC(weather_file, daily_dynamics, stand, location, mtgs, z
                     irr = sky_irradiance(daydate=incident_rad.daydate, day_ghi=par, **location)
                     sun, sky = sky_sources(sky_type='clear_sky', sky_irradiance=irr, scale='global') #, source_irradiance='horizontal')
                     lights = caribu_light_sources(sun, sky)
-                
+
+                # print("lights :", lights)
+                # print("mtg :", list_of_graphs[a][b][i])
+                # print("positions :", positions_crop[a][b])
+                # print("domain :", domain)
+
                 # Build and illuminate scene
                 scene, labels = build_scene(mtg=list_of_graphs[a][b][i], position=positions_crop[a][b], senescence=True)
                 cs, raw, agg = illuminate(scene=scene, light=lights, labels=labels, domain=domain, direct=direct) # --> cf PARaggregators in caribu scene node
