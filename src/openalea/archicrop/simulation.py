@@ -4,7 +4,7 @@ import itertools
 import math
 import os
 import time
-from datetime import date
+from datetime import date, timedelta
 
 import numpy as np
 import pandas as pd
@@ -226,16 +226,15 @@ def simulate_plant_growth_IC(param_sets: dict, daily_dynamics: dict, distributio
         plant = ArchiCrop(daily_dynamics=daily_dynamics, **params)
         plant.generate_potential_plant()
         growing_plant = plant.grow_plant(distribution_function=distribution_function)
-        growing_plant_mtg = list(growing_plant.values())
-        mtgs[id] = {date:mtg for date,mtg in zip(dates,growing_plant_mtg)}
+        mtgs[id] = growing_plant
 
-        realized_la[id] = [sum(la - sen 
+        realized_la[id] = {date: sum(la - sen 
                             for la, sen in zip(gp.properties()["visible_leaf_area"].values(), gp.properties()["senescent_area"].values())) 
-                            for gp in growing_plant_mtg]
-        realized_h[id] = [sum([vl 
+                            for date,gp in growing_plant.items()}
+        realized_h[id] = {date: sum([vl 
                                 for vid, vl in gp.properties()["visible_length"].items() 
                                 if gp.node(vid).label.startswith("Stem")]) 
-                                for gp in growing_plant_mtg]
+                                for date,gp in growing_plant.items()}
         
     return realized_la, realized_h, mtgs
 
@@ -408,8 +407,9 @@ def run_archicrop_and_light_IC(param_sets: dict,
             realized_h[a][b] = {}
             mtgs[a][b] = {}
             for c,plant in algo.items():
-                pot_la[a][b][c], pot_h[a][b][c], _ = compute_pot_growth(param_sets=plant[0], daily_dynamics=daily_dynamics[a][b][c])
+                # pot_la[a][b][c], pot_h[a][b][c], _ = compute_pot_growth(param_sets=plant[0], daily_dynamics=daily_dynamics[a][b][c])
                 realized_la[a][b][c], realized_h[a][b][c], mtgs[a][b][c] = simulate_plant_growth_IC(param_sets=plant[0], daily_dynamics=daily_dynamics[a][b][c])
+                dates = [value["Date"] for value in daily_dynamics[a][b][c].values() if value is not None]
 
     # Compute light interception on 3D scenes through time
     if light_inter:
@@ -424,26 +424,29 @@ def run_archicrop_and_light_IC(param_sets: dict,
             save_scenes=save_scenes, 
         )
     else:
-        nrj_per_plant = {a : {b : {c : {k : [None] * len(plant[k]) for k in plant} for c,plant in algo.items()} for b,algo in usm.items()} for a, usm in realized_la.items()}
+        nrj_per_plant = {a : {b : {c : {k : {d:None for d in dates} for k in plant} for c,plant in algo.items()} for b,algo in usm.items()} for a, usm in realized_la.items()}
         domain_areas = {a : {b : None for b,algo in usm.items()} for a, usm in realized_la.items()}
 
-    return daily_dynamics, pot_la, pot_h, realized_la, realized_h, nrj_per_plant, domain_areas, mtgs
+    return realized_la, realized_h, nrj_per_plant, domain_areas, mtgs
 
 
 
-def run_archicrop_and_light_parallel_IC(id_sim, param_sets: dict, dynamics_file: dict, stand: dict,
+def run_archicrop_and_light_parallel_IC(id_sim, param_sets: dict, daily_dynamics: dict, stand: dict,
              weather_file: str, location: dict, light_inter: bool = True, direct: bool = False):
     
-    daily_dynamics, pot_la, pot_h, realized_la, realized_h, nrj_per_plant, domain_areas, _ = run_archicrop_and_light_IC(param_sets=param_sets,
-                                                                                                                        daily_dynamics=dynamics_file, stand=stand,
-                                                                                                                        weather_file=weather_file, location=location, 
-                                                                                                                        light_inter=light_inter, direct=direct)
+    realized_la, realized_h, nrj_per_plant, domain_areas, _ = run_archicrop_and_light_IC(param_sets=param_sets,
+                                                                                        daily_dynamics=daily_dynamics, stand=stand,
+                                                                                        weather_file=weather_file, location=location, 
+                                                                                        light_inter=light_inter, direct=direct)
     
     # first_key = list(param_sets.keys())[0]
     # filename = f"results_light_inter_{param_sets[first_key]['nb_phy']}"
-    filename = "results_light_inter"
+    if light_inter:
+        filename = "results_light_inter"
+    else:
+        filename = "test"
     write_netcdf_IC(filename, daily_dynamics, param_sets, 
-                 pot_la, pot_h, realized_la, realized_h, nrj_per_plant, domain_areas,
+                 realized_la, realized_h, nrj_per_plant, domain_areas,
                  id_sim, 
                  dir = "../simulations_ArchiCrop/")
     
@@ -574,7 +577,7 @@ def write_netcdf(filename: str, daily_dynamics: dict, params_sets: dict,
 
 
 def write_netcdf_IC(filename: str, daily_dynamics: dict, params_sets: dict, 
-                 pot_la: dict, pot_h: dict, realized_la: dict, realized_h: dict, 
+                 realized_la: dict, realized_h: dict, 
                  nrj_per_leaf: dict, domain_areas:dict,
                  seed: int, 
                  dir: str = "../simulations_ArchiCrop/"):
@@ -610,36 +613,46 @@ def write_netcdf_IC(filename: str, daily_dynamics: dict, params_sets: dict,
                         "usm": usm,
                         "algo": algo,
                         "plant": plant,
-                        "time": t,
-                        "thermal_time":values["Thermal time"],
-                        "lai_stics":values["Plant leaf area"],
-                        "sen_lai_stics":values["Plant senescent leaf area"],
-                        "height_stics":values["Plant height"],
-                        "inc_par":values["Incident PAR"],
-                        "abs_par_stics":values["Absorbed PAR"],
-                        "n_demand":values["N demand"],
-                        "density":values["Density"]
+                        "date": values["Date"],
+                        "thermal_time": values["Thermal time"],
+                        "lai_stics": values["Plant leaf area"],
+                        "sen_lai_stics": values["Plant senescent leaf area"],
+                        "height_stics": values["Plant height"],
+                        "inc_par": values["Incident PAR"],
+                        "abs_par_stics": values["Absorbed PAR"],
+                        "n_demand": values["N demand"],
+                        "density": values["Density"]
                     })
-                for empty_k in range(len(times)+1,732):
-                    records.append({
-                        "usm": usm,
-                        "algo": algo,
-                        "plant": plant,
-                        "time": empty_k,
-                        "thermal_time": None,
-                        "lai_stics": None,
-                        "sen_lai_stics": None,
-                        "height_stics": None,
-                        "inc_par": None,
-                        "abs_par_stics": None,
-                        "n_demand": None,
-                        "density": None,
-                    })
+
+                dates_year = []
+                year = int(values["Date"][:4])
+                current = date(year, 1, 1)
+                end = date(year + 1, 1, 1)
+                while current < end:
+                    dates_year.append(current.strftime("%Y-%m-%d"))
+                    current += timedelta(days=1)
+
+                for blank_date in dates_year:
+                    if blank_date not in [value["Date"] for value in times.values() if value is not None]:
+                        records.append({
+                            "usm": usm,
+                            "algo": algo,
+                            "plant": plant,
+                            "date": blank_date, 
+                            "thermal_time": None,
+                            "lai_stics": None,
+                            "sen_lai_stics": None,
+                            "height_stics": None,
+                            "inc_par": None,
+                            "abs_par_stics": None,
+                            "n_demand": None,
+                            "density": None,
+                        })
 
     df_stics = pd.DataFrame(records)
     ds_stics = (
         df_stics
-        .set_index(["usm", "algo", "plant", "time"])
+        .set_index(["usm", "algo", "plant", "date"])
         .to_xarray()
     )
 
@@ -647,8 +660,6 @@ def write_netcdf_IC(filename: str, daily_dynamics: dict, params_sets: dict,
     df_la_h = []
     ds_la_h = []
     outputs = {
-        "pot_la" : pot_la,
-        "pot_h" : pot_h,
         "realized_la" : realized_la,
         "realized_h" : realized_h
     }
@@ -658,29 +669,39 @@ def write_netcdf_IC(filename: str, daily_dynamics: dict, params_sets: dict,
             for algo, plants in algos.items():
                 for plant, ids in plants.items():
                     for id_, values in ids.items():
-                        for t, value in enumerate(values):
+                        for t, value in values.items():
                             records.append({
                                 "usm": usm,
                                 "algo": algo,
                                 "plant": plant,
                                 "id": id_,
-                                "time": t,
+                                "date": t,
                                 name : value,
                             })
-                        for empty_k in range(len(values)+1,732):
-                            records.append({
-                                "usm": usm,
-                                "algo": algo,
-                                "plant": plant,
-                                "id": id_,
-                                "time": empty_k,
-                                name : None
-                            })
+
+                        dates_year = []
+                        year = int(t[:4])
+                        current = date(year, 1, 1)
+                        end = date(year + 1, 1, 1)
+                        while current < end:
+                            dates_year.append(current.strftime("%Y-%m-%d"))
+                            current += timedelta(days=1)
+
+                        for blank_date in dates_year:
+                            if blank_date not in values.keys():
+                                records.append({
+                                    "usm": usm,
+                                    "algo": algo,
+                                    "plant": plant,
+                                    "id": id_,
+                                    "date": blank_date,
+                                    name : None
+                                })
 
         df = pd.DataFrame(records)
         ds = (
             df
-            .set_index(["usm", "algo", "plant", "id", "time"])
+            .set_index(["usm", "algo", "plant", "id", "date"])
             .to_xarray()
         )
         df_la_h.append(df)
@@ -693,24 +714,34 @@ def write_netcdf_IC(filename: str, daily_dynamics: dict, params_sets: dict,
         for algo, plants in algos.items():
             for plant, ids in plants.items():
                 for id_, values in ids.items():
-                    for t, value in enumerate(values):
+                    for t, value in values.items():
                         records.append({
                             "usm": usm,
                             "algo": algo,
                             "plant": plant,
                             "id": id_,
-                            "time": t,
+                            "date": t,
                             "nrj_per_leaf": value,
                         })
-                    for empty_k in range(len(values)+1,732):
-                        records.append({
-                            "usm": usm,
-                            "algo": algo,
-                            "plant": plant,
-                            "id": id_,
-                            "time": empty_k,
-                            "nrj_per_leaf": None
-                        })
+
+                    dates_year = []
+                    year = int(t[:4])
+                    current = date(year, 1, 1)
+                    end = date(year + 1, 1, 1)
+                    while current < end:
+                        dates_year.append(current.strftime("%Y-%m-%d"))
+                        current += timedelta(days=1)
+
+                    for blank_date in dates_year:
+                        if blank_date not in values.keys():
+                            records.append({
+                                "usm": usm,
+                                "algo": algo,
+                                "plant": plant,
+                                "id": id_,
+                                "date": blank_date,
+                                "nrj_per_leaf": None
+                            })
                         # if value is not None:
                             # for leaf, nrj in enumerate(value):
                             #     records.append({
@@ -737,7 +768,7 @@ def write_netcdf_IC(filename: str, daily_dynamics: dict, params_sets: dict,
     df_light = pd.DataFrame(records)
     ds_light = (
         df_light
-        .set_index(["usm", "algo", "plant", "id", "time"]) #, "leaf"])
+        .set_index(["usm", "algo", "plant", "id", "date"]) #, "leaf"])
         .to_xarray()
     )    
                                 

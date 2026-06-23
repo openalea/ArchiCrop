@@ -220,8 +220,8 @@ def light_interception_IC(weather_file, daily_dynamics, stand, location, mtgs, z
             ids = list(mtgs[a][b][plants[0]].keys())
             nrj_per_plant[a][b] = {plants[0]:{},
                                    plants[1]:{}}
-            nrj_per_leaf = {plants[0]:[],
-                            plants[1]:[]}
+            nrj_per_leaf = {plants[0]:{},
+                            plants[1]:{}}
 
             dates1 = list(mtgs[a][b][plants[0]][ids[0]].keys())
             dates2 = list(mtgs[a][b][plants[1]][ids[0]].keys())
@@ -268,10 +268,10 @@ def light_interception_IC(weather_file, daily_dynamics, stand, location, mtgs, z
 
                 if stand[a][b]["nb_rows_1"] == 0 or stand[a][b]["nb_rows_2"] == 0:
                     for plant in [0,1]:
-                        nrj_per_leaf[plants[plant]].append(sum(list(agg.loc[(agg.is_green) & (agg['label'] == 'Leaf') & (agg['plant'] == plant)]['Energy'].values)))
+                        nrj_per_leaf[plants[plant]] = {i : (sum(list(agg.loc[(agg.is_green) & (agg['label'] == 'Leaf') & (agg['plant'] == plant)]['Energy'].values)))}
                 else:
-                    nrj_per_leaf[plants[0]].append(sum(list(agg.loc[(agg.is_green) & (agg['label'] == 'Leaf') & (agg['plant'].isin(range(0,stand[a][b]["nb_rows_1"])))]['Energy'].values)) / stand[a][b]["nb_rows_1"])
-                    nrj_per_leaf[plants[1]].append(sum(list(agg.loc[(agg.is_green) & (agg['label'] == 'Leaf') & (agg['plant'].isin(range(stand[a][b]["nb_rows_1"],stand[a][b]["nb_rows_2"]+stand[a][b]["nb_rows_1"])))]['Energy'].values)) / stand[a][b]["nb_rows_2"])
+                    nrj_per_leaf[plants[0]] = {i : (sum(list(agg.loc[(agg.is_green) & (agg['label'] == 'Leaf') & (agg['plant'].isin(range(0,stand[a][b]["nb_rows_1"])))]['Energy'].values)) / stand[a][b]["nb_rows_1"])}
+                    nrj_per_leaf[plants[1]] = {i : (sum(list(agg.loc[(agg.is_green) & (agg['label'] == 'Leaf') & (agg['plant'].isin(range(stand[a][b]["nb_rows_1"],stand[a][b]["nb_rows_2"]+stand[a][b]["nb_rows_1"])))]['Energy'].values)) / stand[a][b]["nb_rows_2"])}
                     #  nrj_per_leaf[plants[0]].append(agg.loc[(agg.is_green) & (agg['label'] == 'Leaf') & (agg['plant'].isin(range(0,stand[a][b]["nb_rows_1"])))]['Energy'].values)
                     #  nrj_per_leaf[plants[1]].append(agg.loc[(agg.is_green) & (agg['label'] == 'Leaf') & (agg['plant'].isin(range(stand[a][b]["nb_rows_1"],stand[a][b]["nb_rows_2"])))]['Energy'].values)
                 
