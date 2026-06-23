@@ -142,8 +142,8 @@ if __name__ == '__main__':
             spat_conf["row_orientation"] = row_orientation_values[spat_conf["row_orientation"]]
             spat_conf["interrow_distance_principal"] = interrow_distance_per_species[spat_conf["species_principal"]][spat_conf["interrow_distance_principal"]]
             spat_conf["interrow_distance_secondary"] = interrow_distance_per_species[spat_conf["species_secondary"]][spat_conf["interrow_distance_secondary"]]
-            spat_conf["n_rows_principal"] = n_rows_per_species[spat_conf["species_principal"]][spat_conf["n_rows_principal"]]
-            spat_conf["n_rows_secondary"] = n_rows_per_species[spat_conf["species_secondary"]][spat_conf["n_rows_secondary"]]
+            spat_conf["n_rows_principal"] = 0 if spat_conf["design"] == "intercrop mixed" else n_rows_per_species[spat_conf["species_principal"]][spat_conf["n_rows_principal"]]
+            spat_conf["n_rows_secondary"] = 0 if spat_conf["design"] == "intercrop mixed" else n_rows_per_species[spat_conf["species_secondary"]][spat_conf["n_rows_secondary"]]
             spat_conf["intrarow_distance"] = intrarow_distance_per_species[spat_conf["species_principal"]][spat_conf["intrarow_distance"]]
 
             doe_adapt[usm] = {}
