@@ -724,24 +724,24 @@ def write_netcdf_IC(filename: str, daily_dynamics: dict, params_sets: dict,
                             "nrj_per_leaf": value,
                         })
 
-                    dates_year = []
-                    year = int(t[:4])
-                    current = date(year, 1, 1)
-                    end = date(year + 1, 1, 1)
-                    while current < end:
-                        dates_year.append(current.strftime("%Y-%m-%d"))
-                        current += timedelta(days=1)
+                    # dates_year = []
+                    # year = int(t[:4])
+                    # current = date(year, 1, 1)
+                    # end = date(year + 1, 1, 1)
+                    # while current < end:
+                    #     dates_year.append(current.strftime("%Y-%m-%d"))
+                    #     current += timedelta(days=1)
 
-                    for blank_date in dates_year:
-                        if blank_date not in values.keys():
-                            records.append({
-                                "usm": usm,
-                                "algo": algo,
-                                "plant": plant,
-                                "id": id_,
-                                "date": blank_date,
-                                "nrj_per_leaf": None
-                            })
+                    # for blank_date in dates_year:
+                    #     if blank_date not in values.keys():
+                    #         records.append({
+                    #             "usm": usm,
+                    #             "algo": algo,
+                    #             "plant": plant,
+                    #             "id": id_,
+                    #             "date": blank_date,
+                    #             "nrj_per_leaf": 0
+                    #         })
                         # if value is not None:
                             # for leaf, nrj in enumerate(value):
                             #     records.append({

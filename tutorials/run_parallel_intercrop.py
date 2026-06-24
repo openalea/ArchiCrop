@@ -25,8 +25,8 @@ if __name__ == '__main__':
     # print("Nb CPU : ")
     # n_cpu = int(input())
     # id_sim = list(range(n_cpu))
-    # id_sim = [1,2,3,4,5,6,10,12,14,16,18,20,22,24,26]
-    id_sim = [1,2,26]
+    id_sim = [1,2,3,4,5,6,10,12,14,16,18,20,22,24,26]
+    # id_sim = [1,2,26]
     id_usm = [f"usm_{i}" for i in id_sim]
     n_cpu = len(id_sim)
 
@@ -150,13 +150,20 @@ if __name__ == '__main__':
 
             for algo in param_sets[usm]:
 
+                density_1 = param_sets[usm][algo][plant_1][1]
+                density_2 = param_sets[usm][algo][plant_2][1]
+                inter_row_1 = spat_conf["interrow_distance_principal"]
+                inter_row_2 = spat_conf["interrow_distance_secondary"]
+                intra_row_1 = 1/density_1/inter_row_1
+                intra_row_2 = 1/density_2/inter_row_2
+
                 doe_adapt[usm][algo] = {
-                    "density_1" : param_sets[usm][algo][plant_1][1],
-                    "density_2" : param_sets[usm][algo][plant_2][1],
-                    "inter_row_1" : spat_conf["interrow_distance_principal"],
-                    "inter_row_2" : spat_conf["interrow_distance_secondary"],
-                    "width" : 2 * spat_conf["interrow_distance_principal"] if spat_conf["design"] == "intercrop mixed" else (spat_conf["n_rows_principal"]+1) * spat_conf["interrow_distance_principal"] + (spat_conf["n_rows_secondary"]-1) * spat_conf["interrow_distance_secondary"],
-                    "length" : 2 * spat_conf["intrarow_distance"] if spat_conf["design"] == "intercrop mixed" else spat_conf["intrarow_distance"],
+                    "density_1" : density_1,
+                    "density_2" : density_2,
+                    "inter_row_1" : inter_row_1,
+                    "inter_row_2" : inter_row_2,
+                    "width" : 2 * inter_row_1 if spat_conf["design"] == "intercrop mixed" else (spat_conf["n_rows_principal"]-1) * inter_row_1 + (spat_conf["n_rows_secondary"]-1) * inter_row_2 + 2*max(inter_row_1, inter_row_2),
+                    "length" : 2 * max(intra_row_1, intra_row_2) if spat_conf["design"] == "intercrop mixed" else max(intra_row_1, intra_row_2),
                     "nb_rows_1" : spat_conf["n_rows_principal"],
                     "nb_rows_2" : spat_conf["n_rows_secondary"]
                 }
