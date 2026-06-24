@@ -25,8 +25,8 @@ if __name__ == '__main__':
     # print("Nb CPU : ")
     # n_cpu = int(input())
     # id_sim = list(range(n_cpu))
-    id_sim = [1,2,3,4,5,6,10,12,14,16,18,20,22,24,26]
-    # id_sim = [1,2,26]
+    # id_sim = [1,2,3,4,5,6,10,12,14,16,18,20,22,24,26]
+    id_sim = [1,2,26]
     id_usm = [f"usm_{i}" for i in id_sim]
     n_cpu = len(id_sim)
 
@@ -161,6 +161,7 @@ if __name__ == '__main__':
                     "nb_rows_2" : spat_conf["n_rows_secondary"]
                 }
 
+    print(doe_adapt)
 
     # keys = list(param_sets.keys())
     # chunk_size = ceil(len(keys)*2 / n_cpu)

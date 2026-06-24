@@ -33,35 +33,24 @@ def config_positions_intercrop(inter_row_1, inter_row_2, inter_plant_1, inter_pl
         nstrips = width / (wstrip_1 + wstrip_2)
 
     positions_crop = []
-    if orientation == "N-S":
-        dx = (inter_plant_1 * conv_coef, inter_plant_2 * conv_coef)
-        dy = (inter_row_1 * conv_coef, inter_row_2 * conv_coef)
 
-        if nrows_1 == 0 or nrows_2 == 0:
-            positions_crop = regular(int(nrows * plant_per_row_1), int(nrows), dx[0], dy[0], int(plant_per_row_1))[0]
-        else:
-            for i in range(int(nstrips)):
-                for j in [0,1]:
-                    pos_tmp = regular(int(nrows[j] * plant_per_row[j]), int(nrows[j]), dx[j], dy[j], int(plant_per_row[j]))[0]
-                    # offset to pos_tmp depending on i and j
-                    for k, (x,y,z) in enumerate(pos_tmp):
-                        pos_tmp[k] = (x, y - dy[j]/2 + (i * (wstrip_1 + wstrip_2) + j * wstrip_1) * conv_coef, z)
-                    positions_crop += pos_tmp
+    dx = (inter_plant_1 * conv_coef, inter_plant_2 * conv_coef)
+    dy = (inter_row_1 * conv_coef, inter_row_2 * conv_coef)
 
-    elif orientation == "E-W":
-        dy = (inter_plant_1 * conv_coef, inter_plant_2 * conv_coef)
-        dx = (inter_row_1 * conv_coef, inter_row_2 * conv_coef)
-
-        if nrows_1 == 0 or nrows_2 == 0:
-            positions_crop = regular(int(nrows * plant_per_row_1), int(plant_per_row_1), dx[0], dy[0], int(nrows))[0]
-        else:
-            for i in range(int(nstrips)):
-                for j in [0,1]:
-                    pos_tmp = regular(int(nrows[j] * plant_per_row[j]), int(plant_per_row[j]), dx[j], dy[j], int(nrows[j]))[0]
-                    # offset to pos_tmp depending on i and j
-                    for k, (x,y,z) in enumerate(pos_tmp):
-                        pos_tmp[k] = (x - dx[j]/2 + (i * (wstrip_1 + wstrip_2) + j * wstrip_1) * conv_coef, y, z)
-                    positions_crop += pos_tmp
+    if nrows_1 == 0 or nrows_2 == 0:
+        positions_crop = regular(int(nrows * plant_per_row_1), int(nrows), dx[0], dy[0], int(plant_per_row_1))[0]
+        # Switch places of 1 row to get mixed pattern
+        # pos_tmp = positions_crop[2][:]
+        # positions_crop[2] = positions_crop[3][:]
+        # positions_crop[3] = pos_tmp
+    else:
+        for i in range(int(nstrips)):
+            for j in [0,1]:
+                pos_tmp = regular(int(nrows[j] * plant_per_row[j]), int(nrows[j]), dx[j], dy[j], int(plant_per_row[j]))[0]
+                # offset to pos_tmp depending on i and j
+                for k, (x,y,z) in enumerate(pos_tmp):
+                    pos_tmp[k] = (x, y - dy[j]/2 + (i * (wstrip_1 + wstrip_2) + j * wstrip_1) * conv_coef, z)
+                positions_crop += pos_tmp
 
     positions_crop = sorted(positions_crop, key=itemgetter(1, 0)) # sorting by ranks
 
@@ -70,16 +59,16 @@ def config_positions_intercrop(inter_row_1, inter_row_2, inter_plant_1, inter_pl
 def config_list_intercrop(dates, growing_plant_1, growing_plant_2, nrows_1, nrows_2, plant_per_row_1, plant_per_row_2):
     
     gp1 = [[growing_plant_1[date]] 
-            if date in growing_plant_1 
+            if date in growing_plant_1.keys() 
             else [MTG()]
             for date in dates]
     gp2 = [[growing_plant_2[date]] 
-            if date in growing_plant_2 
+            if date in growing_plant_2.keys() 
             else [MTG()]
             for date in dates]
     
     if nrows_1 == 0 or nrows_2 == 0:
-        return {date: g1 + g2
+        return {date: g1 + g2 + g2 + g1
                 for date, g1, g2 in zip(dates, gp1, gp2)}
     else:
         return {date: g1*int(plant_per_row_1)*nrows_1 + g2*int(plant_per_row_2)*nrows_2 
