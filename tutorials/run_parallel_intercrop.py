@@ -161,8 +161,6 @@ if __name__ == '__main__':
                     "nb_rows_2" : spat_conf["n_rows_secondary"]
                 }
 
-    print(doe_adapt)
-
     # keys = list(param_sets.keys())
     # chunk_size = ceil(len(keys)*2 / n_cpu)
     # params_sets_split = {
