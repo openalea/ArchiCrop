@@ -13,6 +13,8 @@ from openalea.archicrop.stics_io import stics_weather_3d, stics_weather_3d_bis
 from openalea.astk.sky_irradiance import sky_irradiance
 from openalea.astk.sky_sources import caribu_light_sources, sky_sources
 
+from openalea.plantgl.all import Viewer
+
 # Einc is the total incident energy received on the domain
 # Eabs (float): the surfacic density of energy absorbed (MJ m⁻² s⁻¹)
 # raint (float): from STICS, Photosynthetic Active Radiation intercepted by the canopy 	(MJ m⁻²) --> faPAR !!!
@@ -231,11 +233,8 @@ def light_interception_IC(weather_file, daily_dynamics, stand, location, mtgs, z
             # print(a, positions_crop[a][b])
 
             domain = ((0, 0), (stand[a][b]["width"] * conv_coef, stand[a][b]["length"] * conv_coef))
-            domain_area = (abs(domain[1][0] - domain[0][0])
-                            / conv_coef
-                            * abs(domain[1][1] - domain[0][1])
-                            / conv_coef
-                            )
+            domain_area = (abs(domain[1][0] - domain[0][0]) / conv_coef
+                            * abs(domain[1][1] - domain[0][1]) / conv_coef)
             domain_areas[a][b] = domain_area
 
             # Read weather data
@@ -262,6 +261,8 @@ def light_interception_IC(weather_file, daily_dynamics, stand, location, mtgs, z
 
                 # Build and illuminate scene
                 scene, labels = build_scene(mtg=list_of_graphs[a][b][i], position=positions_crop[a][b], senescence=True)
+                # Viewer.display(scene)
+                # Viewer.frameGL.saveImage(f'scene_{a}_{i}.png') 
                 cs, raw, agg = illuminate(scene=scene, light=lights, labels=labels, domain=domain, direct=direct) # --> cf PARaggregators in caribu scene node
                 
                 # Compute energy per leaf
@@ -271,11 +272,14 @@ def light_interception_IC(weather_file, daily_dynamics, stand, location, mtgs, z
                     for plant in [0,1]:
                         nrj_per_leaf[plants[plant]] = {i : (sum(list(agg.loc[(agg.is_green) & (agg['label'] == 'Leaf') & (agg['plant'] == plant)]['Energy'].values)))}
                 else:
-                    nrj_per_leaf[plants[0]] = {i : (sum(list(agg.loc[(agg.is_green) & (agg['label'] == 'Leaf') & (agg['plant'].isin(range(0,stand[a][b]["nb_rows_1"])))]['Energy'].values)) / stand[a][b]["nb_rows_1"])}
-                    nrj_per_leaf[plants[1]] = {i : (sum(list(agg.loc[(agg.is_green) & (agg['label'] == 'Leaf') & (agg['plant'].isin(range(stand[a][b]["nb_rows_1"],stand[a][b]["nb_rows_2"]+stand[a][b]["nb_rows_1"])))]['Energy'].values)) / stand[a][b]["nb_rows_2"])}
+                    nrj_per_leaf[plants[0]][i] = sum(list(agg.loc[(agg.is_green) & (agg['label'] == 'Leaf') & (agg['plant'].isin(range(0,stand[a][b]["nb_rows_1"])))]['Energy'].values)) / stand[a][b]["nb_rows_1"]
+                    nrj_per_leaf[plants[1]][i] = sum(list(agg.loc[(agg.is_green) & (agg['label'] == 'Leaf') & (agg['plant'].isin(range(stand[a][b]["nb_rows_1"],stand[a][b]["nb_rows_2"]+stand[a][b]["nb_rows_1"])))]['Energy'].values)) / stand[a][b]["nb_rows_2"]
                     #  nrj_per_leaf[plants[0]].append(agg.loc[(agg.is_green) & (agg['label'] == 'Leaf') & (agg['plant'].isin(range(0,stand[a][b]["nb_rows_1"])))]['Energy'].values)
                     #  nrj_per_leaf[plants[1]].append(agg.loc[(agg.is_green) & (agg['label'] == 'Leaf') & (agg['plant'].isin(range(stand[a][b]["nb_rows_1"],stand[a][b]["nb_rows_2"])))]['Energy'].values)
-                
+
+                # print(a, nrj_per_leaf[plants[0]])
+                # print(a, nrj_per_leaf[plants[1]])
+
                 # Save scene if required
                 if save_scenes:
                     values = list(chain.from_iterable(raw.values()))
@@ -283,8 +287,8 @@ def light_interception_IC(weather_file, daily_dynamics, stand, location, mtgs, z
                     nvalues=np.array(values)
                     nvalues[nvalues>v99]=v99
                     raw_new = nvalues.tolist()
-                    scene_tmp = cs.plot(raw, maxval=max(raw_new), display=False)[0]
-                    scene_tmp.save(f'scene_{i}.png') # not as images !!!
+                    cs.plot(raw, maxval=max(raw_new), display=False)
+                    Viewer.frameGL.saveImage(f'scene_{a}_{i}.png') 
 
             # nrj_per_plant[k] = [sum(nrj) for nrj in nrj_per_leaf]
             nrj_per_plant[a][b][plants[0]][ids[0]] = nrj_per_leaf[plants[0]]

@@ -432,12 +432,13 @@ def run_archicrop_and_light_IC(param_sets: dict,
 
 
 def run_archicrop_and_light_parallel_IC(id_sim, param_sets: dict, daily_dynamics: dict, stand: dict,
-             weather_file: str, location: dict, light_inter: bool = True, direct: bool = False):
+             weather_file: str, location: dict, light_inter: bool = True, direct: bool = False, save_scenes: bool = False):
     
     realized_la, realized_h, nrj_per_plant, domain_areas, _ = run_archicrop_and_light_IC(param_sets=param_sets,
                                                                                         daily_dynamics=daily_dynamics, stand=stand,
                                                                                         weather_file=weather_file, location=location, 
-                                                                                        light_inter=light_inter, direct=direct)
+                                                                                        light_inter=light_inter, direct=direct, 
+                                                                                        save_scenes=save_scenes)
     
     # first_key = list(param_sets.keys())[0]
     # filename = f"results_light_inter_{param_sets[first_key]['nb_phy']}"
@@ -740,7 +741,7 @@ def write_netcdf_IC(filename: str, daily_dynamics: dict, params_sets: dict,
                     #             "plant": plant,
                     #             "id": id_,
                     #             "date": blank_date,
-                    #             "nrj_per_leaf": 0
+                    #             "nrj_per_leaf": None
                     #         })
                         # if value is not None:
                             # for leaf, nrj in enumerate(value):

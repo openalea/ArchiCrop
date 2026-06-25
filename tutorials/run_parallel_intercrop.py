@@ -26,7 +26,7 @@ if __name__ == '__main__':
     # n_cpu = int(input())
     # id_sim = list(range(n_cpu))
     id_sim = [1,2,3,4,5,6,10,12,14,16,18,20,22,24,26]
-    # id_sim = [1,2,26]
+    # id_sim = [1,26]
     id_usm = [f"usm_{i}" for i in id_sim]
     n_cpu = len(id_sim)
 
@@ -34,7 +34,7 @@ if __name__ == '__main__':
     # tec_files_1=list(path.glob("sorghum_*_tec.xml"))
     # tec_files_2=list(path.glob("maize_*_tec.xml"))
     plant_file_1='../data/usms_STICS/v11_IC_light/plant/sorgho_imp_M_v10_plt.xml'
-    plant_file_2='../data/usms_STICS/v11_IC_light/plant/corn_LI_step2_MANT_plt.xml'
+    plant_file_2='../data/usms_STICS/v11_IC_light/plant/corn_LI_step2_BEOU_plt.xml'
 
     tec_files_1 = []
     tec_files_2 = []
@@ -57,6 +57,7 @@ if __name__ == '__main__':
     distribution_function = demand_dist_bis
     light_inter = True
     direct = False
+    save_scenes = False
 
     param_sets = {}
 
@@ -179,7 +180,7 @@ if __name__ == '__main__':
     with Pool(n_cpu) as p:
         start_time = t.time()
         p.starmap_async(run_archicrop_and_light_parallel_IC, 
-                        [(usm, {usm:param_sets[usm]}, {usm:d_outputs[usm]}, {usm:doe_adapt[usm]}, weather_file, location, light_inter, direct) 
+                        [(usm, {usm:param_sets[usm]}, {usm:d_outputs[usm]}, {usm:doe_adapt[usm]}, weather_file, location, light_inter, direct, save_scenes) 
                         for i,usm in enumerate(id_usm)]).get()
         end_time = t.time()
         elapsed_time = (end_time - start_time)/3600
