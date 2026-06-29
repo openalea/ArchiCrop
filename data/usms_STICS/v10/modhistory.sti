@@ -1,5 +1,5 @@
  -----------------------------------------------------------------------------------------
- Stics history file            Creation date: 2026/04/13-17:32:09
+ Stics history file            Creation date: 2026/06/02-17:01:19
  STICS Version: V10.0.0_r3391_2022-10-26                          
  -----------------------------------------------------------------------------------------
  
@@ -127,6 +127,8 @@
  P_profsem    5.00000000    
  P_densitesem    6.00000000    
  P_variete            1
+ P_interrang   0.400000006    
+ P_orientrang    1.57000005    
  P_ilev          181
  P_iamf          999
  P_ilax          999
@@ -407,15 +409,8 @@
  Depth of measurement (profmes) > soil depth (profsol). Then profmes = profsol =   155.000000    
 Initial values over the soil depth (155 cm):     SWC = 197. mm     SMN =  8.0 kg N/ha
  problem with your profile output dates --> they have been recalculated
- the crop cannot begin growing : soil surface too dry
- attention: there are no longer any effective roots, on day :          47
- the crop cannot begin growing : soil surface too dry
- attention: there are no longer any effective roots, on day :          48
- the crop cannot begin growing : soil surface too dry
- attention: there are no longer any effective roots, on day :          49
- the crop cannot begin growing : soil surface too dry
- attention: there are no longer any effective roots, on day :          50
+ ATTENTION: neither rain nor irrigation at sowing
  Program end ... 
  -----------------------------------------------------------------------------------------
- Stics history file end            End date: 2026/04/13-17:32:09
+ Stics history file end            End date: 2026/06/02-17:01:19
  -----------------------------------------------------------------------------------------

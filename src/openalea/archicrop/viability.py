@@ -134,7 +134,7 @@ def resolve_organ_growth(N, duration, la_ends, nb_tillers=0, tillers=None, reduc
     if nb_tillers > 0:
         T = {i: np.zeros((N, N)) for i in range(1,nb_tillers+1)}
     else:
-        T = {}
+        T = None
 
     for x in range(0, N):
         A[x, min(x+1,N-1)] = (duration - 1) / duration
@@ -151,16 +151,74 @@ def resolve_organ_growth(N, duration, la_ends, nb_tillers=0, tillers=None, reduc
                         t[x, max(0,j-delay)] = 1
 
     # Sum matrices of main stem and tillers 
-    P = A
+    P = A.copy()
     if nb_tillers > 0:
         for id,t in T.items():
             t *= reduction_factor**tillers[id][0]
             P += t
 
-    # S = np.linalg.solve(P, B)
-    S = nnls(P, B)[0]
+    if T is None:
+        S = np.linalg.solve(P, B)
+    else:
+        S = nnls(P, B)[0]
 
     return S, P, A, T
+
+
+def remove_reps(time, values):
+    # Original data
+    time = np.array(time)
+    values = np.array(values)
+
+    # Keep last occurrence of each time
+    _, idx = np.unique(time[::-1], return_index=True)
+    idx = len(time) - 1 - idx
+    idx = np.sort(idx)
+    time_unique = time[idx]
+    values_unique = values[idx]
+    return time_unique, values_unique
+
+
+def compute_phi(nb_phy, end_veg, ligul_factor=1.6):
+    phyllochron = (end_veg)/(nb_phy - 1 + ligul_factor)
+    return phyllochron
+
+def compute_rmax(nb_phy, end_veg, index_end_veg, thermal_time, leaf_area_plant, params):
+
+    ligul_factor = params['leaf_duration']
+    nb_tillers = params['nb_tillers']
+    reduction_factor = params['reduction_factor']
+
+    phyllochron = compute_phi(nb_phy, end_veg, ligul_factor)
+    ligulochron = phyllochron * ligul_factor
+                
+    leaf_area_plant = leaf_area_plant[:index_end_veg+2]
+    thermal_time = thermal_time[:index_end_veg+2]
+                 
+    starts = [i * phyllochron for i in range(nb_phy)]
+    ends = [start + phyllochron * ligul_factor for start in starts]
+
+    time_unique, leaf_area_unique = remove_reps(thermal_time, leaf_area_plant)
+
+    # Interpolate growth dynamics and compute it at given points (instead of daily)
+    spl_la = splrep(time_unique, leaf_area_unique)
+    la_ends = splev(ends, spl_la)
+
+    g, tillers = generate_tillers(nb_phy, phyllochron, ligul_factor, nb_tillers) # Dict for tillers: {id: [order, delay]}
+
+    # Numeric solution for minimal constrained growth (H: linear organ growth)
+    min_leaf_areas,_,_,_ = resolve_organ_growth(nb_phy, ligul_factor, la_ends, nb_tillers, tillers, reduction_factor)
+    
+    # Find viable rmax interval
+    for i, la in enumerate(min_leaf_areas):
+        if la == max(min_leaf_areas):
+            id_max = i+1
+            break
+    # rmax_int = np.linspace(max(0,min(max((id_max-1)/nb_phy, min(params['rmax'])), max(params['rmax']))), min(1,max(min((id_max+1)/nb_phy, max(params['rmax'])), min(params['rmax']))), 10)
+    rmax_int = np.linspace(max(min(params['rmax']),(id_max-1)/nb_phy), min(max(params['rmax']),(id_max+1)/nb_phy), 10)
+
+
+    return rmax_int # id_max/nb_phy 
 
 
 
@@ -173,18 +231,33 @@ def compute_skew(leaf_areas, rank, nb_phy, rmax):
     return math.log(leaf_areas[rank-1]/max(leaf_areas))/((rank/nb_phy - rmax)**2)
 
 
-def compute_viable_params(params_sets: dict, daily_dynamics: dict, pot_factor_lai: float = 1.5, pot_factor_height: float = 3, end_veg_indefinite=None) -> dict:
+def compute_viable_parameter_space(N_bounds, phi_bounds, rmax_bounds, thermal_time_pot, leaf_area_plant_pot, index_end_veg_pot, archi, end_veg_corr=1):
+        # Example parameter space
+        N = np.arange(min(N_bounds), max(N_bounds) + 1)
+
+        end_veg_pot = thermal_time_pot[index_end_veg_pot+end_veg_corr] # +1 or +2,3... not always very accurate in STICS, but we want to be sure to be after the end of the vegetative phase
+
+        phi = {n : compute_phi(n, end_veg_pot) for n in N}
+        rmax = {n : compute_rmax(n, end_veg_pot, index_end_veg_pot, thermal_time_pot, leaf_area_plant_pot, archi)
+                for n in N
+        }
+
+        d = {n: [(phi[n], r) for r in rmax[n] if min(phi_bounds) <= phi[n] <= max(phi_bounds) and min(rmax_bounds) <= r <= max(rmax_bounds)] for n in N}
+
+        return d, N, phi, rmax
+
+
+def compute_viable_params(params_sets: dict, daily_dynamics: dict, pot_factor_lai: float = 1.5, pot_factor_height: float = 3) -> dict:
     """Compute viable parameters wrt the dynamic constraint of LAI and height."""
 
     # Dynamics of vegetative phase
-    thermal_time = [value["Thermal time"] for value in daily_dynamics.values()]
-    if end_veg_indefinite:
-        index_end_veg = end_veg_indefinite
-        end_veg = thermal_time[index_end_veg]
+    thermal_time = [value["Thermal time"] for value in daily_dynamics.values() if value is not None]
+    index_end_veg, end_veg, _ = get_pheno(daily_dynamics)
+    if index_end_veg == len(thermal_time) - 1:
+        leaf_area_plant = [value["Plant leaf area"] for value in daily_dynamics.values() if value is not None][:index_end_veg]
     else:
-        index_end_veg, end_veg, _ = get_pheno(daily_dynamics)
-    thermal_time = [value["Thermal time"] for value in daily_dynamics.values()][:index_end_veg+2]
-    leaf_area_plant = [value["Plant leaf area"] for value in daily_dynamics.values()][:index_end_veg+2]
+        thermal_time = [value["Thermal time"] for value in daily_dynamics.values() if value is not None][:index_end_veg+2]
+        leaf_area_plant = [value["Plant leaf area"] for value in daily_dynamics.values() if value is not None][:index_end_veg+2]
     
     # Viable values for parameters
     new_params_sets = {}
@@ -206,8 +279,10 @@ def compute_viable_params(params_sets: dict, daily_dynamics: dict, pot_factor_la
             starts = [i * phyllochron for i in range(nb_phy)]
             ends = [start + phyllochron * leaf_duration for start in starts]
 
+            time_unique, leaf_area_unique = remove_reps(thermal_time, leaf_area_plant)
+
             # Interpolate growth dynamics and compute it at given points (instead of daily)
-            spl_la = splrep(thermal_time, leaf_area_plant)
+            spl_la = splrep(time_unique, leaf_area_unique)
             la_ends = splev(ends, spl_la)
 
             g, tillers = generate_tillers(nb_phy, phyllochron, leaf_duration, nb_tillers) # Dict for tillers: {id: [order, delay]}
@@ -220,8 +295,7 @@ def compute_viable_params(params_sets: dict, daily_dynamics: dict, pot_factor_la
                 if la == max(min_leaf_areas):
                     id_max = i+1
                     break
-            rmax_int = np.linspace(max(0,min(max((id_max-1)/nb_phy, params['rmax'][0]), params['rmax'][1])), min(1,max(min((id_max+1)/nb_phy, params['rmax'][1]), params['rmax'][0])), 10)
-            print(rmax_int)
+            rmax_int = np.linspace(max(0,min(max((id_max-1)/nb_phy, min(params['rmax'])), max(params['rmax']))), min(1,max(min((id_max+1)/nb_phy, max(params['rmax'])), min(params['rmax']))), 10)
 
             # Find viable (rmax, skew) pairs
             leaf_areas_norm = [la/max(min_leaf_areas) for la in min_leaf_areas]
@@ -242,7 +316,7 @@ def compute_viable_params(params_sets: dict, daily_dynamics: dict, pot_factor_la
                                 skews_rmax_ok.append((skew, rmax))
                          
             # Build new parameter set with updated 'skew' and 'rmax'
-            for (s,r) in skews_rmax_ok[:1]: #################### All realized leaf area distributions are the same no matter the (rmax,skew) given
+            for (s,r) in skews_rmax_ok[:1]: 
                 new_param = {}
                 for key, value in params.items():
                     if key == "skew":

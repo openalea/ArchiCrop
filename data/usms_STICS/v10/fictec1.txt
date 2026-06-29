@@ -21,7 +21,7 @@ densitesem
 variete
 1
 codetradtec
-2
+1
 interrang
 0.4
 orientrang

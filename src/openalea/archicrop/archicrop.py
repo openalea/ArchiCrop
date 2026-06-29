@@ -32,7 +32,7 @@ class ArchiCrop:
                  f2=0.92,
                  stem_q=1,
                  rmax=0.8,
-                 skew=0.0005,
+                 skew=-5,
                  phyllotactic_angle=137.5,
                  phyllotactic_deviation=0,
                  phyllochron=40,
@@ -87,7 +87,7 @@ class ArchiCrop:
         """
 
         if daily_dynamics is not None:
-            _, end_veg, end_juv = get_pheno(daily_dynamics)
+            index_end_veg, end_veg, end_juv = get_pheno(daily_dynamics)
         else:
             end_juv = 0
             end_veg = 1000
@@ -200,8 +200,8 @@ class ArchiCrop:
         self.g = init_visible_variables(self.g, daily_dynamics=self.daily_dynamics)
         for k,v in self.daily_dynamics.items():
             gtemp = mtg_turtle_time_with_constraint(self.g, k, v, rate=rate, distribution_function=distribution_function)
-            # growing_plant[v["Date"]] = gtemp
-            growing_plant[k] = gtemp
+            growing_plant[v["Date"]] = gtemp
+            # growing_plant[k] = gtemp
             self.g = gtemp.copy() # copy
         
         return growing_plant

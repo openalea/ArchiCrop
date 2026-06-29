@@ -4,13 +4,16 @@ from __future__ import annotations
 
 import numpy as np
 import pandas as pd
+from itertools import chain
 from openalea.caribu.CaribuScene import CaribuScene
 
 from openalea.archicrop.display import build_scene
-from openalea.archicrop.stand import compute_domain
-from openalea.archicrop.stics_io import stics_weather_3d
+from openalea.archicrop.stand import compute_domain, config_crop_intercrop
+from openalea.archicrop.stics_io import stics_weather_3d, stics_weather_3d_bis
 from openalea.astk.sky_irradiance import sky_irradiance
 from openalea.astk.sky_sources import caribu_light_sources, sky_sources
+
+from openalea.plantgl.all import Viewer
 
 # Einc is the total incident energy received on the domain
 # Eabs (float): the surfacic density of energy absorbed (MJ m⁻² s⁻¹)
@@ -186,3 +189,109 @@ def light_interception(weather_file, daily_dynamics, density, location, mtgs, ze
     '''
 
     return nrj_per_plant
+
+
+
+def light_interception_IC(weather_file, daily_dynamics, stand, location, mtgs, zenith=False, direct=False, save_scenes=False, conv_coef=100):
+    '''Compute light interception on plants 
+    Args:
+        weather_file: path to the weather file
+        daily_dynamics: daily dynamics from STICS
+        density: sowing density
+        location: dictionary with location parameters (longitude, latitude, altitude, timezone)
+        mtgs: list of MTGs for each plant
+        zenith: if True, use zenith light sources
+        save_scenes: if True, save the scenes as images
+    Returns:
+        nrj_per_plant: list of energy per plant
+    '''
+
+    # Compute light interception for each plant at each time step
+    nrj_per_plant = {}
+    list_of_graphs = {}
+    positions_crop = {}
+    domain_areas = {}
+    # For each plant
+    for a, usm in mtgs.items():
+        nrj_per_plant[a] = {}
+        list_of_graphs[a] = {}
+        positions_crop[a] = {}
+        domain_areas[a] = {}
+        for b, algo in usm.items():
+            plants = list(mtgs[a][b].keys())
+            ids = list(mtgs[a][b][plants[0]].keys())
+            nrj_per_plant[a][b] = {plants[0]:{},
+                                   plants[1]:{}}
+            nrj_per_leaf = {plants[0]:{},
+                            plants[1]:{}}
+
+            dates1 = list(mtgs[a][b][plants[0]][ids[0]].keys())
+            dates2 = list(mtgs[a][b][plants[1]][ids[0]].keys())
+            dates = sorted(list(dict.fromkeys(dates1 + dates2)))
+            
+            list_of_graphs[a][b], positions_crop[a][b] = config_crop_intercrop(dates, growing_plant_1=mtgs[a][b][plants[0]][ids[0]], growing_plant_2=mtgs[a][b][plants[1]][ids[0]], **stand[a][b])
+            # print(a, positions_crop[a][b])
+
+            domain = ((0, 0), (stand[a][b]["width"] * conv_coef, stand[a][b]["length"] * conv_coef))
+            domain_area = (abs(domain[1][0] - domain[0][0]) / conv_coef
+                            * abs(domain[1][1] - domain[0][1]) / conv_coef)
+            domain_areas[a][b] = domain_area
+
+            # Read weather data
+            df_weather = stics_weather_3d_bis(filename=weather_file, dates=dates)
+            # Define incident PAR
+            incident_rads = list(df_weather.itertuples())
+
+            # For each time step
+            for i,incident_rad in zip(dates,incident_rads):
+                
+                # Compute light sources
+                par = incident_rad.rad * 0.48 * 0.95
+                if zenith:
+                    lights = [(par,(0,0,-1))]
+                else:
+                    irr = sky_irradiance(daydate=incident_rad.daydate, day_ghi=par, **location)
+                    sun, sky = sky_sources(sky_type='clear_sky', sky_irradiance=irr, scale='global') #, source_irradiance='horizontal')
+                    lights = caribu_light_sources(sun, sky)
+
+                # print("lights :", lights)
+                # print("mtg :", list_of_graphs[a][b][i])
+                # print("positions :", positions_crop[a][b])
+                # print("domain :", domain)
+
+                # Build and illuminate scene
+                scene, labels = build_scene(mtg=list_of_graphs[a][b][i], position=positions_crop[a][b], senescence=True)
+                # Viewer.display(scene)
+                # Viewer.frameGL.saveImage(f'scene_{a}_{i}.png') 
+                cs, raw, agg = illuminate(scene=scene, light=lights, labels=labels, domain=domain, direct=direct) # --> cf PARaggregators in caribu scene node
+                
+                # Compute energy per leaf
+                df_mod = mean_leaf_irradiance(agg) 
+
+                if stand[a][b]["nb_rows_1"] == 0 or stand[a][b]["nb_rows_2"] == 0:
+                    for plant in [0,1]:
+                        nrj_per_leaf[plants[plant]][i] = sum(list(agg.loc[(agg.is_green) & (agg['label'] == 'Leaf') & (agg['plant'] == plant)]['Energy'].values))
+                else:
+                    nrj_per_leaf[plants[0]][i] = sum(list(agg.loc[(agg.is_green) & (agg['label'] == 'Leaf') & (agg['plant'].isin(range(0,stand[a][b]["nb_rows_1"])))]['Energy'].values)) / stand[a][b]["nb_rows_1"]
+                    nrj_per_leaf[plants[1]][i] = sum(list(agg.loc[(agg.is_green) & (agg['label'] == 'Leaf') & (agg['plant'].isin(range(stand[a][b]["nb_rows_1"],stand[a][b]["nb_rows_2"]+stand[a][b]["nb_rows_1"])))]['Energy'].values)) / stand[a][b]["nb_rows_2"]
+                    #  nrj_per_leaf[plants[0]].append(agg.loc[(agg.is_green) & (agg['label'] == 'Leaf') & (agg['plant'].isin(range(0,stand[a][b]["nb_rows_1"])))]['Energy'].values)
+                    #  nrj_per_leaf[plants[1]].append(agg.loc[(agg.is_green) & (agg['label'] == 'Leaf') & (agg['plant'].isin(range(stand[a][b]["nb_rows_1"],stand[a][b]["nb_rows_2"])))]['Energy'].values)
+
+                # print(a, nrj_per_leaf[plants[0]])
+                # print(a, nrj_per_leaf[plants[1]])
+
+                # Save scene if required
+                if save_scenes:
+                    values = list(chain.from_iterable(raw.values()))
+                    v99 = np.percentile(values, 99)
+                    nvalues=np.array(values)
+                    nvalues[nvalues>v99]=v99
+                    raw_new = nvalues.tolist()
+                    cs.plot(raw, maxval=max(raw_new), display=False)
+                    Viewer.frameGL.saveImage(f'scene_{a}_{i}.png') 
+
+            # nrj_per_plant[k] = [sum(nrj) for nrj in nrj_per_leaf]
+            nrj_per_plant[a][b][plants[0]][ids[0]] = nrj_per_leaf[plants[0]]
+            nrj_per_plant[a][b][plants[1]][ids[0]] = nrj_per_leaf[plants[1]]
+
+    return nrj_per_plant, domain_areas

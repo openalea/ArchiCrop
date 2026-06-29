@@ -15,7 +15,7 @@
             <fplt>sorgho_imp_M_v10_plt.xml</fplt>
             <ftec>02NT18SorgV2D1_tec.xml</ftec>
             <flai>null</flai>
-            <fobs>02NT18SorgV2D1.obs</fobs>
+            <fobs>null</fobs>
         </plante>
         <plante dominance="2">
             <fplt>null</fplt>
@@ -84,16 +84,184 @@
         <nbplantes>2</nbplantes>
         <codesimul>0</codesimul>
         <plante dominance="1">
-            <fplt>sorgho_imp_M_v10_plt.xml</fplt>
+            <fplt>sorgho_trop_plt.xml</fplt>
             <ftec>inter-sorghum-maize_tec.xml</ftec>
             <flai>null</flai>
             <fobs>null</fobs>
         </plante>
         <plante dominance="2">
-            <fplt>corn_plt.xml</fplt>
+            <fplt>corn_trop_plt.xml</fplt>
             <ftec>inter-sorghum-maize_tec.xml</ftec>
             <flai>null</flai>
             <fobs>null</fobs>
         </plante>
     </usm>
+    <usm nom="inter_sorghum_maize_strip">
+        <datedebut>135</datedebut>
+        <datefin>365</datefin>
+        <finit>inter-sorghum-maize_ini.xml</finit>
+        <nomsol>02V2D1</nomsol>
+        <fstation>StationNtarla_inter_sta.xml</fstation>
+        <fclim1>ntarla_corr.2018</fclim1>
+        <fclim2>ntarla_corr.2018</fclim2>
+        <culturean>1</culturean>
+        <nbplantes>2</nbplantes>
+        <codesimul>0</codesimul>
+        <plante dominance="1">
+            <fplt>sorgho_trop_plt.xml</fplt>
+            <ftec>inter-sorghum-maize_strip_tec.xml</ftec>
+            <flai>null</flai>
+            <fobs>null</fobs>
+        </plante>
+        <plante dominance="2">
+            <fplt>corn_trop_plt.xml</fplt>
+            <ftec>inter-sorghum-maize_strip_tec.xml</ftec>
+            <flai>null</flai>
+            <fobs>null</fobs>
+        </plante>
+    </usm>
+    <usm nom="maize_trop">
+        <datedebut>135</datedebut>
+        <datefin>365</datefin>
+        <finit>02NT18SorgV2D1_ini.xml</finit>
+        <nomsol>02V2D1</nomsol>
+        <fstation>StationNtarla_sta.xml</fstation>
+        <fclim1>ntarla_corr.2018</fclim1>
+        <fclim2>ntarla_corr.2018</fclim2>
+        <culturean>1</culturean>
+        <nbplantes>1</nbplantes>
+        <codesimul>0</codesimul>
+        <plante dominance="1">
+            <fplt>corn_trop_plt.xml</fplt>
+            <ftec>maize_trop_tec.xml</ftec>
+            <flai>null</flai>
+            <fobs>null</fobs>
+        </plante>
+        <plante dominance="2">
+            <fplt>null</fplt>
+            <ftec>null</ftec>
+            <flai>null</flai>
+            <fobs>null</fobs>
+        </plante>
+    </usm>
+    <usm nom="sorgho_trop">
+        <datedebut>135</datedebut>
+        <datefin>365</datefin>
+        <finit>02NT18SorgV2D1_ini.xml</finit>
+        <nomsol>02V2D1</nomsol>
+        <fstation>StationNtarla_sta.xml</fstation>
+        <fclim1>ntarla_corr.2018</fclim1>
+        <fclim2>ntarla_corr.2018</fclim2>
+        <culturean>1</culturean>
+        <nbplantes>1</nbplantes>
+        <codesimul>0</codesimul>
+        <plante dominance="1">
+            <fplt>sorgho_trop_plt.xml</fplt>
+            <ftec>02NT18SorgV2D1_tec.xml</ftec>
+            <flai>null</flai>
+            <fobs>null</fobs>
+        </plante>
+        <plante dominance="2">
+            <fplt>null</fplt>
+            <ftec>null</ftec>
+            <flai>null</flai>
+            <fobs>null</fobs>
+        </plante>
+    </usm>
+    <usm nom="maize_MANT">
+        <datedebut>135</datedebut>
+        <datefin>365</datefin>
+        <finit>02NT18SorgV2D1_ini.xml</finit>
+        <nomsol>02V2D1</nomsol>
+        <fstation>StationNtarla_sta.xml</fstation>
+        <fclim1>ntarla_corr.2018</fclim1>
+        <fclim2>ntarla_corr.2018</fclim2>
+        <culturean>1</culturean>
+        <nbplantes>1</nbplantes>
+        <codesimul>0</codesimul>
+        <plante dominance="1">
+            <fplt>corn_LI_step2_MANT_plt.xml</fplt>
+            <ftec>maize_trop_tec.xml</ftec>
+            <flai>null</flai>
+            <fobs>null</fobs>
+        </plante>
+        <plante dominance="2">
+            <fplt>null</fplt>
+            <ftec>null</ftec>
+            <flai>null</flai>
+            <fobs>null</fobs>
+        </plante>
+    </usm>
+<usm nom="wheat">                                                                                 
+    <datedebut>290</datedebut>                                                                      
+    <datefin>700</datefin>                                                                          
+    <finit>ble_ini.xml</finit>                                                                      
+    <nomsol>solble</nomsol>                                                                         
+    <fstation>climblej_sta.xml</fstation>                                                           
+    <fclim1>climblej.1994</fclim1>                                                                  
+    <fclim2>climblej.1995</fclim2>                                                                  
+    <culturean>2</culturean>                                                                        
+    <nbplantes>1</nbplantes>                                                                        
+    <codesimul>0</codesimul>                                                                        
+    <plante dominance="1">                                                                          
+      <fplt>wheat_plt.xml</fplt>                                                                    
+      <ftec>Ble_tec.xml</ftec>                                                                      
+      <flai>ble.lai</flai>                                                                          
+      <fobs>wheat.obs</fobs>                                                                        
+    </plante>                                                                                       
+    <plante dominance="2">                                                                          
+      <fplt>null</fplt>                                                                             
+      <ftec>null</ftec>                                                                             
+      <flai>null</flai>                                                                             
+      <fobs>null</fobs>                                                                             
+    </plante>                                                                                       
+  </usm>                                                                                            
+  <usm nom="maize">                                                                                 
+    <datedebut>112</datedebut>                                                                      
+    <datefin>360</datefin>                                                                          
+    <finit>mais_ini.xml</finit>                                                                     
+    <nomsol>solmais</nomsol>                                                                        
+    <fstation>climaisj_sta.xml</fstation>                                                           
+    <fclim1>climaisj.1996</fclim1>                                                                  
+    <fclim2>climaisj.1996</fclim2>                                                                  
+    <culturean>1</culturean>                                                                        
+    <nbplantes>1</nbplantes>                                                                        
+    <codesimul>0</codesimul>                                                                        
+    <plante dominance="1">                                                                          
+      <fplt>corn_plt.xml</fplt>                                                                     
+      <ftec>Mais_tec.xml</ftec>                                                                     
+      <flai>mais.lai</flai>                                                                         
+      <fobs>maize.obs</fobs>                                                                        
+    </plante>                                                                                       
+    <plante dominance="2">                                                                          
+      <fplt>null</fplt>                                                                             
+      <ftec>null</ftec>                                                                             
+      <flai>null</flai>                                                                             
+      <fobs>null</fobs>                                                                             
+    </plante>                                                                                       
+  </usm>
+  <usm nom="proto_rice">                                                                            
+    <datedebut>100</datedebut>                                                                      
+    <datefin>300</datefin>                                                                          
+    <finit>proto_rice_ini.xml</finit>                                                               
+    <nomsol>soil_rice</nomsol>                                                                      
+    <fstation>fourquej_sta.xml</fstation>                                                           
+    <fclim1>fourquej.1988</fclim1>                                                                  
+    <fclim2>fourquej.1988</fclim2>                                                                  
+    <culturean>1</culturean>                                                                        
+    <nbplantes>1</nbplantes>                                                                        
+    <codesimul>0</codesimul>                                                                        
+    <plante dominance="1">                                                                          
+      <fplt>proto_rice_plt.xml</fplt>                                                               
+      <ftec>proto_rice_tec.xml</ftec>                                                               
+      <flai>null</flai>                                                                             
+      <fobs>proto_rice.obs</fobs>                                                                   
+    </plante>                                                                                       
+    <plante dominance="2">                                                                          
+      <fplt>null</fplt>                                                                             
+      <ftec>null</ftec>                                                                             
+      <flai>null</flai>                                                                             
+      <fobs>null</fobs>                                                                             
+    </plante>                                                                                       
+  </usm> 
 </usms>

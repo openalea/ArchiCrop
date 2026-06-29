@@ -625,7 +625,7 @@ bdens
 hautbase
 0
 hautmax
-2
+2.5
 khaut
 0.7
 durvieF

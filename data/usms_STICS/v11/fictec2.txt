@@ -27,9 +27,9 @@ interrang
 orientrang
 0.0
 code_strip
-2
-nrow
 1
+nrow
+2
 codedecisemis
 2
 nbjmaxapressemis
@@ -45,7 +45,7 @@ humirac_decisemis
 codestade
 2
 ilev
-181
+999
 iamf
 999
 ilax

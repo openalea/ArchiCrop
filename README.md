@@ -4,7 +4,7 @@ ArchiCrop is a 3D+t parametric plant model for cereals that gives architecture t
 
 ArchCrop is a model where:
 - plant architecture and development are defined by parameters;
-- known allometrics laws enables to define a potential plant with relatively few parameters;
+- known allometric laws enables to define a potential plant with relatively few parameters;
 - plant growth is globally constrained by dynamics at crop scale, from crop model outputs for example. 
 
 Our approach is inspired by the concept of equifinality, which suggests that an exact same outcome can be achieved starting from distinct initial conditions.  
@@ -13,6 +13,8 @@ Local differential growth of each organ is calculated from a global constraint, 
 Based on these constraints we are able to generate a morphospace of growing architectured plants that follow exactly the crop dynamic constraints. 
 
 The explicit spatial arrangement of crops is considered in ArchiCrop, thanks to the individual-based approach. 
+
+DOI: https://doi.org/10.64898/2026.04.07.716970 
 
 
 ## Installation
@@ -31,7 +33,7 @@ The explicit spatial arrangement of crops is considered in ArchiCrop, thanks to 
 
 
 ## Tutorials
-Script for simple use of ArchiCrop : [notebook](/tutorials/run_1_simul.py)  
+Script for simple use of ArchiCrop [here](/tutorials/run_1_simul.py)  
 
 ## Status 
 [![Actions Status][actions-badge]][actions-link]
