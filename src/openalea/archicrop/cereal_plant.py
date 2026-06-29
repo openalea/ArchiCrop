@@ -286,7 +286,8 @@ def cereal(nb_phy, phyllochron, plastochron, stem_duration, leaf_duration,
             tropism_coefficient,
             plant_orientation=45,
             spiral=True,
-            classic=False):
+            classic=False,
+            max_nb_leaves=0):
     """
     Generate a MTG representation of cereals
 
@@ -317,6 +318,7 @@ def cereal(nb_phy, phyllochron, plastochron, stem_duration, leaf_duration,
     :param plant_orientation: float, orientation of the plant (in °)
     :param spiral: bool, whether the phyllotaxy is spiral or not
     :param classic: bool, whether to use the classic MTG interpreter or not
+    :param max_nb_leaves: int, max number of leaves to generate (for all axes), 0 for no limit
 
     Returns:
     :return: MTG, a geometric-based MTG representation of cereals
@@ -411,7 +413,7 @@ def cereal(nb_phy, phyllochron, plastochron, stem_duration, leaf_duration,
         axis: 
         [
             vid for vid in g.components(axis)
-            if g.node(vid).label.startswith("Leaf")
+            if g.label(vid).startswith("Leaf")
         ]
         for axis in axes
     }
@@ -425,7 +427,41 @@ def cereal(nb_phy, phyllochron, plastochron, stem_duration, leaf_duration,
         ]
         for axis in axes
     }
-    # total_nb_leaves = sum(nb_leaves_per_axis.values())
+    total_nb_leaves = sum(nb_leaves_per_axis.values())
+    if max_nb_leaves > 0 and total_nb_leaves > max_nb_leaves:
+        # remove leaves based on some criteria: 1. oldest to youngest, 2. lowest to highest, 3. higher order
+        leaves = [(axis, vid) for axis in axes for vid in leaves_per_axis[axis]]
+        leaf_age = dict()
+        start_tts = g.property('start_tt')
+        for lid in leaves:
+            vid = lid[1]
+            leaf_age.setdefault(start_tts[vid], []).append(lid)
+
+        ages = list(leaf_age.keys())
+        ages.sort()
+
+        count = total_nb_leaves - max_nb_leaves
+        remove_leaves = []
+        for _age in ages:
+            leaf_ids = leaf_age[_age]
+            n = len(leaf_ids)
+            if n >= count:
+                remove_leaves.extend(leaf_ids[:count])
+            else:
+                remove_leaves.extend(leaf_ids)
+            count -= n
+
+            if count <= 0:
+                break
+
+        print(f'Remove {len(remove_leaves)} vertices !!!')
+        for axis_id, leaf_id in remove_leaves:
+            g.remove_tree(leaf_id)
+            leaves_per_axis[axis_id].remove(leaf_id)
+            nb_leaves_per_axis[axis_id]-=1    
+
+        total_nb_leaves = sum(nb_leaves_per_axis.values())
+        assert(total_nb_leaves == max_nb_leaves)
 
     # Compute reduction factor for each axis (main axis: 1, tillers: reduction_factor^order)
     axis_factors = {
