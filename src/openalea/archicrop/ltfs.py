@@ -1,6 +1,6 @@
 """Some macro / utilities to run light simpulation on pgl/lpy virtual scene """
 import pandas
-from alinea.caribu.CaribuScene import CaribuScene
+from openalea.caribu.CaribuScene import CaribuScene
 
 
 def illuminate(scene, light=None, domain=None, scene_unit='cm', labels=None):

@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from oawidgets.plantgl import *  # noqa: F403
+from openalea.widgets.plantgl import *  # noqa: F403
 
 from openalea.plantgl.all import Color3, Material
 
