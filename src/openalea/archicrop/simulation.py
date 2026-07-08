@@ -20,7 +20,7 @@ from .viability import compute_viable_params
 
 from openalea.archicrop.display import build_scene
 from openalea.archicrop.stand import compute_domain, config_crop_intercrop
-from openalea.plantgl.all import Viewer
+from openalea.plantgl.all import Viewer, Shape, Translated, Oriented, Vector3, Sphere
 
 
 
@@ -466,6 +466,11 @@ def run_archicrop_and_light_IC(param_sets: dict,
             #              "2018-10-13",  
             #              "2018-10-14"]:
             #     scene, labels = build_scene(mtg=list_of_graphs[a][b][date], position=positions_crop[a][b], senescence=True)
+            #     domain = ((0, 0), (stand[a][b]["length"] * conv_coef, stand[a][b]["width"] * conv_coef))
+            #     scene.add(Shape(Translated((domain[0][0], domain[0][1], 0), Oriented(Vector3((1,0,0)), Vector3((0,1,0)), Sphere(5)))))
+            #     scene.add(Shape(Translated((domain[0][0], domain[1][1], 0), Oriented(Vector3((1,0,0)), Vector3((0,1,0)), Sphere(5)))))
+            #     scene.add(Shape(Translated((domain[1][0], domain[0][1], 0), Oriented(Vector3((1,0,0)), Vector3((0,1,0)), Sphere(5)))))
+            #     scene.add(Shape(Translated((domain[1][0], domain[1][1], 0), Oriented(Vector3((1,0,0)), Vector3((0,1,0)), Sphere(5)))))
             #     Viewer.display(scene)
             #     pos = (-200,-300,120)
             #     # Viewer.camera.set(zero, 0, 0)

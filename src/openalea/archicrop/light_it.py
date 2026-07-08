@@ -237,7 +237,7 @@ def light_interception_IC(weather_file, stand, location, mtgs, zenith=False, dir
             list_of_graphs[a][b], positions_crop[a][b] = config_crop_intercrop(dates, growing_plant_1=mtgs[a][b][plants[0]][ids[0]], growing_plant_2=mtgs[a][b][plants[1]][ids[0]], **stand[a][b])
             # print(a, positions_crop[a][b])
 
-            domain = ((0, 0), (stand[a][b]["width"] * conv_coef, stand[a][b]["length"] * conv_coef))
+            domain = ((0, 0), (stand[a][b]["length"] * conv_coef, stand[a][b]["width"] * conv_coef))
             domain_area = (abs(domain[1][0] - domain[0][0]) / conv_coef
                             * abs(domain[1][1] - domain[0][1]) / conv_coef)
             domain_areas[a][b] = domain_area

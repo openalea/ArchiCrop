@@ -49,7 +49,8 @@ def config_positions_intercrop(inter_row_1, inter_row_2, inter_plant_1, inter_pl
                 pos_tmp = regular(int(nrows[j] * plant_per_row[j]), int(nrows[j]), dx[j], dy[j], int(plant_per_row[j]))[0]
                 # offset to pos_tmp depending on i and j
                 for k, (x,y,z) in enumerate(pos_tmp):
-                    pos_tmp[k] = (x, y - dy[j]/2 + (i * (wstrip_1 + wstrip_2) + j * wstrip_1) * conv_coef, z)
+                    # pos_tmp[k] = (x, y - dy[j]/2 + (i * (wstrip_1 + wstrip_2) + j * wstrip_1) * conv_coef, z)
+                    pos_tmp[k] = (x, y + (i * (wstrip_1 + wstrip_2) + j * wstrip_1) * conv_coef, z)
                 positions_crop += pos_tmp
 
     positions_crop = sorted(positions_crop, key=itemgetter(1, 0)) # sorting by ranks

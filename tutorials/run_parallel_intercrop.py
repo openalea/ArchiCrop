@@ -55,7 +55,7 @@ if __name__ == '__main__':
     pot_factor_lai = 5
     pot_factor_height = 10
     distribution_function = demand_dist_bis
-    light_inter = False
+    light_inter = True
     direct = False
     save_scenes = False
 
