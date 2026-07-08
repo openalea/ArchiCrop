@@ -27,7 +27,7 @@ archi_maize = {
     "insertion_angle": 45, # leaf blade insertion angle
     "scurv": 0.6, #  relative position of inflexion point
     "curvature": 120, # leaf blade insertion-to-tip angle
-    "phyllotactic_angle": 180, # phyllotactic angle
+    "phyllotactic_angle": 40, # phyllotactic angle
     "phyllotactic_deviation": 20, # half-deviation to phyllotactic angle
 
     # Development
@@ -162,7 +162,7 @@ archi_sorghum = {
     "insertion_angle": 60, # leaf blade insertion angle : [10,50] (Truong et al., 2015; Kaitaniemi et al., 1999)
     "scurv": 0.4, # leaf blade relative inflexion point : [0.6, 0.8] ()
     "curvature": 90, # leaf blade insertion-to-tip angle : [0,130] [45, 135] (Kaitaniemi et al., 1999)
-    "phyllotactic_angle": 180, # phyllotactic angle : [180] (Davis et al., 2024)
+    "phyllotactic_angle": 40, # phyllotactic angle : [180] (Davis et al., 2024)
     "phyllotactic_deviation": 20, # half-deviation to phyllotactic angle : [0,90] (Davis et al., 2024)
 
     # Development

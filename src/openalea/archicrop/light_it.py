@@ -192,7 +192,7 @@ def light_interception(weather_file, daily_dynamics, density, location, mtgs, ze
 
 
 
-def light_interception_IC(weather_file, daily_dynamics, stand, location, mtgs, zenith=False, direct=False, save_scenes=False, conv_coef=100):
+def light_interception_IC(weather_file, stand, location, mtgs, zenith=False, direct=False, save_scenes=False, conv_coef=100):
     '''Compute light interception on plants 
     Args:
         weather_file: path to the weather file
@@ -208,12 +208,14 @@ def light_interception_IC(weather_file, daily_dynamics, stand, location, mtgs, z
 
     # Compute light interception for each plant at each time step
     nrj_per_plant = {}
+    nrj_crop = {}
     list_of_graphs = {}
     positions_crop = {}
     domain_areas = {}
     # For each plant
     for a, usm in mtgs.items():
         nrj_per_plant[a] = {}
+        nrj_crop[a] = {}
         list_of_graphs[a] = {}
         positions_crop[a] = {}
         domain_areas[a] = {}
@@ -224,6 +226,9 @@ def light_interception_IC(weather_file, daily_dynamics, stand, location, mtgs, z
                                    plants[1]:{}}
             nrj_per_leaf = {plants[0]:{},
                             plants[1]:{}}
+            
+            nrj_crop[a][b] = {plants[0]:{ids[0]: {}},
+                              plants[1]:{ids[0]: {}}}
 
             dates1 = list(mtgs[a][b][plants[0]][ids[0]].keys())
             dates2 = list(mtgs[a][b][plants[1]][ids[0]].keys())
@@ -271,11 +276,17 @@ def light_interception_IC(weather_file, daily_dynamics, stand, location, mtgs, z
                 if stand[a][b]["nb_rows_1"] == 0 or stand[a][b]["nb_rows_2"] == 0:
                     for plant in [0,1]:
                         nrj_per_leaf[plants[plant]][i] = sum(list(agg.loc[(agg.is_green) & (agg['label'] == 'Leaf') & (agg['plant'] == plant)]['Energy'].values))
+
+                        nrj_crop[a][b][plants[0]][ids[0]][i] = nrj_per_leaf[plants[plant]][i] * 2 / (domain_area * par)
+                        nrj_crop[a][b][plants[1]][ids[0]][i] = nrj_per_leaf[plants[plant]][i] * 2 / (domain_area * par)
                 else:
                     nrj_per_leaf[plants[0]][i] = sum(list(agg.loc[(agg.is_green) & (agg['label'] == 'Leaf') & (agg['plant'].isin(range(0,stand[a][b]["nb_rows_1"])))]['Energy'].values)) / stand[a][b]["nb_rows_1"]
                     nrj_per_leaf[plants[1]][i] = sum(list(agg.loc[(agg.is_green) & (agg['label'] == 'Leaf') & (agg['plant'].isin(range(stand[a][b]["nb_rows_1"],stand[a][b]["nb_rows_2"]+stand[a][b]["nb_rows_1"])))]['Energy'].values)) / stand[a][b]["nb_rows_2"]
                     #  nrj_per_leaf[plants[0]].append(agg.loc[(agg.is_green) & (agg['label'] == 'Leaf') & (agg['plant'].isin(range(0,stand[a][b]["nb_rows_1"])))]['Energy'].values)
                     #  nrj_per_leaf[plants[1]].append(agg.loc[(agg.is_green) & (agg['label'] == 'Leaf') & (agg['plant'].isin(range(stand[a][b]["nb_rows_1"],stand[a][b]["nb_rows_2"])))]['Energy'].values)
+
+                    nrj_crop[a][b][plants[0]][ids[0]][i] = nrj_per_leaf[plants[0]][i] * stand[a][b]["nb_rows_1"] / (domain_area * par)
+                    nrj_crop[a][b][plants[1]][ids[0]][i] = nrj_per_leaf[plants[1]][i] * stand[a][b]["nb_rows_2"] / (domain_area * par)
 
                 # print(a, nrj_per_leaf[plants[0]])
                 # print(a, nrj_per_leaf[plants[1]])
@@ -294,4 +305,4 @@ def light_interception_IC(weather_file, daily_dynamics, stand, location, mtgs, z
             nrj_per_plant[a][b][plants[0]][ids[0]] = nrj_per_leaf[plants[0]]
             nrj_per_plant[a][b][plants[1]][ids[0]] = nrj_per_leaf[plants[1]]
 
-    return nrj_per_plant, domain_areas
+    return nrj_per_plant, nrj_crop, domain_areas
