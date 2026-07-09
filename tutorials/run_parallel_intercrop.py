@@ -6,6 +6,7 @@ import time as t
 from math import ceil
 from multiprocessing import Pool
 from pathlib import Path
+import csv
 
 sys.path.append('../data')
 from archi_dict import archi_sorghum as archi_1
@@ -168,6 +169,21 @@ if __name__ == '__main__':
                     "nb_rows_1" : spat_conf["n_rows_principal"],
                     "nb_rows_2" : spat_conf["n_rows_secondary"]
                 }
+
+    # header = ["usms", "x_first_corner", "y_first_corner", "x_last_corner", "y_last_corner"]
+
+    # rows = []
+
+    # for usm, algo in doe_adapt.items():
+    #     for a,conf in algo.items():
+    #         if a == "Beer":
+    #             domain = ((0, 0), (conf["length"] * 100, conf["width"] * 100))
+    #             rows.append([usm, domain[0][0], domain[0][1], domain[1][0], domain[1][1]])
+
+    # with open("domains.csv", "w", newline="") as file:
+    #     writer = csv.writer(file)
+    #     writer.writerow(header)
+    #     writer.writerows(rows) 
 
     # keys = list(param_sets.keys())
     # chunk_size = ceil(len(keys)*2 / n_cpu)
