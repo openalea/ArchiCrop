@@ -24,7 +24,7 @@ archi_maize = {
     "f2": 0.92, # parameter for leaf blade shape
 
     # blade curvature
-    "insertion_angle": 45, # leaf blade insertion angle
+    "insertion_angle": 30, # leaf blade insertion angle
     "scurv": 0.6, #  relative position of inflexion point
     "curvature": 120, # leaf blade insertion-to-tip angle
     "phyllotactic_angle": 180, # phyllotactic angle
