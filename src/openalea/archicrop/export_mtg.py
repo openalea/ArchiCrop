@@ -93,8 +93,13 @@ def save_mtg(g, scene, mtg_fn, obj_fn):
 
     senescent_scene = Scene()
     # use scene.todict() rather that iterating on the scene
-    for sh in scene:
-        vid = sh.id
+    for vid, shs in scene.todict().items():
+        if len(shs) == 2:
+            # check is senecescent
+            sh, sh_sen = shs
+        else:
+            sh = shs[0]           
+            
         #if g.node(vid).senescence:
             # add element on senescent scene
         sh.setName(f'vid_{vid}')
