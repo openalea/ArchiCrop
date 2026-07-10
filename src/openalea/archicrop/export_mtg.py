@@ -1,5 +1,11 @@
 """ This module provides functions to save MTG and PlantGL scene into MTG and OBJ files.
 
+```python
+    fn_mtg = Path(output_fn).with_suffix('.mtg')
+    fn_obj = Path(output_fn).with_suffix('.obj')
+    save_mtg(g, scene, fn_mtg, fn_obj)
+```
+
 """
 from pathlib import Path
 from openalea.mtg.io import write_mtg
@@ -85,8 +91,13 @@ def save_mtg(g, scene, mtg_fn, obj_fn):
     fn.write_text(mtg_lines)
     print(f'Write MTG in {str(fn)}')
 
+    senescent_scene = Scene()
+    # use scene.todict() rather that iterating on the scene
     for sh in scene:
-        sh.setName(f'vid_{sh.id}')
+        vid = sh.id
+        #if g.node(vid).senescence:
+            # add element on senescent scene
+        sh.setName(f'vid_{vid}')
 
     fn = obj_fn
     if fn.exists():
