@@ -14,6 +14,8 @@ Based on these constraints we are able to generate a morphospace of growing arch
 
 The explicit spatial arrangement of crops is considered in ArchiCrop, thanks to the individual-based approach. 
 
+DOI: https://doi.org/10.64898/2026.04.07.716970 
+
 
 ## Installation
 - (optional, if you don't have conda) Install miniforge: https://github.com/conda-forge/miniforge

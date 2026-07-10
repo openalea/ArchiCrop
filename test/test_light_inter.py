@@ -34,11 +34,11 @@ density, stics_output_data, lifespan, lifespan_early, inter_row = get_stics_data
 )
 
 # Retrieve STICS growth and senescence dynamics
-time = [value["Thermal time"] for value in stics_output_data.values()]
-LA_stics = [value["Plant leaf area"] for value in stics_output_data.values()]
-sen_LA_stics = [value["Plant senescent leaf area"] for value in stics_output_data.values()]
-height_stics = [value["Plant height"] for value in stics_output_data.values()]
-par_stics = [value["Absorbed PAR"] for value in stics_output_data.values()]
+time = [value["Thermal time"] for value in stics_output_data.values() if value is not None]
+LA_stics = [value["Plant leaf area"] for value in stics_output_data.values() if value is not None]
+sen_LA_stics = [value["Plant senescent leaf area"] for value in stics_output_data.values() if value is not None]
+height_stics = [value["Plant height"] for value in stics_output_data.values() if value is not None]
+par_stics = [value["Absorbed PAR"] for value in stics_output_data.values() if value is not None]
 
 
 # Set ArchiCrop parameters

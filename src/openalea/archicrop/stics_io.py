@@ -4,6 +4,8 @@ import xml.etree.ElementTree as ET
 
 import numpy as np
 import pandas as pd
+from pathlib import Path
+from datetime import datetime
 
 from .sky_sources import meteo_day
 
@@ -142,6 +144,181 @@ def read_sti_file(file_sti, conv_unit=100, end=-1):
     }, density
 
 
+def read_csv_file_IC(file_csv, conv_unit=100):
+    """Reads a STICS .csv output file of several USMs and builds a dictionary.
+    
+    :param file: str, input file of STICS outputs :
+        - somupvtsem : cumulative thermal time (°C.day)
+        - laimax : canopy max LAI (m2/m2)
+        - laisen(n) : senescent LAI (m2/m2)
+        - hauteur : canopy height (m)
+        - raint : PAR intercepted (actually, PAR absorbed) by canopy (MJ/m2)
+        - trg(n) : global radiation (MJ/m2)
+    :return: dict of dicts, for each time step, a dict of values from STICS outputs, converted to be used in ArchiCrop :
+        - "Thermal time" (float): thermal time (in °C.day).
+        - "Plant leaf area" (float): plant leaf area at a given thermal time (in cm²).
+        - "Leaf area increment" (float): leaf area increment at a given thermal time (in cm²).
+        - "Plant height" (float): plant height at a given thermal time (in cm).
+        - "Height increment" (float): height increment at a given thermal time (in cm).
+        - "Absorbed PAR" (float): absorbed PAR at a given thermal time (in MJ/m²)"""
+    
+    df = pd.read_csv(file_csv)
+
+    variables = [
+        "Date",
+        "somupvtsem",
+        "laimax",
+        "laisen_n",
+        "hauteur",
+        "raint",
+        "trg_n",
+        "ilevs",
+        "iamfs",
+        "ilaxs",
+        "densite",
+        "demande",
+    ]
+
+    nested_dict = {}
+
+    for _, row in df.iterrows():
+
+        situation = row["situation"]
+        algorithm = row["algorithm"]
+        plant = row["Plant"]
+        row["Date"] = pd.to_datetime(row["Date"])
+        # jul = [dt.date().timetuple().tm_yday for dt in row["Date"]]
+        jul = row["Date"].dayofyear
+
+        nested_dict.setdefault(situation, {}) \
+                .setdefault(algorithm, {}) \
+                .setdefault(plant, {}) [jul] = {
+                        var: row[var]
+                        for var in variables
+                }
+
+    output_dict = {}
+    for a,sit in nested_dict.items():
+        # print("usm :", a)
+        output_dict[a] = {}
+        for b,algo in sit.items():
+            # print("algo :", b)
+            output_dict[a][b] = {}
+            for c,plt in algo.items():
+                # print("plant :", c)
+                output_dict[a][b][c] = {}
+                non_zero_height_encountered = False
+                thermal_time_prev = 0.0
+                leaf_area_prev = 0.0
+                sen_leaf_area_prev = 0.0
+                height_prev = 0.0
+                k_emerg = 732
+                k_harv = 732
+                for k,day in plt.items():
+
+                    if day["hauteur"] > 0.0 and day["laisen_n"] < day["laimax"]:
+                        non_zero_height_encountered = True
+
+                    elif not non_zero_height_encountered:
+                        tt_emerg = float(day["somupvtsem"])
+                        k_emerg = k
+
+                    if non_zero_height_encountered and (day["hauteur"] <= 0.0 or day["laisen_n"] >= day["laimax"]):
+                        k_harv = k
+                        break
+
+                    if k >= k_emerg and k < k_harv:
+                        # Thermal time
+                        thermal_time = float(day["somupvtsem"]) - tt_emerg 
+                        thermal_time_incr = thermal_time - thermal_time_prev
+                        thermal_time_prev = thermal_time
+
+                        # Green LAI
+                        plant_leaf_area = conv_unit**2*float(day["laimax"])/day["densite"] # from m2/m2 to cm2/plant
+                        leaf_area_incr = plant_leaf_area - leaf_area_prev
+                        leaf_area_prev = plant_leaf_area
+
+                        # Senescent LAI
+                        sen_leaf_area = conv_unit**2*float(day["laisen_n"])/day["densite"] # from m2/m2 to cm2/plant
+                        sen_leaf_area_incr = sen_leaf_area - sen_leaf_area_prev
+                        sen_leaf_area_prev = sen_leaf_area
+
+                        # Height
+                        height = float(day["hauteur"])*conv_unit # from m to cm
+                        height_incr = height - height_prev
+                        height_prev = height
+
+                        # Phenology
+                        emergence = 0 # from pseudo julian day (from the beginning of the year) to day from begining of the simulation
+                        end_juv = day["iamfs"] - day["ilevs"]
+                        max_lai = day["ilaxs"] - day["ilevs"]
+
+                        # Incident and absorbed PAR
+                        par_rg_ratio = 0.95*0.48
+                        par_inc = par_rg_ratio*float(day["trg_n"])
+                        par_abs = float(day["raint"])/par_inc # to % of light intercepted, in MJ/m^2
+
+                        # N demand
+                        n_demand = float(day["demande"])
+
+                        # Density
+                        density = day["densite"]
+
+                        new_key = k-k_emerg+1
+                        output_dict[a][b][c][new_key] = {"Date": day["Date"].date().strftime("%Y-%m-%d"),
+                            "Thermal time": round(thermal_time,4),
+                            "Thermal time increment": round(thermal_time_incr,4),
+                            "Phenology": 'germination' if new_key < emergence else 'juvenile' if emergence <= new_key < end_juv else 'exponential' if end_juv <= new_key < max_lai else 'repro',
+                            "Plant leaf area": round(plant_leaf_area,4), 
+                            "Leaf area increment": round(leaf_area_incr,4), 
+                            "Plant senescent leaf area": round(sen_leaf_area,4),
+                            "Senescent leaf area increment": round(sen_leaf_area_incr,4),
+                            "Plant height": round(height,4), 
+                            "Height increment": round(height_incr,4), 
+                            "Incident PAR": round(par_inc,4),
+                            "Absorbed PAR": round(par_abs,4),
+                            "N demand": round(n_demand,4),
+                            "Density": round(density,4),
+                            "Emergence": day["ilevs"]
+                            }
+                        
+                    # for empty_k in range(len(output_dict[a][b][c])+1,732):
+                    #     output_dict[a][b][c][empty_k] = None
+
+    return output_dict
+
+
+def read_doe_intercrop(file_csv):
+    """Reads a .csv DOE file of several USMs and builds a dictionary."""
+    
+    df = pd.read_csv(file_csv)
+
+    variables = [
+        "species_principal",
+        "species_secondary",
+        "design",
+        "row_orientation",
+        "interrow_distance_principal",
+        "interrow_distance_secondary",
+        "n_rows_principal",
+        "n_rows_secondary",
+        "intrarow_distance"
+    ]
+
+    nested_dict = {}
+    
+    i = 1
+    for _, row in df.iterrows():
+
+        nested_dict[f"usm_{i}"] = {
+                    var: row[var]
+                    for var in variables
+                }
+        i+=1
+    
+    return nested_dict
+
+
 def get_stics_management_params(file_tec_xml):
     """Retrieve STICS management parameters from an XML file."""
     params_tec = ['interrang']
@@ -170,6 +347,24 @@ def get_stics_data(file_tec_xml, file_plt_xml, stics_output_file, end=-1):
     return density, stics_output_data, lifespan, lifespan_early, interrow
 
 
+def get_stics_data_IC(file_tec_xml, file_plt_xml, stics_output_data):
+    """Retrieve STICS management and senescence parameters, and growth dynamics."""
+    # tec_stics = get_stics_management_params(file_tec_xml)
+    # interrow = tec_stics['interrang']
+    interrow = None
+    
+    # stics_output_data = {i : d_outputs[usm][algo][plant][i] 
+    #                      for i in range(1,len(d_outputs[usm][algo][plant])+1) 
+    #                      if d_outputs[usm][algo][plant][i] is not None}
+    density = stics_output_data[len(stics_output_data)]["Density"]
+    
+    sen_stics = get_stics_senescence_params(file_plt_xml)
+    lifespan = sen_stics['durvieF']
+    lifespan_early = sen_stics['ratiodurvieI'] * lifespan
+    
+    return density, lifespan, lifespan_early, interrow
+
+
 def stics_weather_3d(filename, daily_dynamics):
     """Load the weather data from a file and filter it based on the first and last dates of plant growth."""
     df = meteo_day(filename)  # noqa: PD901
@@ -181,21 +376,35 @@ def stics_weather_3d(filename, daily_dynamics):
     # Use these dates to filter DataFrame
     return df[(df.daydate >= pd.to_datetime(first_date)) & (df.daydate <= pd.to_datetime(last_date))]
 
+def stics_weather_3d_bis(filename, dates):
+    """Load the weather data from a file and filter it based on the first and last dates of plant growth."""
+    df = meteo_day(filename)  # noqa: PD901
+
+    # Get the first and last dates from daily_dynamics
+    first_date = dates[0]  # noqa: RUF015
+    last_date = dates[-1]
+
+    # Use these dates to filter DataFrame
+    return df[(df.daydate >= pd.to_datetime(first_date)) & (df.daydate <= pd.to_datetime(last_date))]
+
 
 def get_pheno(daily_dynamics: dict):
-    thermal_time = [value["Thermal time"] for value in daily_dynamics.values()]
+    thermal_time = [value["Thermal time"] for value in daily_dynamics.values() if value is not None]
+
+    index_end_veg = len(thermal_time) - 1
+    end_veg = thermal_time[index_end_veg] 
 
     for key, value in daily_dynamics.items():
         if value["Phenology"] == 'juvenile':
             next_key = key + 1
             if next_key in daily_dynamics and daily_dynamics[next_key]["Phenology"] == 'exponential':
-                end_juv = thermal_time[key-1] # + thermal_time[0]
+                end_juv = thermal_time[key] # -1] 
 
         elif value["Phenology"] == 'exponential':
             next_key = key + 1
             if next_key in daily_dynamics and daily_dynamics[next_key]["Phenology"] == 'repro':
-                end_veg = thermal_time[key-1] # + thermal_time[0]
-                index_end_veg = key - 1
+                index_end_veg = next_key # key # - 1
+                end_veg = thermal_time[index_end_veg] 
                 break
     
     return index_end_veg, end_veg, end_juv
@@ -210,11 +419,94 @@ def stics_output(tec_file, plant_file, stics_output_file):
         stics_output_file=stics_output_file  # Path to the STICS output file
     )
 
-    thermal_time = [value["Thermal time"] for value in daily_dynamics.values()]
-    leaf_area_plant = [value["Plant leaf area"] for value in daily_dynamics.values()]
-    sen_leaf_area_plant = [value["Plant senescent leaf area"] for value in daily_dynamics.values()]
-    height_canopy = [value["Plant height"] for value in daily_dynamics.values()]
+    thermal_time = [value["Thermal time"] for value in daily_dynamics.values() if value is not None]
+    leaf_area_plant = [value["Plant leaf area"] for value in daily_dynamics.values() if value is not None]
+    sen_leaf_area_plant = [value["Plant senescent leaf area"] for value in daily_dynamics.values() if value is not None]
+    height_canopy = [value["Plant height"] for value in daily_dynamics.values() if value is not None]
 
     index_end_veg, end_veg, end_juv = get_pheno(daily_dynamics)
 
     return density, daily_dynamics, lifespan, lifespan_early, thermal_time, leaf_area_plant, sen_leaf_area_plant, height_canopy, end_juv, end_veg, index_end_veg
+
+
+def read_climate_csv(file, sep=";"):
+    return pd.read_csv(file, sep=sep)
+
+def export_csv_tab(df, file_out=None, header=True):
+    """Exporte en fichier tabulé."""
+    df.to_csv(
+        file_out,
+        sep="\t",
+        index=False,
+        header=header
+    )
+
+
+def reorder_columns(df, new_order):
+    """
+    new_order = liste des colonnes dans l'ordre souhaité.
+    """
+    df_new = df.loc[:,new_order]
+    return df_new
+
+
+def remove_columns(df, columns):
+    """
+    columns = liste des colonnes à supprimer.
+    """
+    return df.drop(columns=columns, inplace=True)
+
+
+def add_column(df, column_name, default_value):
+    """
+    Ajoute une colonne avec une valeur par défaut.
+    """
+    df[column_name] = default_value
+    return df
+
+
+def export_without_header(df, file_out, sep="\t"):
+    """
+    Exporte sans les noms de colonnes.
+    """
+    df.to_csv(
+        file_out,
+        sep=sep,
+        index=False,
+        header=False
+    )
+
+
+def split_climate_csv(df, folder_out):
+    """
+    Génère un fichier par couple (year, idPoint).
+    Exemple :
+        Bamako.1981
+        Bamako.1982
+        ...
+    """
+    dossier = Path(folder_out)
+    dossier.mkdir(parents=True, exist_ok=True)
+
+    for (idpoint, year), groupe in df.groupby(["idPoint", "year"]):
+        file_name = dossier / f"{idpoint}.{year}"
+
+        groupe.to_csv(
+            file_name,
+            sep="\t",
+            index=False,
+            header=False
+        )
+
+
+'''
+df = read_climate_csv("D:/Downloads/data_Oriane.csv")
+columns = ["w_date","tmoy","Tdewmin","Tdewmax","original_lat","original_lon"]
+remove_columns(df, columns)
+add_column(df, "Penman PET", -999.9)
+add_column(df, "CO2", -999.9)
+new_order = ["idPoint","year","Nmonth","NdayM","DOY","tmin","tmax","srad","Penman PET","rain","wind","Surfpress","CO2"]
+df = reorder_columns(df, new_order)
+folder_out = "../data/usms_STICS/v10/"
+split_climate_csv(df, folder_out)
+'''

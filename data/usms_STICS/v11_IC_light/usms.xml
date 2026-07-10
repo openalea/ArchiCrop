@@ -1,0 +1,1084 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<usms version="11.0.0">
+  <usm nom="usm_1">
+    <datedebut>135</datedebut>
+    <datefin>365</datefin>
+    <finit>inter-sorghum-maize_ini.xml</finit>
+    <nomsol>02V2D1</nomsol>
+    <fstation>StationNtarla_inter_sta.xml</fstation>
+    <fclim1>ntarla_corr.2018</fclim1>
+    <fclim2>ntarla_corr.2018</fclim2>
+    <culturean>1</culturean>
+    <nbplantes>2</nbplantes>
+    <codesimul>0</codesimul>
+    <plante dominance="1">
+      <fplt>sorgho_trop_plt.xml</fplt>
+      <ftec>sorghum_1_tec.xml</ftec>
+      <flai>null</flai>
+      <fobs>null</fobs>
+    </plante>
+    <plante dominance="2">
+      <fplt>corn_LI_step2_BEOU_plt.xml</fplt>
+      <ftec>maize_1_tec.xml</ftec>
+      <flai>null</flai>
+      <fobs>null</fobs>
+    </plante>
+  </usm>
+  <usm nom="usm_2">
+    <datedebut>135</datedebut>
+    <datefin>365</datefin>
+    <finit>inter-sorghum-maize_ini.xml</finit>
+    <nomsol>02V2D1</nomsol>
+    <fstation>StationNtarla_inter_sta.xml</fstation>
+    <fclim1>ntarla_corr.2018</fclim1>
+    <fclim2>ntarla_corr.2018</fclim2>
+    <culturean>1</culturean>
+    <nbplantes>2</nbplantes>
+    <codesimul>0</codesimul>
+    <plante dominance="1">
+      <fplt>sorgho_trop_plt.xml</fplt>
+      <ftec>sorghum_2_tec.xml</ftec>
+      <flai>null</flai>
+      <fobs>null</fobs>
+    </plante>
+    <plante dominance="2">
+      <fplt>corn_LI_step2_BEOU_plt.xml</fplt>
+      <ftec>maize_2_tec.xml</ftec>
+      <flai>null</flai>
+      <fobs>null</fobs>
+    </plante>
+  </usm>
+  <usm nom="usm_3">
+    <datedebut>135</datedebut>
+    <datefin>365</datefin>
+    <finit>inter-sorghum-maize_ini.xml</finit>
+    <nomsol>02V2D1</nomsol>
+    <fstation>StationNtarla_inter_sta.xml</fstation>
+    <fclim1>ntarla_corr.2018</fclim1>
+    <fclim2>ntarla_corr.2018</fclim2>
+    <culturean>1</culturean>
+    <nbplantes>2</nbplantes>
+    <codesimul>0</codesimul>
+    <plante dominance="1">
+      <fplt>sorgho_trop_plt.xml</fplt>
+      <ftec>sorghum_3_tec.xml</ftec>
+      <flai>null</flai>
+      <fobs>null</fobs>
+    </plante>
+    <plante dominance="2">
+      <fplt>corn_LI_step2_BEOU_plt.xml</fplt>
+      <ftec>maize_3_tec.xml</ftec>
+      <flai>null</flai>
+      <fobs>null</fobs>
+    </plante>
+  </usm>
+  <usm nom="usm_4">
+    <datedebut>135</datedebut>
+    <datefin>365</datefin>
+    <finit>inter-sorghum-maize_ini.xml</finit>
+    <nomsol>02V2D1</nomsol>
+    <fstation>StationNtarla_inter_sta.xml</fstation>
+    <fclim1>ntarla_corr.2018</fclim1>
+    <fclim2>ntarla_corr.2018</fclim2>
+    <culturean>1</culturean>
+    <nbplantes>2</nbplantes>
+    <codesimul>0</codesimul>
+    <plante dominance="1">
+      <fplt>sorgho_trop_plt.xml</fplt>
+      <ftec>sorghum_4_tec.xml</ftec>
+      <flai>null</flai>
+      <fobs>null</fobs>
+    </plante>
+    <plante dominance="2">
+      <fplt>corn_LI_step2_BEOU_plt.xml</fplt>
+      <ftec>maize_4_tec.xml</ftec>
+      <flai>null</flai>
+      <fobs>null</fobs>
+    </plante>
+  </usm>
+  <usm nom="usm_5">
+    <datedebut>135</datedebut>
+    <datefin>365</datefin>
+    <finit>inter-sorghum-maize_ini.xml</finit>
+    <nomsol>02V2D1</nomsol>
+    <fstation>StationNtarla_inter_sta.xml</fstation>
+    <fclim1>ntarla_corr.2018</fclim1>
+    <fclim2>ntarla_corr.2018</fclim2>
+    <culturean>1</culturean>
+    <nbplantes>2</nbplantes>
+    <codesimul>0</codesimul>
+    <plante dominance="1">
+      <fplt>sorgho_trop_plt.xml</fplt>
+      <ftec>sorghum_5_tec.xml</ftec>
+      <flai>null</flai>
+      <fobs>null</fobs>
+    </plante>
+    <plante dominance="2">
+      <fplt>corn_LI_step2_BEOU_plt.xml</fplt>
+      <ftec>maize_5_tec.xml</ftec>
+      <flai>null</flai>
+      <fobs>null</fobs>
+    </plante>
+  </usm>
+  <usm nom="usm_6">
+    <datedebut>135</datedebut>
+    <datefin>365</datefin>
+    <finit>inter-sorghum-maize_ini.xml</finit>
+    <nomsol>02V2D1</nomsol>
+    <fstation>StationNtarla_inter_sta.xml</fstation>
+    <fclim1>ntarla_corr.2018</fclim1>
+    <fclim2>ntarla_corr.2018</fclim2>
+    <culturean>1</culturean>
+    <nbplantes>2</nbplantes>
+    <codesimul>0</codesimul>
+    <plante dominance="1">
+      <fplt>sorgho_trop_plt.xml</fplt>
+      <ftec>sorghum_6_tec.xml</ftec>
+      <flai>null</flai>
+      <fobs>null</fobs>
+    </plante>
+    <plante dominance="2">
+      <fplt>corn_LI_step2_BEOU_plt.xml</fplt>
+      <ftec>maize_6_tec.xml</ftec>
+      <flai>null</flai>
+      <fobs>null</fobs>
+    </plante>
+  </usm>
+  <usm nom="usm_7">
+    <datedebut>135</datedebut>
+    <datefin>365</datefin>
+    <finit>inter-sorghum-maize_ini.xml</finit>
+    <nomsol>02V2D1</nomsol>
+    <fstation>StationNtarla_inter_sta.xml</fstation>
+    <fclim1>ntarla_corr.2018</fclim1>
+    <fclim2>ntarla_corr.2018</fclim2>
+    <culturean>1</culturean>
+    <nbplantes>2</nbplantes>
+    <codesimul>0</codesimul>
+    <plante dominance="1">
+      <fplt>sorgho_trop_plt.xml</fplt>
+      <ftec>sorghum_7_tec.xml</ftec>
+      <flai>null</flai>
+      <fobs>null</fobs>
+    </plante>
+    <plante dominance="2">
+      <fplt>corn_LI_step2_BEOU_plt.xml</fplt>
+      <ftec>maize_7_tec.xml</ftec>
+      <flai>null</flai>
+      <fobs>null</fobs>
+    </plante>
+  </usm>
+  <usm nom="usm_8">
+    <datedebut>135</datedebut>
+    <datefin>365</datefin>
+    <finit>inter-sorghum-maize_ini.xml</finit>
+    <nomsol>02V2D1</nomsol>
+    <fstation>StationNtarla_inter_sta.xml</fstation>
+    <fclim1>ntarla_corr.2018</fclim1>
+    <fclim2>ntarla_corr.2018</fclim2>
+    <culturean>1</culturean>
+    <nbplantes>2</nbplantes>
+    <codesimul>0</codesimul>
+    <plante dominance="1">
+      <fplt>sorgho_trop_plt.xml</fplt>
+      <ftec>sorghum_8_tec.xml</ftec>
+      <flai>null</flai>
+      <fobs>null</fobs>
+    </plante>
+    <plante dominance="2">
+      <fplt>corn_LI_step2_BEOU_plt.xml</fplt>
+      <ftec>maize_8_tec.xml</ftec>
+      <flai>null</flai>
+      <fobs>null</fobs>
+    </plante>
+  </usm>
+  <usm nom="usm_9">
+    <datedebut>135</datedebut>
+    <datefin>365</datefin>
+    <finit>inter-sorghum-maize_ini.xml</finit>
+    <nomsol>02V2D1</nomsol>
+    <fstation>StationNtarla_inter_sta.xml</fstation>
+    <fclim1>ntarla_corr.2018</fclim1>
+    <fclim2>ntarla_corr.2018</fclim2>
+    <culturean>1</culturean>
+    <nbplantes>2</nbplantes>
+    <codesimul>0</codesimul>
+    <plante dominance="1">
+      <fplt>sorgho_trop_plt.xml</fplt>
+      <ftec>sorghum_9_tec.xml</ftec>
+      <flai>null</flai>
+      <fobs>null</fobs>
+    </plante>
+    <plante dominance="2">
+      <fplt>corn_LI_step2_BEOU_plt.xml</fplt>
+      <ftec>maize_9_tec.xml</ftec>
+      <flai>null</flai>
+      <fobs>null</fobs>
+    </plante>
+  </usm>
+  <usm nom="usm_10">
+    <datedebut>135</datedebut>
+    <datefin>365</datefin>
+    <finit>inter-sorghum-maize_ini.xml</finit>
+    <nomsol>02V2D1</nomsol>
+    <fstation>StationNtarla_inter_sta.xml</fstation>
+    <fclim1>ntarla_corr.2018</fclim1>
+    <fclim2>ntarla_corr.2018</fclim2>
+    <culturean>1</culturean>
+    <nbplantes>2</nbplantes>
+    <codesimul>0</codesimul>
+    <plante dominance="1">
+      <fplt>sorgho_trop_plt.xml</fplt>
+      <ftec>sorghum_10_tec.xml</ftec>
+      <flai>null</flai>
+      <fobs>null</fobs>
+    </plante>
+    <plante dominance="2">
+      <fplt>corn_LI_step2_BEOU_plt.xml</fplt>
+      <ftec>maize_10_tec.xml</ftec>
+      <flai>null</flai>
+      <fobs>null</fobs>
+    </plante>
+  </usm>
+  <usm nom="usm_11">
+    <datedebut>135</datedebut>
+    <datefin>365</datefin>
+    <finit>inter-sorghum-maize_ini.xml</finit>
+    <nomsol>02V2D1</nomsol>
+    <fstation>StationNtarla_inter_sta.xml</fstation>
+    <fclim1>ntarla_corr.2018</fclim1>
+    <fclim2>ntarla_corr.2018</fclim2>
+    <culturean>1</culturean>
+    <nbplantes>2</nbplantes>
+    <codesimul>0</codesimul>
+    <plante dominance="1">
+      <fplt>sorgho_trop_plt.xml</fplt>
+      <ftec>sorghum_11_tec.xml</ftec>
+      <flai>null</flai>
+      <fobs>null</fobs>
+    </plante>
+    <plante dominance="2">
+      <fplt>corn_LI_step2_BEOU_plt.xml</fplt>
+      <ftec>maize_11_tec.xml</ftec>
+      <flai>null</flai>
+      <fobs>null</fobs>
+    </plante>
+  </usm>
+  <usm nom="usm_12">
+    <datedebut>135</datedebut>
+    <datefin>365</datefin>
+    <finit>inter-sorghum-maize_ini.xml</finit>
+    <nomsol>02V2D1</nomsol>
+    <fstation>StationNtarla_inter_sta.xml</fstation>
+    <fclim1>ntarla_corr.2018</fclim1>
+    <fclim2>ntarla_corr.2018</fclim2>
+    <culturean>1</culturean>
+    <nbplantes>2</nbplantes>
+    <codesimul>0</codesimul>
+    <plante dominance="1">
+      <fplt>sorgho_trop_plt.xml</fplt>
+      <ftec>sorghum_12_tec.xml</ftec>
+      <flai>null</flai>
+      <fobs>null</fobs>
+    </plante>
+    <plante dominance="2">
+      <fplt>corn_LI_step2_BEOU_plt.xml</fplt>
+      <ftec>maize_12_tec.xml</ftec>
+      <flai>null</flai>
+      <fobs>null</fobs>
+    </plante>
+  </usm>
+  <usm nom="usm_13">
+    <datedebut>135</datedebut>
+    <datefin>365</datefin>
+    <finit>inter-sorghum-maize_ini.xml</finit>
+    <nomsol>02V2D1</nomsol>
+    <fstation>StationNtarla_inter_sta.xml</fstation>
+    <fclim1>ntarla_corr.2018</fclim1>
+    <fclim2>ntarla_corr.2018</fclim2>
+    <culturean>1</culturean>
+    <nbplantes>2</nbplantes>
+    <codesimul>0</codesimul>
+    <plante dominance="1">
+      <fplt>sorgho_trop_plt.xml</fplt>
+      <ftec>sorghum_13_tec.xml</ftec>
+      <flai>null</flai>
+      <fobs>null</fobs>
+    </plante>
+    <plante dominance="2">
+      <fplt>corn_LI_step2_BEOU_plt.xml</fplt>
+      <ftec>maize_13_tec.xml</ftec>
+      <flai>null</flai>
+      <fobs>null</fobs>
+    </plante>
+  </usm>
+  <usm nom="usm_14">
+    <datedebut>135</datedebut>
+    <datefin>365</datefin>
+    <finit>inter-sorghum-maize_ini.xml</finit>
+    <nomsol>02V2D1</nomsol>
+    <fstation>StationNtarla_inter_sta.xml</fstation>
+    <fclim1>ntarla_corr.2018</fclim1>
+    <fclim2>ntarla_corr.2018</fclim2>
+    <culturean>1</culturean>
+    <nbplantes>2</nbplantes>
+    <codesimul>0</codesimul>
+    <plante dominance="1">
+      <fplt>sorgho_trop_plt.xml</fplt>
+      <ftec>sorghum_14_tec.xml</ftec>
+      <flai>null</flai>
+      <fobs>null</fobs>
+    </plante>
+    <plante dominance="2">
+      <fplt>corn_LI_step2_BEOU_plt.xml</fplt>
+      <ftec>maize_14_tec.xml</ftec>
+      <flai>null</flai>
+      <fobs>null</fobs>
+    </plante>
+  </usm>
+  <usm nom="usm_15">
+    <datedebut>135</datedebut>
+    <datefin>365</datefin>
+    <finit>inter-sorghum-maize_ini.xml</finit>
+    <nomsol>02V2D1</nomsol>
+    <fstation>StationNtarla_inter_sta.xml</fstation>
+    <fclim1>ntarla_corr.2018</fclim1>
+    <fclim2>ntarla_corr.2018</fclim2>
+    <culturean>1</culturean>
+    <nbplantes>2</nbplantes>
+    <codesimul>0</codesimul>
+    <plante dominance="1">
+      <fplt>sorgho_trop_plt.xml</fplt>
+      <ftec>sorghum_15_tec.xml</ftec>
+      <flai>null</flai>
+      <fobs>null</fobs>
+    </plante>
+    <plante dominance="2">
+      <fplt>corn_LI_step2_BEOU_plt.xml</fplt>
+      <ftec>maize_15_tec.xml</ftec>
+      <flai>null</flai>
+      <fobs>null</fobs>
+    </plante>
+  </usm>
+  <usm nom="usm_16">
+    <datedebut>135</datedebut>
+    <datefin>365</datefin>
+    <finit>inter-sorghum-maize_ini.xml</finit>
+    <nomsol>02V2D1</nomsol>
+    <fstation>StationNtarla_inter_sta.xml</fstation>
+    <fclim1>ntarla_corr.2018</fclim1>
+    <fclim2>ntarla_corr.2018</fclim2>
+    <culturean>1</culturean>
+    <nbplantes>2</nbplantes>
+    <codesimul>0</codesimul>
+    <plante dominance="1">
+      <fplt>sorgho_trop_plt.xml</fplt>
+      <ftec>sorghum_16_tec.xml</ftec>
+      <flai>null</flai>
+      <fobs>null</fobs>
+    </plante>
+    <plante dominance="2">
+      <fplt>corn_LI_step2_BEOU_plt.xml</fplt>
+      <ftec>maize_16_tec.xml</ftec>
+      <flai>null</flai>
+      <fobs>null</fobs>
+    </plante>
+  </usm>
+  <usm nom="usm_17">
+    <datedebut>135</datedebut>
+    <datefin>365</datefin>
+    <finit>inter-sorghum-maize_ini.xml</finit>
+    <nomsol>02V2D1</nomsol>
+    <fstation>StationNtarla_inter_sta.xml</fstation>
+    <fclim1>ntarla_corr.2018</fclim1>
+    <fclim2>ntarla_corr.2018</fclim2>
+    <culturean>1</culturean>
+    <nbplantes>2</nbplantes>
+    <codesimul>0</codesimul>
+    <plante dominance="1">
+      <fplt>sorgho_trop_plt.xml</fplt>
+      <ftec>sorghum_17_tec.xml</ftec>
+      <flai>null</flai>
+      <fobs>null</fobs>
+    </plante>
+    <plante dominance="2">
+      <fplt>corn_LI_step2_BEOU_plt.xml</fplt>
+      <ftec>maize_17_tec.xml</ftec>
+      <flai>null</flai>
+      <fobs>null</fobs>
+    </plante>
+  </usm>
+  <usm nom="usm_18">
+    <datedebut>135</datedebut>
+    <datefin>365</datefin>
+    <finit>inter-sorghum-maize_ini.xml</finit>
+    <nomsol>02V2D1</nomsol>
+    <fstation>StationNtarla_inter_sta.xml</fstation>
+    <fclim1>ntarla_corr.2018</fclim1>
+    <fclim2>ntarla_corr.2018</fclim2>
+    <culturean>1</culturean>
+    <nbplantes>2</nbplantes>
+    <codesimul>0</codesimul>
+    <plante dominance="1">
+      <fplt>sorgho_trop_plt.xml</fplt>
+      <ftec>sorghum_18_tec.xml</ftec>
+      <flai>null</flai>
+      <fobs>null</fobs>
+    </plante>
+    <plante dominance="2">
+      <fplt>corn_LI_step2_BEOU_plt.xml</fplt>
+      <ftec>maize_18_tec.xml</ftec>
+      <flai>null</flai>
+      <fobs>null</fobs>
+    </plante>
+  </usm>
+  <usm nom="usm_19">
+    <datedebut>135</datedebut>
+    <datefin>365</datefin>
+    <finit>inter-sorghum-maize_ini.xml</finit>
+    <nomsol>02V2D1</nomsol>
+    <fstation>StationNtarla_inter_sta.xml</fstation>
+    <fclim1>ntarla_corr.2018</fclim1>
+    <fclim2>ntarla_corr.2018</fclim2>
+    <culturean>1</culturean>
+    <nbplantes>2</nbplantes>
+    <codesimul>0</codesimul>
+    <plante dominance="1">
+      <fplt>sorgho_trop_plt.xml</fplt>
+      <ftec>sorghum_19_tec.xml</ftec>
+      <flai>null</flai>
+      <fobs>null</fobs>
+    </plante>
+    <plante dominance="2">
+      <fplt>corn_LI_step2_BEOU_plt.xml</fplt>
+      <ftec>maize_19_tec.xml</ftec>
+      <flai>null</flai>
+      <fobs>null</fobs>
+    </plante>
+  </usm>
+  <usm nom="usm_20">
+    <datedebut>135</datedebut>
+    <datefin>365</datefin>
+    <finit>inter-sorghum-maize_ini.xml</finit>
+    <nomsol>02V2D1</nomsol>
+    <fstation>StationNtarla_inter_sta.xml</fstation>
+    <fclim1>ntarla_corr.2018</fclim1>
+    <fclim2>ntarla_corr.2018</fclim2>
+    <culturean>1</culturean>
+    <nbplantes>2</nbplantes>
+    <codesimul>0</codesimul>
+    <plante dominance="1">
+      <fplt>sorgho_trop_plt.xml</fplt>
+      <ftec>sorghum_20_tec.xml</ftec>
+      <flai>null</flai>
+      <fobs>null</fobs>
+    </plante>
+    <plante dominance="2">
+      <fplt>corn_LI_step2_BEOU_plt.xml</fplt>
+      <ftec>maize_20_tec.xml</ftec>
+      <flai>null</flai>
+      <fobs>null</fobs>
+    </plante>
+  </usm>
+  <usm nom="usm_21">
+    <datedebut>135</datedebut>
+    <datefin>365</datefin>
+    <finit>inter-sorghum-maize_ini.xml</finit>
+    <nomsol>02V2D1</nomsol>
+    <fstation>StationNtarla_inter_sta.xml</fstation>
+    <fclim1>ntarla_corr.2018</fclim1>
+    <fclim2>ntarla_corr.2018</fclim2>
+    <culturean>1</culturean>
+    <nbplantes>2</nbplantes>
+    <codesimul>0</codesimul>
+    <plante dominance="1">
+      <fplt>sorgho_trop_plt.xml</fplt>
+      <ftec>sorghum_21_tec.xml</ftec>
+      <flai>null</flai>
+      <fobs>null</fobs>
+    </plante>
+    <plante dominance="2">
+      <fplt>corn_LI_step2_BEOU_plt.xml</fplt>
+      <ftec>maize_21_tec.xml</ftec>
+      <flai>null</flai>
+      <fobs>null</fobs>
+    </plante>
+  </usm>
+  <usm nom="usm_22">
+    <datedebut>135</datedebut>
+    <datefin>365</datefin>
+    <finit>inter-sorghum-maize_ini.xml</finit>
+    <nomsol>02V2D1</nomsol>
+    <fstation>StationNtarla_inter_sta.xml</fstation>
+    <fclim1>ntarla_corr.2018</fclim1>
+    <fclim2>ntarla_corr.2018</fclim2>
+    <culturean>1</culturean>
+    <nbplantes>2</nbplantes>
+    <codesimul>0</codesimul>
+    <plante dominance="1">
+      <fplt>sorgho_trop_plt.xml</fplt>
+      <ftec>sorghum_22_tec.xml</ftec>
+      <flai>null</flai>
+      <fobs>null</fobs>
+    </plante>
+    <plante dominance="2">
+      <fplt>corn_LI_step2_BEOU_plt.xml</fplt>
+      <ftec>maize_22_tec.xml</ftec>
+      <flai>null</flai>
+      <fobs>null</fobs>
+    </plante>
+  </usm>
+  <usm nom="usm_23">
+    <datedebut>135</datedebut>
+    <datefin>365</datefin>
+    <finit>inter-sorghum-maize_ini.xml</finit>
+    <nomsol>02V2D1</nomsol>
+    <fstation>StationNtarla_inter_sta.xml</fstation>
+    <fclim1>ntarla_corr.2018</fclim1>
+    <fclim2>ntarla_corr.2018</fclim2>
+    <culturean>1</culturean>
+    <nbplantes>2</nbplantes>
+    <codesimul>0</codesimul>
+    <plante dominance="1">
+      <fplt>sorgho_trop_plt.xml</fplt>
+      <ftec>sorghum_23_tec.xml</ftec>
+      <flai>null</flai>
+      <fobs>null</fobs>
+    </plante>
+    <plante dominance="2">
+      <fplt>corn_LI_step2_BEOU_plt.xml</fplt>
+      <ftec>maize_23_tec.xml</ftec>
+      <flai>null</flai>
+      <fobs>null</fobs>
+    </plante>
+  </usm>
+  <usm nom="usm_24">
+    <datedebut>135</datedebut>
+    <datefin>365</datefin>
+    <finit>inter-sorghum-maize_ini.xml</finit>
+    <nomsol>02V2D1</nomsol>
+    <fstation>StationNtarla_inter_sta.xml</fstation>
+    <fclim1>ntarla_corr.2018</fclim1>
+    <fclim2>ntarla_corr.2018</fclim2>
+    <culturean>1</culturean>
+    <nbplantes>2</nbplantes>
+    <codesimul>0</codesimul>
+    <plante dominance="1">
+      <fplt>sorgho_trop_plt.xml</fplt>
+      <ftec>sorghum_24_tec.xml</ftec>
+      <flai>null</flai>
+      <fobs>null</fobs>
+    </plante>
+    <plante dominance="2">
+      <fplt>corn_LI_step2_BEOU_plt.xml</fplt>
+      <ftec>maize_24_tec.xml</ftec>
+      <flai>null</flai>
+      <fobs>null</fobs>
+    </plante>
+  </usm>
+  <usm nom="usm_25">
+    <datedebut>135</datedebut>
+    <datefin>365</datefin>
+    <finit>inter-sorghum-maize_ini.xml</finit>
+    <nomsol>02V2D1</nomsol>
+    <fstation>StationNtarla_inter_sta.xml</fstation>
+    <fclim1>ntarla_corr.2018</fclim1>
+    <fclim2>ntarla_corr.2018</fclim2>
+    <culturean>1</culturean>
+    <nbplantes>2</nbplantes>
+    <codesimul>0</codesimul>
+    <plante dominance="1">
+      <fplt>sorgho_trop_plt.xml</fplt>
+      <ftec>sorghum_25_tec.xml</ftec>
+      <flai>null</flai>
+      <fobs>null</fobs>
+    </plante>
+    <plante dominance="2">
+      <fplt>corn_LI_step2_BEOU_plt.xml</fplt>
+      <ftec>maize_25_tec.xml</ftec>
+      <flai>null</flai>
+      <fobs>null</fobs>
+    </plante>
+  </usm>
+  <usm nom="usm_26">
+    <datedebut>135</datedebut>
+    <datefin>365</datefin>
+    <finit>inter-sorghum-maize_ini.xml</finit>
+    <nomsol>02V2D1</nomsol>
+    <fstation>StationNtarla_inter_sta.xml</fstation>
+    <fclim1>ntarla_corr.2018</fclim1>
+    <fclim2>ntarla_corr.2018</fclim2>
+    <culturean>1</culturean>
+    <nbplantes>2</nbplantes>
+    <codesimul>0</codesimul>
+    <plante dominance="1">
+      <fplt>sorgho_trop_plt.xml</fplt>
+      <ftec>sorghum_26_tec.xml</ftec>
+      <flai>null</flai>
+      <fobs>null</fobs>
+    </plante>
+    <plante dominance="2">
+      <fplt>corn_LI_step2_BEOU_plt.xml</fplt>
+      <ftec>maize_26_tec.xml</ftec>
+      <flai>null</flai>
+      <fobs>null</fobs>
+    </plante>
+  </usm>
+  <usm nom="usm_27">
+    <datedebut>135</datedebut>
+    <datefin>365</datefin>
+    <finit>inter-sorghum-maize_ini.xml</finit>
+    <nomsol>02V2D1</nomsol>
+    <fstation>StationNtarla_inter_sta.xml</fstation>
+    <fclim1>ntarla_corr.2018</fclim1>
+    <fclim2>ntarla_corr.2018</fclim2>
+    <culturean>1</culturean>
+    <nbplantes>2</nbplantes>
+    <codesimul>0</codesimul>
+    <plante dominance="1">
+      <fplt>sorgho_trop_plt.xml</fplt>
+      <ftec>sorghum_27_tec.xml</ftec>
+      <flai>null</flai>
+      <fobs>null</fobs>
+    </plante>
+    <plante dominance="2">
+      <fplt>corn_LI_step2_BEOU_plt.xml</fplt>
+      <ftec>maize_27_tec.xml</ftec>
+      <flai>null</flai>
+      <fobs>null</fobs>
+    </plante>
+  </usm>
+  <usm nom="usm_28">
+    <datedebut>135</datedebut>
+    <datefin>365</datefin>
+    <finit>inter-sorghum-maize_ini.xml</finit>
+    <nomsol>02V2D1</nomsol>
+    <fstation>StationNtarla_inter_sta.xml</fstation>
+    <fclim1>ntarla_corr.2018</fclim1>
+    <fclim2>ntarla_corr.2018</fclim2>
+    <culturean>1</culturean>
+    <nbplantes>2</nbplantes>
+    <codesimul>0</codesimul>
+    <plante dominance="1">
+      <fplt>sorgho_trop_plt.xml</fplt>
+      <ftec>sorghum_28_tec.xml</ftec>
+      <flai>null</flai>
+      <fobs>null</fobs>
+    </plante>
+    <plante dominance="2">
+      <fplt>corn_LI_step2_BEOU_plt.xml</fplt>
+      <ftec>maize_28_tec.xml</ftec>
+      <flai>null</flai>
+      <fobs>null</fobs>
+    </plante>
+  </usm>
+  <usm nom="usm_29">
+    <datedebut>135</datedebut>
+    <datefin>365</datefin>
+    <finit>inter-sorghum-maize_ini.xml</finit>
+    <nomsol>02V2D1</nomsol>
+    <fstation>StationNtarla_inter_sta.xml</fstation>
+    <fclim1>ntarla_corr.2018</fclim1>
+    <fclim2>ntarla_corr.2018</fclim2>
+    <culturean>1</culturean>
+    <nbplantes>2</nbplantes>
+    <codesimul>0</codesimul>
+    <plante dominance="1">
+      <fplt>sorgho_trop_plt.xml</fplt>
+      <ftec>sorghum_29_tec.xml</ftec>
+      <flai>null</flai>
+      <fobs>null</fobs>
+    </plante>
+    <plante dominance="2">
+      <fplt>corn_LI_step2_BEOU_plt.xml</fplt>
+      <ftec>maize_29_tec.xml</ftec>
+      <flai>null</flai>
+      <fobs>null</fobs>
+    </plante>
+  </usm>
+  <usm nom="usm_30">
+    <datedebut>135</datedebut>
+    <datefin>365</datefin>
+    <finit>inter-sorghum-maize_ini.xml</finit>
+    <nomsol>02V2D1</nomsol>
+    <fstation>StationNtarla_inter_sta.xml</fstation>
+    <fclim1>ntarla_corr.2018</fclim1>
+    <fclim2>ntarla_corr.2018</fclim2>
+    <culturean>1</culturean>
+    <nbplantes>2</nbplantes>
+    <codesimul>0</codesimul>
+    <plante dominance="1">
+      <fplt>sorgho_trop_plt.xml</fplt>
+      <ftec>sorghum_30_tec.xml</ftec>
+      <flai>null</flai>
+      <fobs>null</fobs>
+    </plante>
+    <plante dominance="2">
+      <fplt>corn_LI_step2_BEOU_plt.xml</fplt>
+      <ftec>maize_30_tec.xml</ftec>
+      <flai>null</flai>
+      <fobs>null</fobs>
+    </plante>
+  </usm>
+  <usm nom="usm_31">
+    <datedebut>135</datedebut>
+    <datefin>365</datefin>
+    <finit>inter-sorghum-maize_ini.xml</finit>
+    <nomsol>02V2D1</nomsol>
+    <fstation>StationNtarla_inter_sta.xml</fstation>
+    <fclim1>ntarla_corr.2018</fclim1>
+    <fclim2>ntarla_corr.2018</fclim2>
+    <culturean>1</culturean>
+    <nbplantes>2</nbplantes>
+    <codesimul>0</codesimul>
+    <plante dominance="1">
+      <fplt>sorgho_trop_plt.xml</fplt>
+      <ftec>sorghum_31_tec.xml</ftec>
+      <flai>null</flai>
+      <fobs>null</fobs>
+    </plante>
+    <plante dominance="2">
+      <fplt>corn_LI_step2_BEOU_plt.xml</fplt>
+      <ftec>maize_31_tec.xml</ftec>
+      <flai>null</flai>
+      <fobs>null</fobs>
+    </plante>
+  </usm>
+  <usm nom="usm_32">
+    <datedebut>135</datedebut>
+    <datefin>365</datefin>
+    <finit>inter-sorghum-maize_ini.xml</finit>
+    <nomsol>02V2D1</nomsol>
+    <fstation>StationNtarla_inter_sta.xml</fstation>
+    <fclim1>ntarla_corr.2018</fclim1>
+    <fclim2>ntarla_corr.2018</fclim2>
+    <culturean>1</culturean>
+    <nbplantes>2</nbplantes>
+    <codesimul>0</codesimul>
+    <plante dominance="1">
+      <fplt>sorgho_trop_plt.xml</fplt>
+      <ftec>sorghum_32_tec.xml</ftec>
+      <flai>null</flai>
+      <fobs>null</fobs>
+    </plante>
+    <plante dominance="2">
+      <fplt>corn_LI_step2_BEOU_plt.xml</fplt>
+      <ftec>maize_32_tec.xml</ftec>
+      <flai>null</flai>
+      <fobs>null</fobs>
+    </plante>
+  </usm>
+  <usm nom="usm_33">
+    <datedebut>135</datedebut>
+    <datefin>365</datefin>
+    <finit>inter-sorghum-maize_ini.xml</finit>
+    <nomsol>02V2D1</nomsol>
+    <fstation>StationNtarla_inter_sta.xml</fstation>
+    <fclim1>ntarla_corr.2018</fclim1>
+    <fclim2>ntarla_corr.2018</fclim2>
+    <culturean>1</culturean>
+    <nbplantes>2</nbplantes>
+    <codesimul>0</codesimul>
+    <plante dominance="1">
+      <fplt>sorgho_trop_plt.xml</fplt>
+      <ftec>sorghum_33_tec.xml</ftec>
+      <flai>null</flai>
+      <fobs>null</fobs>
+    </plante>
+    <plante dominance="2">
+      <fplt>corn_LI_step2_BEOU_plt.xml</fplt>
+      <ftec>maize_33_tec.xml</ftec>
+      <flai>null</flai>
+      <fobs>null</fobs>
+    </plante>
+  </usm>
+  <usm nom="usm_34">
+    <datedebut>135</datedebut>
+    <datefin>365</datefin>
+    <finit>inter-sorghum-maize_ini.xml</finit>
+    <nomsol>02V2D1</nomsol>
+    <fstation>StationNtarla_inter_sta.xml</fstation>
+    <fclim1>ntarla_corr.2018</fclim1>
+    <fclim2>ntarla_corr.2018</fclim2>
+    <culturean>1</culturean>
+    <nbplantes>2</nbplantes>
+    <codesimul>0</codesimul>
+    <plante dominance="1">
+      <fplt>sorgho_trop_plt.xml</fplt>
+      <ftec>sorghum_34_tec.xml</ftec>
+      <flai>null</flai>
+      <fobs>null</fobs>
+    </plante>
+    <plante dominance="2">
+      <fplt>corn_LI_step2_BEOU_plt.xml</fplt>
+      <ftec>maize_34_tec.xml</ftec>
+      <flai>null</flai>
+      <fobs>null</fobs>
+    </plante>
+  </usm>
+  <usm nom="usm_35">
+    <datedebut>135</datedebut>
+    <datefin>365</datefin>
+    <finit>inter-sorghum-maize_ini.xml</finit>
+    <nomsol>02V2D1</nomsol>
+    <fstation>StationNtarla_inter_sta.xml</fstation>
+    <fclim1>ntarla_corr.2018</fclim1>
+    <fclim2>ntarla_corr.2018</fclim2>
+    <culturean>1</culturean>
+    <nbplantes>2</nbplantes>
+    <codesimul>0</codesimul>
+    <plante dominance="1">
+      <fplt>sorgho_trop_plt.xml</fplt>
+      <ftec>sorghum_35_tec.xml</ftec>
+      <flai>null</flai>
+      <fobs>null</fobs>
+    </plante>
+    <plante dominance="2">
+      <fplt>corn_LI_step2_BEOU_plt.xml</fplt>
+      <ftec>maize_35_tec.xml</ftec>
+      <flai>null</flai>
+      <fobs>null</fobs>
+    </plante>
+  </usm>
+  <usm nom="usm_36">
+    <datedebut>135</datedebut>
+    <datefin>365</datefin>
+    <finit>inter-sorghum-maize_ini.xml</finit>
+    <nomsol>02V2D1</nomsol>
+    <fstation>StationNtarla_inter_sta.xml</fstation>
+    <fclim1>ntarla_corr.2018</fclim1>
+    <fclim2>ntarla_corr.2018</fclim2>
+    <culturean>1</culturean>
+    <nbplantes>2</nbplantes>
+    <codesimul>0</codesimul>
+    <plante dominance="1">
+      <fplt>sorgho_trop_plt.xml</fplt>
+      <ftec>sorghum_36_tec.xml</ftec>
+      <flai>null</flai>
+      <fobs>null</fobs>
+    </plante>
+    <plante dominance="2">
+      <fplt>corn_LI_step2_BEOU_plt.xml</fplt>
+      <ftec>maize_36_tec.xml</ftec>
+      <flai>null</flai>
+      <fobs>null</fobs>
+    </plante>
+  </usm>
+  <usm nom="usm_37">
+    <datedebut>135</datedebut>
+    <datefin>365</datefin>
+    <finit>inter-sorghum-maize_ini.xml</finit>
+    <nomsol>02V2D1</nomsol>
+    <fstation>StationNtarla_inter_sta.xml</fstation>
+    <fclim1>ntarla_corr.2018</fclim1>
+    <fclim2>ntarla_corr.2018</fclim2>
+    <culturean>1</culturean>
+    <nbplantes>2</nbplantes>
+    <codesimul>0</codesimul>
+    <plante dominance="1">
+      <fplt>sorgho_trop_plt.xml</fplt>
+      <ftec>sorghum_37_tec.xml</ftec>
+      <flai>null</flai>
+      <fobs>null</fobs>
+    </plante>
+    <plante dominance="2">
+      <fplt>corn_LI_step2_BEOU_plt.xml</fplt>
+      <ftec>maize_37_tec.xml</ftec>
+      <flai>null</flai>
+      <fobs>null</fobs>
+    </plante>
+  </usm>
+  <usm nom="usm_38">
+    <datedebut>135</datedebut>
+    <datefin>365</datefin>
+    <finit>inter-sorghum-maize_ini.xml</finit>
+    <nomsol>02V2D1</nomsol>
+    <fstation>StationNtarla_inter_sta.xml</fstation>
+    <fclim1>ntarla_corr.2018</fclim1>
+    <fclim2>ntarla_corr.2018</fclim2>
+    <culturean>1</culturean>
+    <nbplantes>2</nbplantes>
+    <codesimul>0</codesimul>
+    <plante dominance="1">
+      <fplt>sorgho_trop_plt.xml</fplt>
+      <ftec>sorghum_38_tec.xml</ftec>
+      <flai>null</flai>
+      <fobs>null</fobs>
+    </plante>
+    <plante dominance="2">
+      <fplt>corn_LI_step2_BEOU_plt.xml</fplt>
+      <ftec>maize_38_tec.xml</ftec>
+      <flai>null</flai>
+      <fobs>null</fobs>
+    </plante>
+  </usm>
+  <usm nom="usm_39">
+    <datedebut>135</datedebut>
+    <datefin>365</datefin>
+    <finit>inter-sorghum-maize_ini.xml</finit>
+    <nomsol>02V2D1</nomsol>
+    <fstation>StationNtarla_inter_sta.xml</fstation>
+    <fclim1>ntarla_corr.2018</fclim1>
+    <fclim2>ntarla_corr.2018</fclim2>
+    <culturean>1</culturean>
+    <nbplantes>2</nbplantes>
+    <codesimul>0</codesimul>
+    <plante dominance="1">
+      <fplt>sorgho_trop_plt.xml</fplt>
+      <ftec>sorghum_39_tec.xml</ftec>
+      <flai>null</flai>
+      <fobs>null</fobs>
+    </plante>
+    <plante dominance="2">
+      <fplt>corn_LI_step2_BEOU_plt.xml</fplt>
+      <ftec>maize_39_tec.xml</ftec>
+      <flai>null</flai>
+      <fobs>null</fobs>
+    </plante>
+  </usm>
+  <usm nom="usm_40">
+    <datedebut>135</datedebut>
+    <datefin>365</datefin>
+    <finit>inter-sorghum-maize_ini.xml</finit>
+    <nomsol>02V2D1</nomsol>
+    <fstation>StationNtarla_inter_sta.xml</fstation>
+    <fclim1>ntarla_corr.2018</fclim1>
+    <fclim2>ntarla_corr.2018</fclim2>
+    <culturean>1</culturean>
+    <nbplantes>2</nbplantes>
+    <codesimul>0</codesimul>
+    <plante dominance="1">
+      <fplt>sorgho_trop_plt.xml</fplt>
+      <ftec>sorghum_40_tec.xml</ftec>
+      <flai>null</flai>
+      <fobs>null</fobs>
+    </plante>
+    <plante dominance="2">
+      <fplt>corn_LI_step2_BEOU_plt.xml</fplt>
+      <ftec>maize_40_tec.xml</ftec>
+      <flai>null</flai>
+      <fobs>null</fobs>
+    </plante>
+  </usm>
+  <usm nom="usm_41">
+    <datedebut>135</datedebut>
+    <datefin>365</datefin>
+    <finit>inter-sorghum-maize_ini.xml</finit>
+    <nomsol>02V2D1</nomsol>
+    <fstation>StationNtarla_inter_sta.xml</fstation>
+    <fclim1>ntarla_corr.2018</fclim1>
+    <fclim2>ntarla_corr.2018</fclim2>
+    <culturean>1</culturean>
+    <nbplantes>2</nbplantes>
+    <codesimul>0</codesimul>
+    <plante dominance="1">
+      <fplt>sorgho_trop_plt.xml</fplt>
+      <ftec>sorghum_41_tec.xml</ftec>
+      <flai>null</flai>
+      <fobs>null</fobs>
+    </plante>
+    <plante dominance="2">
+      <fplt>corn_LI_step2_BEOU_plt.xml</fplt>
+      <ftec>maize_41_tec.xml</ftec>
+      <flai>null</flai>
+      <fobs>null</fobs>
+    </plante>
+  </usm>
+  <usm nom="usm_42">
+    <datedebut>135</datedebut>
+    <datefin>365</datefin>
+    <finit>inter-sorghum-maize_ini.xml</finit>
+    <nomsol>02V2D1</nomsol>
+    <fstation>StationNtarla_inter_sta.xml</fstation>
+    <fclim1>ntarla_corr.2018</fclim1>
+    <fclim2>ntarla_corr.2018</fclim2>
+    <culturean>1</culturean>
+    <nbplantes>2</nbplantes>
+    <codesimul>0</codesimul>
+    <plante dominance="1">
+      <fplt>sorgho_trop_plt.xml</fplt>
+      <ftec>sorghum_42_tec.xml</ftec>
+      <flai>null</flai>
+      <fobs>null</fobs>
+    </plante>
+    <plante dominance="2">
+      <fplt>corn_LI_step2_BEOU_plt.xml</fplt>
+      <ftec>maize_42_tec.xml</ftec>
+      <flai>null</flai>
+      <fobs>null</fobs>
+    </plante>
+  </usm>
+  <usm nom="usm_43">
+    <datedebut>135</datedebut>
+    <datefin>365</datefin>
+    <finit>inter-sorghum-maize_ini.xml</finit>
+    <nomsol>02V2D1</nomsol>
+    <fstation>StationNtarla_inter_sta.xml</fstation>
+    <fclim1>ntarla_corr.2018</fclim1>
+    <fclim2>ntarla_corr.2018</fclim2>
+    <culturean>1</culturean>
+    <nbplantes>2</nbplantes>
+    <codesimul>0</codesimul>
+    <plante dominance="1">
+      <fplt>sorgho_trop_plt.xml</fplt>
+      <ftec>sorghum_43_tec.xml</ftec>
+      <flai>null</flai>
+      <fobs>null</fobs>
+    </plante>
+    <plante dominance="2">
+      <fplt>corn_LI_step2_BEOU_plt.xml</fplt>
+      <ftec>maize_43_tec.xml</ftec>
+      <flai>null</flai>
+      <fobs>null</fobs>
+    </plante>
+  </usm>
+  <usm nom="usm_44">
+    <datedebut>135</datedebut>
+    <datefin>365</datefin>
+    <finit>inter-sorghum-maize_ini.xml</finit>
+    <nomsol>02V2D1</nomsol>
+    <fstation>StationNtarla_inter_sta.xml</fstation>
+    <fclim1>ntarla_corr.2018</fclim1>
+    <fclim2>ntarla_corr.2018</fclim2>
+    <culturean>1</culturean>
+    <nbplantes>2</nbplantes>
+    <codesimul>0</codesimul>
+    <plante dominance="1">
+      <fplt>sorgho_trop_plt.xml</fplt>
+      <ftec>sorghum_44_tec.xml</ftec>
+      <flai>null</flai>
+      <fobs>null</fobs>
+    </plante>
+    <plante dominance="2">
+      <fplt>corn_LI_step2_BEOU_plt.xml</fplt>
+      <ftec>maize_44_tec.xml</ftec>
+      <flai>null</flai>
+      <fobs>null</fobs>
+    </plante>
+  </usm>
+  <usm nom="usm_45">
+    <datedebut>135</datedebut>
+    <datefin>365</datefin>
+    <finit>inter-sorghum-maize_ini.xml</finit>
+    <nomsol>02V2D1</nomsol>
+    <fstation>StationNtarla_inter_sta.xml</fstation>
+    <fclim1>ntarla_corr.2018</fclim1>
+    <fclim2>ntarla_corr.2018</fclim2>
+    <culturean>1</culturean>
+    <nbplantes>2</nbplantes>
+    <codesimul>0</codesimul>
+    <plante dominance="1">
+      <fplt>sorgho_trop_plt.xml</fplt>
+      <ftec>sorghum_45_tec.xml</ftec>
+      <flai>null</flai>
+      <fobs>null</fobs>
+    </plante>
+    <plante dominance="2">
+      <fplt>corn_LI_step2_BEOU_plt.xml</fplt>
+      <ftec>maize_45_tec.xml</ftec>
+      <flai>null</flai>
+      <fobs>null</fobs>
+    </plante>
+  </usm>
+</usms>
+

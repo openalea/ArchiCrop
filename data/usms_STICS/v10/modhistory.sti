@@ -1,5 +1,5 @@
  -----------------------------------------------------------------------------------------
- Stics history file            Creation date: 2026/04/21-15:06:08
+ Stics history file            Creation date: 2026/06/02-17:01:19
  STICS Version: V10.0.0_r3391_2022-10-26                          
  -----------------------------------------------------------------------------------------
  
@@ -7,6 +7,8 @@
     
  GENERAL PARAMETERS USEFUL FOR THE SIMULATION
  *********************************************
+ Nitrogen stress actived            1
+ Water stress actived           1
  Depth for mineral N and water stocks calculation = profmes           1
  Climatic series = reset of the initial conditions           1
  Biomass and yield conservation after harvest           1
@@ -124,7 +126,7 @@
  P_iplt0          177
  P_profsem    5.00000000    
  P_densitesem    6.00000000    
- P_variete            2
+ P_variete            1
  P_interrang   0.400000006    
  P_orientrang    1.57000005    
  P_ilev          181
@@ -284,21 +286,21 @@
  stadebbchdebdes75
  stadebbchmat89
  stadebbchrec99
- P_codevar Tiandougou
- P_stlevamf    700.000000    
- P_stamflax    380.000000    
- P_stlevdrp    1180.00000    
- P_stflodrp    70.0000000    
+ P_codevar Grinka
+ P_stlevamf    300.000000    
+ P_stamflax    433.000000    
+ P_stlevdrp    980.000000    
+ P_stflodrp    60.0000000    
  P_stdrpdes    600.000000    
  P_sensiphot   0.600000024    
  P_phobase    14.0000000    
  P_phosat    12.7500000    
- P_adens  -0.500000000    
+ P_adens    0.00000000    
  P_bdens    6.00000000    
  P_hautbase    0.00000000    
- P_hautmax    2.50000000    
+ P_hautmax    2.00000000    
  P_khaut  0.699999988    
- P_durvieF    280.000000    
+ P_durvieF    420.000000    
  P_dlaimaxbrut    1.27999997E-03
  P_innsen   0.280000001    
  P_rapsenturg   0.500000000    
@@ -315,10 +317,10 @@
  P_deshydbase    8.00000038E-03
  P_nbjgrain           10
  P_nbgrmin    0.00000000    
- P_nbgrmax    60000.0000    
- P_stdrpmat    400.000000    
+ P_nbgrmax    25000.0000    
+ P_stdrpmat    575.000000    
  P_vitircarb    9.99999978E-03
- P_croirac   0.200000003    
+ P_croirac   0.150000006    
  P_tgellev10   -1.00000000      -1.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000    
  P_tgeljuv10   -1.00000000      -1.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000    
  P_tgelveg10   -1.00000000      -1.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000       0.00000000    
@@ -407,15 +409,8 @@
  Depth of measurement (profmes) > soil depth (profsol). Then profmes = profsol =   155.000000    
 Initial values over the soil depth (155 cm):     SWC = 197. mm     SMN =  8.0 kg N/ha
  problem with your profile output dates --> they have been recalculated
- the crop cannot begin growing : soil surface too dry
- attention: there are no longer any effective roots, on day :          47
- the crop cannot begin growing : soil surface too dry
- attention: there are no longer any effective roots, on day :          48
- the crop cannot begin growing : soil surface too dry
- attention: there are no longer any effective roots, on day :          49
- the crop cannot begin growing : soil surface too dry
- attention: there are no longer any effective roots, on day :          50
+ ATTENTION: neither rain nor irrigation at sowing
  Program end ... 
  -----------------------------------------------------------------------------------------
- Stics history file end            End date: 2026/04/21-15:06:08
+ Stics history file end            End date: 2026/06/02-17:01:19
  -----------------------------------------------------------------------------------------
