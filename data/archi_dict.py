@@ -17,7 +17,7 @@ archi_maize = {
     "skew": [-10,0], # skewness for leaf area distribution along axis 
 
     # blade area
-    "wl": 0.13, # leaf blade width-to-length ratio 
+    "wl": 0.12, # leaf blade width-to-length ratio 
     "klig": 0.6, # parameter for leaf blade shape
     "swmax": 0.55, # relative position of maximal blade width
     "f1": 0.64, # parameter for leaf blade shape
@@ -152,7 +152,7 @@ archi_sorghum = {
     "skew": [-10,0], # parameter for leaf area distribution along axis : [0.0005,0.1] (Kaitaniemi et al., 1999; Welcker et al., )
     
     # blade area 
-    "wl": 0.12, # leaf blade width-to-length ratio : [0.1, 0.12] ()
+    "wl": 0.11, # leaf blade width-to-length ratio : [0.1, 0.12] ()
     "klig": 0.6, # parameter for leaf blade shape
     "swmax": 0.55, # parameter for leaf blade shape
     "f1": 0.64, # parameter for leaf blade shape
