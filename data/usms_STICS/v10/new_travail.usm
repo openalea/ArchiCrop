@@ -7,7 +7,7 @@ culture
 :nbplantes
 1
 :nom
-02NT18SorgV2D1_no_stress
+sorghum_ntarla_2024
 :datedebut
 135
 :datefin
@@ -21,9 +21,9 @@ culture
 :fstation
 StationNtarla_sta.xml
 :fclim1
-ntarla_corr.2018
+Ntarla.2024
 :fclim2
-ntarla_corr.2018
+Ntarla.2024
 :nbans
 1
 :culturean

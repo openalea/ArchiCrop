@@ -19,7 +19,7 @@ profsem
 densitesem
 6
 variete
-2
+1
 codetradtec
 1
 interrang
