@@ -25,9 +25,7 @@ if __name__ == '__main__':
 
     # print("Nb CPU : ")
     # n_cpu = int(input())
-    # id_sim = list(range(n_cpu))
-    id_sim = range(1,46) # [1,2,3,4,5,6,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26]
-    # id_sim = [1,26]
+    id_sim = range(1,46) 
     id_usm = [f"usm_{i}" for i in id_sim]
     n_cpu = len(id_sim)
 

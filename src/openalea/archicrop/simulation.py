@@ -508,6 +508,96 @@ def run_archicrop_and_light_IC(param_sets: dict,
 
 
 
+def save_scenes_IC(stand, mtgs, path, conv_coef=100):
+    '''Compute light interception on plants 
+    '''
+
+    # Compute light interception for each plant at each time step
+    list_of_graphs = {}
+    positions_crop = {}
+    # For each plant
+    for a, usm in mtgs.items():
+        list_of_graphs[a] = {}
+        positions_crop[a] = {}
+        for b, algo in usm.items():
+            plants = list(mtgs[a][b].keys())
+            ids = list(mtgs[a][b][plants[0]].keys())
+
+            dates1 = list(mtgs[a][b][plants[0]][ids[0]].keys())
+            dates2 = list(mtgs[a][b][plants[1]][ids[0]].keys())
+            dates = sorted(list(dict.fromkeys(dates1 + dates2)))
+            
+            list_of_graphs[a][b], positions_crop[a][b] = config_crop_intercrop(dates, 
+                                                                               growing_plant_1=mtgs[a][b][plants[0]][ids[0]], 
+                                                                               growing_plant_2=mtgs[a][b][plants[1]][ids[0]], 
+                                                                               **stand[a][b])
+
+            # For each time step
+            for i in dates:
+
+                # Build and illuminate scene
+                scene, labels = build_scene(mtg=list_of_graphs[a][b][i], position=positions_crop[a][b], senescence=True)
+                # Viewer.display(scene)
+                # Viewer.frameGL.saveImage(f'scene_{a}_{i}.png') 
+                
+                if i > min(dates):
+                    for k,g in enumerate(list_of_graphs[a][b][i]):
+                        sc, _ = build_scene(mtg=g, position=positions_crop[a][b][k], senescence=True)
+                        mtg_fn = path.glob(f"{a}_{b}_{i}_{k}.mtg")
+                        obj_fn = path.glob(f"{a}_{b}_{i}_{k}.obj")
+                        save_mtg(g, sc, mtg_fn, obj_fn)
+
+
+def run_archicrop_IC(param_sets: dict, 
+             daily_dynamics: dict):
+
+
+    # Simulate plant growth with fitting parameters
+    pot_la = {}
+    pot_h = {}
+    realized_la = {}
+    realized_h = {}
+    mtgs = {}
+
+    list_of_graphs = {}
+    positions_crop = {}
+
+    for a,usm in param_sets.items():
+        pot_la[a] = {}
+        pot_h[a] = {}
+        realized_la[a] = {}
+        realized_h[a] = {}
+        mtgs[a] = {}
+
+        list_of_graphs[a] = {}
+        positions_crop[a] = {}
+
+        for b,algo in usm.items():
+            pot_la[a][b] = {}
+            pot_h[a][b] = {}
+            realized_la[a][b] = {}
+            realized_h[a][b] = {}
+            mtgs[a][b] = {}
+
+            dates = []
+            for c,plant in algo.items():
+                # pot_la[a][b][c], pot_h[a][b][c], _ = compute_pot_growth(param_sets=plant[0], daily_dynamics=daily_dynamics[a][b][c])
+                realized_la[a][b][c], realized_h[a][b][c], mtgs[a][b][c] = simulate_plant_growth_IC(param_sets=plant[0], daily_dynamics=daily_dynamics[a][b][c])
+                
+                dates.append([value["Date"] for value in daily_dynamics[a][b][c].values() if value is not None])
+
+    return realized_la, realized_h, mtgs
+
+
+def run_archicrop_parallel_IC(param_sets: dict, daily_dynamics: dict, stand: dict, path: Path, save_scenes: bool = False):
+    
+    realized_la, realized_h, mtgs = run_archicrop_IC(param_sets=param_sets,
+                                                daily_dynamics=daily_dynamics)
+    
+    if save_scenes:
+        save_scenes_IC(stand=stand, mtgs=mtgs, path=path, conv_coef=100)
+
+
 def run_archicrop_and_light_parallel_IC(id_sim, param_sets: dict, daily_dynamics: dict, stand: dict,
              weather_file: str, location: dict, light_inter: bool = True, direct: bool = False, save_scenes: bool = False):
     
