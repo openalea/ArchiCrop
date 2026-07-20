@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 archi_maize = {
+    "species": "maize",
+
     "nb_phy": [20,22,24], # number of phytomers on the main stem
     "nb_short_phy": 5,
     "short_phy_len": 3,
@@ -17,14 +19,14 @@ archi_maize = {
     "skew": [-10,0], # skewness for leaf area distribution along axis 
 
     # blade area
-    "wl": 0.12, # leaf blade width-to-length ratio 
+    "wl": 0.10, # leaf blade width-to-length ratio 
     "klig": 0.6, # parameter for leaf blade shape
     "swmax": 0.55, # relative position of maximal blade width
     "f1": 0.64, # parameter for leaf blade shape
     "f2": 0.92, # parameter for leaf blade shape
 
     # blade curvature
-    "insertion_angle": 30, # leaf blade insertion angle
+    "insertion_angle": 45, # leaf blade insertion angle
     "scurv": 0.6, #  relative position of inflexion point
     "curvature": 120, # leaf blade insertion-to-tip angle
     "phyllotactic_angle": 180, # phyllotactic angle
@@ -46,6 +48,8 @@ archi_maize = {
 
 
 archi_wheat = {
+    "species": "wheat",
+    
     "nb_phy": 9, # number of phytomers on the main stem : [10,40] (Ndiaye et al., 2021; Lafarge and Tardieu, 2002; Clerget, 2008; Ganeme et al., 2022)
     "nb_short_phy": 5,
     "short_phy_len": 1,
@@ -91,6 +95,8 @@ archi_wheat = {
 
 
 archi_rice = {
+    "species": "rice",
+
     "nb_phy": 8, # number of phytomers on the main stem : [10,40] (Ndiaye et al., 2021; Lafarge and Tardieu, 2002; Clerget, 2008; Ganeme et al., 2022)
     "nb_short_phy": 5,
     "short_phy_len": 3,
@@ -136,6 +142,8 @@ archi_rice = {
 
 
 archi_sorghum = {
+    "species": "sorghum",
+
     "nb_phy": [16,18,20,22,24], # number of phytomers on the main stem : [10,40] (Ndiaye et al., 2021; Lafarge and Tardieu, 2002; Clerget, 2008; Ganeme et al., 2022)
     "nb_short_phy": 5,
     "short_phy_len": 3,
@@ -152,7 +160,7 @@ archi_sorghum = {
     "skew": [-10,0], # parameter for leaf area distribution along axis : [0.0005,0.1] (Kaitaniemi et al., 1999; Welcker et al., )
     
     # blade area 
-    "wl": 0.11, # leaf blade width-to-length ratio : [0.1, 0.12] ()
+    "wl": 0.10, # leaf blade width-to-length ratio : [0.1, 0.12] ()
     "klig": 0.6, # parameter for leaf blade shape
     "swmax": 0.55, # parameter for leaf blade shape
     "f1": 0.64, # parameter for leaf blade shape
@@ -181,6 +189,8 @@ archi_sorghum = {
 
 
 archi_sorghum_angles = {
+    "species": "sorghum",
+
     "nb_phy": [12,16,20,24,28], # [10,30], # number of phytomers on the main stem : [10,40] (Ndiaye et al., 2021; Lafarge and Tardieu, 2002; Clerget, 2008; Ganeme et al., 2022)
     "nb_short_phy": 4,
     "short_phy_len": 3,
@@ -227,6 +237,8 @@ archi_sorghum_angles = {
 
 
 archi_sorghum_PMA = {
+    "species": "sorghum",
+
     "nb_phy": 16, # number of phytomers on the main stem : [10,40] (Ndiaye et al., 2021; Lafarge and Tardieu, 2002; Clerget, 2008; Ganeme et al., 2022)
     "nb_short_phy": 5,
     "short_phy_len": 3,
@@ -272,6 +284,8 @@ archi_sorghum_PMA = {
 
 
 archi_maize_theo = {
+    "species": "maize",
+
     "nb_phy": 16, # number of phytomers on the main stem
     "nb_short_phy": 4,
     "short_phy_len": 3,
@@ -317,6 +331,8 @@ archi_maize_theo = {
 
 
 archi_wheat_theo = {
+    "species": "Wheat",
+
     "nb_phy": 10, # number of phytomers on the main stem : [10,40] (Ndiaye et al., 2021; Lafarge and Tardieu, 2002; Clerget, 2008; Ganeme et al., 2022)
     "nb_short_phy": 5,
     "short_phy_len": 3,
@@ -362,6 +378,8 @@ archi_wheat_theo = {
 
 
 archi_rice_theo_1 = {
+    "species": "rice",
+
     "nb_phy": 8, # number of phytomers on the main stem : [10,40] (Ndiaye et al., 2021; Lafarge and Tardieu, 2002; Clerget, 2008; Ganeme et al., 2022)
     "nb_short_phy": 5,
     "short_phy_len": 3,
@@ -407,6 +425,8 @@ archi_rice_theo_1 = {
 
 
 archi_rice_theo_2 = {
+    "species": "rice",
+
     "nb_phy": 14, # number of phytomers on the main stem : [10,40] (Ndiaye et al., 2021; Lafarge and Tardieu, 2002; Clerget, 2008; Ganeme et al., 2022)
     "nb_short_phy": 5,
     "short_phy_len": 3,
@@ -452,6 +472,8 @@ archi_rice_theo_2 = {
 
 
 archi_sorghum_theo = {
+    "species": "sorghum",
+
     "nb_phy": 20, # number of phytomers on the main stem : [10,40] (Ndiaye et al., 2021; Lafarge and Tardieu, 2002; Clerget, 2008; Ganeme et al., 2022)
     "nb_short_phy": 5,
     "short_phy_len": 3,

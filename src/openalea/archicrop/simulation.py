@@ -5,6 +5,7 @@ import math
 import os
 import time
 from datetime import date, timedelta
+from pathlib import Path
 
 import numpy as np
 import pandas as pd
@@ -17,6 +18,7 @@ from .light_it import light_interception, light_interception_IC
 from .stand import config_crop_intercrop
 from .stics_io import get_stics_data, get_stics_data_IC
 from .viability import compute_viable_params
+from .export_mtg import save_mtg
 
 from openalea.archicrop.display import build_scene
 from openalea.archicrop.stand import compute_domain, config_crop_intercrop
@@ -116,6 +118,7 @@ def param_sampling(archi_params: dict, n_samples: int, seed: int = 42, latin_hyp
             for key, value in zip(sampled_params, sample)
         }
         param_sets[i] = {**fixed_params, **sampled_dict}
+        param_sets[i]["species"] = archi_params["species"]
     
     return param_sets
 
@@ -426,11 +429,18 @@ def run_archicrop_and_light_IC(param_sets: dict,
                 
                 dates.append([value["Date"] for value in daily_dynamics[a][b][c].values() if value is not None])
 
-            dates = sorted(list(dict.fromkeys(dates[0] + dates[1])))
+            # dates = sorted(list(dict.fromkeys(dates[0] + dates[1])))
 
             # plants = list(algo.keys())
             # ids = list(mtgs[a][b][c].keys())
             # list_of_graphs[a][b], positions_crop[a][b] = config_crop_intercrop(dates, growing_plant_1=mtgs[a][b][plants[0]][ids[0]], growing_plant_2=mtgs[a][b][plants[1]][ids[0]], **stand[a][b])
+            # for date in dates[1:]:
+            #     for k,g in enumerate(list_of_graphs[a][b][date]):
+            #         scene, labels = build_scene(mtg=g, position=positions_crop[a][b][k], senescence=True)
+            #         mtg_fn = Path(f"../simulations_ArchiCrop/{a}_{b}_{date}_{k}.mtg")
+            #         obj_fn = Path(f"../simulations_ArchiCrop/{a}_{b}_{date}_{k}.obj")
+            #         save_mtg(g, scene, mtg_fn, obj_fn)
+            
             # for date in ["2018-08-18",
             #              "2018-08-19", 
             #              "2018-08-20", 
@@ -466,11 +476,11 @@ def run_archicrop_and_light_IC(param_sets: dict,
             #              "2018-10-13",  
             #              "2018-10-14"]:
             #     scene, labels = build_scene(mtg=list_of_graphs[a][b][date], position=positions_crop[a][b], senescence=True)
-            #     domain = ((0, 0), (stand[a][b]["length"] * conv_coef, stand[a][b]["width"] * conv_coef))
-            #     scene.add(Shape(Translated((domain[0][0], domain[0][1], 0), Oriented(Vector3((1,0,0)), Vector3((0,1,0)), Sphere(5)))))
-            #     scene.add(Shape(Translated((domain[0][0], domain[1][1], 0), Oriented(Vector3((1,0,0)), Vector3((0,1,0)), Sphere(5)))))
-            #     scene.add(Shape(Translated((domain[1][0], domain[0][1], 0), Oriented(Vector3((1,0,0)), Vector3((0,1,0)), Sphere(5)))))
-            #     scene.add(Shape(Translated((domain[1][0], domain[1][1], 0), Oriented(Vector3((1,0,0)), Vector3((0,1,0)), Sphere(5)))))
+                # domain = ((0, 0), (stand[a][b]["length"] * conv_coef, stand[a][b]["width"] * conv_coef))
+                # scene.add(Shape(Translated((domain[0][0], domain[0][1], 0), Oriented(Vector3((1,0,0)), Vector3((0,1,0)), Sphere(5)))))
+                # scene.add(Shape(Translated((domain[0][0], domain[1][1], 0), Oriented(Vector3((1,0,0)), Vector3((0,1,0)), Sphere(5)))))
+                # scene.add(Shape(Translated((domain[1][0], domain[0][1], 0), Oriented(Vector3((1,0,0)), Vector3((0,1,0)), Sphere(5)))))
+                # scene.add(Shape(Translated((domain[1][0], domain[1][1], 0), Oriented(Vector3((1,0,0)), Vector3((0,1,0)), Sphere(5)))))
             #     Viewer.display(scene)
             #     pos = (-200,-300,120)
             #     # Viewer.camera.set(zero, 0, 0)

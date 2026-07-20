@@ -284,6 +284,7 @@ def cereal(nb_phy, phyllochron, plastochron, stem_duration, leaf_duration,
             phyllotactic_deviation,
             tiller_angle,
             tropism_coefficient,
+            species,
             plant_orientation=45,
             spiral=True,
             classic=False):
@@ -344,6 +345,7 @@ def cereal(nb_phy, phyllochron, plastochron, stem_duration, leaf_duration,
     g = MTG()
     # Add a root vertex for the plant
     vid_plant = g.add_component(g.root, label="Plant", edge_type="/") 
+    g.node(vid_plant).species = species
     # Add a plant vertex for the main axis
     vid_axis = g.add_component(vid_plant, label="MainAxis", edge_type="/")
 

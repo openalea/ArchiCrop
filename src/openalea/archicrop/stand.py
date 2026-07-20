@@ -34,26 +34,50 @@ def config_positions_intercrop(inter_row_1, inter_row_2, inter_plant_1, inter_pl
 
     positions_crop = []
 
-    dx = (inter_plant_1 * conv_coef, inter_plant_2 * conv_coef)
-    dy = (inter_row_1 * conv_coef, inter_row_2 * conv_coef)
+    if orientation == "N-S":
 
-    if nrows_1 == 0 or nrows_2 == 0:
-        positions_crop = regular(int(nrows * plant_per_row_1), int(nrows), dx[0], dy[0], int(plant_per_row_1))[0]
-        # Switch places of 1 row to get mixed pattern
-        # pos_tmp = positions_crop[2][:]
-        # positions_crop[2] = positions_crop[3][:]
-        # positions_crop[3] = pos_tmp
-    else:
-        for i in range(int(nstrips)):
-            for j in [0,1]:
-                pos_tmp = regular(int(nrows[j] * plant_per_row[j]), int(nrows[j]), dx[j], dy[j], int(plant_per_row[j]))[0]
-                # offset to pos_tmp depending on i and j
-                for k, (x,y,z) in enumerate(pos_tmp):
-                    # pos_tmp[k] = (x, y - dy[j]/2 + (i * (wstrip_1 + wstrip_2) + j * wstrip_1) * conv_coef, z)
-                    pos_tmp[k] = (x, y + (i * (wstrip_1 + wstrip_2) + j * wstrip_1) * conv_coef, z)
-                positions_crop += pos_tmp
+        dx = (inter_plant_1 * conv_coef, inter_plant_2 * conv_coef)
+        dy = (inter_row_1 * conv_coef, inter_row_2 * conv_coef)
 
-    positions_crop = sorted(positions_crop, key=itemgetter(1, 0)) # sorting by ranks
+        if nrows_1 == 0 or nrows_2 == 0:
+            positions_crop = regular(int(nrows * plant_per_row_1), int(nrows), dx[0], dy[0], int(plant_per_row_1))[0]
+            # Switch places of 1 row to get mixed pattern
+            # pos_tmp = positions_crop[2][:]
+            # positions_crop[2] = positions_crop[3][:]
+            # positions_crop[3] = pos_tmp
+        else:
+            for i in range(int(nstrips)):
+                for j in [0,1]:
+                    pos_tmp = regular(int(nrows[j] * plant_per_row[j]), int(nrows[j]), dx[j], dy[j], int(plant_per_row[j]))[0]
+                    # offset to pos_tmp depending on i and j
+                    for k, (x,y,z) in enumerate(pos_tmp):
+                        # pos_tmp[k] = (x, y - dy[j]/2 + (i * (wstrip_1 + wstrip_2) + j * wstrip_1) * conv_coef, z)
+                        pos_tmp[k] = (x, y + (i * (wstrip_1 + wstrip_2) + j * wstrip_1) * conv_coef, z)
+                    positions_crop += pos_tmp
+
+    elif orientation == "E-W":
+        dy = (inter_plant_1 * conv_coef, inter_plant_2 * conv_coef)
+        dx = (inter_row_1 * conv_coef, inter_row_2 * conv_coef)
+
+        if nrows_1 == 0 or nrows_2 == 0:
+            positions_crop = regular_ew(int(nrows * plant_per_row_1), int(nrows), dx[0], dy[0], int(plant_per_row_1))[0]
+            # Switch places of 1 row to get mixed pattern
+            # pos_tmp = positions_crop[2][:]
+            # positions_crop[2] = positions_crop[3][:]
+            # positions_crop[3] = pos_tmp
+        else:
+            for i in range(int(nstrips)):
+                for j in [0,1]:
+                    print(int(plant_per_row[j]), dx[j], dy[j])
+                    pos_tmp = regular_ew(int(nrows[j] * plant_per_row[j]), int(nrows[j]), dx[j], dy[j], int(plant_per_row[j]))[0]
+                    # offset to pos_tmp depending on i and j
+                    for k, (x,y,z) in enumerate(pos_tmp):
+                        # pos_tmp[k] = (x, y - dy[j]/2 + (i * (wstrip_1 + wstrip_2) + j * wstrip_1) * conv_coef, z)
+                        pos_tmp[k] = (x + (i * (wstrip_1 + wstrip_2) + j * wstrip_1) * conv_coef, y, z)
+                    positions_crop += pos_tmp
+
+
+    positions_crop = sorted(positions_crop, key=itemgetter(0, 1)) # sorting by ranks
 
     return positions_crop
 
@@ -109,6 +133,17 @@ def regular(nb_plants, nb_rank, dx, dy, nx=None):
         (i * dx + dx / 2.0, j * dy + dy / 2.0, 0.0)
         for j in range(ny)
         for i in range(nx)
+    ], domain
+
+def regular_ew(nb_plants, nb_rank, dx, dy, nx=None):
+    if nx is None:
+        nx = int(nb_plants / nb_rank)
+    ny = nb_rank
+    domain = ((0, 0), (nx * dx, ny * dy))
+    return [
+        (i * dx + dx / 2.0, j * dy + dy / 2.0, 0.0)
+        for j in range(nx)
+        for i in range(ny)
     ], domain
 
 

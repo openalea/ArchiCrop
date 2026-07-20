@@ -26,7 +26,7 @@ if __name__ == '__main__':
     # print("Nb CPU : ")
     # n_cpu = int(input())
     # id_sim = list(range(n_cpu))
-    id_sim = [1,2,3,4,5,6,10,12,14,16,18,20,22,24,26]
+    id_sim = range(1,46) # [1,2,3,4,5,6,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26]
     # id_sim = [1,26]
     id_usm = [f"usm_{i}" for i in id_sim]
     n_cpu = len(id_sim)
@@ -56,9 +56,10 @@ if __name__ == '__main__':
     pot_factor_lai = 5
     pot_factor_height = 10
     distribution_function = demand_dist_bis
-    light_inter = False
+    light_inter = True
     direct = False
     save_scenes = False
+    conv_coef = 100 # Conversion coefficient from meters to centimeters
 
     param_sets = {}
 
@@ -141,7 +142,7 @@ if __name__ == '__main__':
 
     for usm,spat_conf in doe.items():
         if usm in id_usm:
-            spat_conf["row_orientation"] = row_orientation_values[spat_conf["row_orientation"]]
+            # spat_conf["row_orientation"] = row_orientation_values[spat_conf["row_orientation"]]
             spat_conf["interrow_distance_principal"] = interrow_distance_per_species[spat_conf["species_principal"]][spat_conf["interrow_distance_principal"]]
             spat_conf["interrow_distance_secondary"] = interrow_distance_per_species[spat_conf["species_secondary"]][spat_conf["interrow_distance_secondary"]]
             spat_conf["n_rows_principal"] = 0 if spat_conf["design"] == "intercrop mixed" else n_rows_per_species[spat_conf["species_principal"]][spat_conf["n_rows_principal"]]
@@ -160,6 +161,8 @@ if __name__ == '__main__':
                 intra_row_2 = 1/density_2/inter_row_2
 
                 doe_adapt[usm][algo] = {
+                    # "design" : spat_conf["design"],
+                    "orientation" : spat_conf["row_orientation"],
                     "density_1" : density_1,
                     "density_2" : density_2,
                     "inter_row_1" : inter_row_1,
@@ -167,23 +170,31 @@ if __name__ == '__main__':
                     "width" : 2 * inter_row_1 if spat_conf["design"] == "intercrop mixed" else (spat_conf["n_rows_principal"]-1) * inter_row_1 + (spat_conf["n_rows_secondary"]-1) * inter_row_2 + 2*max(inter_row_1, inter_row_2),
                     "length" : 2 * max(intra_row_1, intra_row_2) if spat_conf["design"] == "intercrop mixed" else max(intra_row_1, intra_row_2),
                     "nb_rows_1" : spat_conf["n_rows_principal"],
-                    "nb_rows_2" : spat_conf["n_rows_secondary"]
+                    "nb_rows_2" : spat_conf["n_rows_secondary"],
+                    # "sowing_delay" : 1 if spat_conf["sowing_date_latest_crop"] == "later" else 0
                 }
 
-    # header = ["usms", "x_first_corner", "y_first_corner", "x_last_corner", "y_last_corner"]
+    domain_file = "../simulations_ArchiCrop/test/domains.csv"
+    header = ["usms", "x_first_corner", "y_first_corner", "x_last_corner", "y_last_corner"]
+    rows = []
 
-    # rows = []
+    for usm, algo in doe_adapt.items():
+        for a,conf in algo.items():
+            if conf["orientation"] == "N-S":
+                domain = ((0, 0), (conf["length"] * conv_coef, conf["width"] * conv_coef))
+            elif conf["orientation"] == "E-W":
+                domain = ((0, 0), (conf["width"] * conv_coef, conf["length"] * conv_coef))
+            if a == "Beer":
+                if conf["orientation"] == "N-S":
+                    domain = ((0, 0), (conf["length"] * conv_coef, conf["width"] * conv_coef))
+                elif conf["orientation"] == "E-W":
+                    domain = ((0, 0), (conf["width"] * conv_coef, conf["length"] * conv_coef))
+                rows.append([usm, domain[0][0], domain[0][1], domain[1][0], domain[1][1]])
 
-    # for usm, algo in doe_adapt.items():
-    #     for a,conf in algo.items():
-    #         if a == "Beer":
-    #             domain = ((0, 0), (conf["length"] * 100, conf["width"] * 100))
-    #             rows.append([usm, domain[0][0], domain[0][1], domain[1][0], domain[1][1]])
-
-    # with open("domains.csv", "w", newline="") as file:
-    #     writer = csv.writer(file)
-    #     writer.writerow(header)
-    #     writer.writerows(rows) 
+    with open(domain_file, "w", newline="") as file:
+        writer = csv.writer(file)
+        writer.writerow(header)
+        writer.writerows(rows) 
 
     # keys = list(param_sets.keys())
     # chunk_size = ceil(len(keys)*2 / n_cpu)

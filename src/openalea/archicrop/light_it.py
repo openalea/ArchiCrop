@@ -1,15 +1,19 @@
 """Some macro / utilities to run light simpulation on pgl/lpy virtual scene"""
 
 from __future__ import annotations
+import csv
 
 import numpy as np
 import pandas as pd
 from itertools import chain
+from pathlib import Path
 from openalea.caribu.CaribuScene import CaribuScene
 
 from openalea.archicrop.display import build_scene
 from openalea.archicrop.stand import compute_domain, config_crop_intercrop
 from openalea.archicrop.stics_io import stics_weather_3d, stics_weather_3d_bis
+from openalea.archicrop.export_mtg import save_mtg
+
 from openalea.astk.sky_irradiance import sky_irradiance
 from openalea.astk.sky_sources import caribu_light_sources, sky_sources
 
@@ -206,6 +210,21 @@ def light_interception_IC(weather_file, stand, location, mtgs, zenith=False, dir
         nrj_per_plant: list of energy per plant
     '''
 
+    # domain_file = "../simulations_ArchiCrop/test/domains.csv"
+    # header = ["usms", "x_first_corner", "y_first_corner", "x_last_corner", "y_last_corner"]
+    # rows = []
+
+    # for usm, algo in doe_adapt.items():
+    #     for a,conf in algo.items():
+    #         if a == "Beer":
+    #             domain = ((0, 0), (conf["length"] * 100, conf["width"] * 100))
+    #             rows.append([usm, domain[0][0], domain[0][1], domain[1][0], domain[1][1]])
+
+    # with open(domain_file, "w", newline="") as file:
+    #     writer = csv.writer(file)
+    #     writer.writerow(header)
+    #     writer.writerows(rows) 
+
     # Compute light interception for each plant at each time step
     nrj_per_plant = {}
     nrj_crop = {}
@@ -235,12 +254,20 @@ def light_interception_IC(weather_file, stand, location, mtgs, zenith=False, dir
             dates = sorted(list(dict.fromkeys(dates1 + dates2)))
             
             list_of_graphs[a][b], positions_crop[a][b] = config_crop_intercrop(dates, growing_plant_1=mtgs[a][b][plants[0]][ids[0]], growing_plant_2=mtgs[a][b][plants[1]][ids[0]], **stand[a][b])
-            # print(a, positions_crop[a][b])
 
-            domain = ((0, 0), (stand[a][b]["length"] * conv_coef, stand[a][b]["width"] * conv_coef))
+            if stand[a][b]["orientation"] == "N-S":
+                domain = ((0, 0), (stand[a][b]["length"] * conv_coef, stand[a][b]["width"] * conv_coef))
+            elif stand[a][b]["orientation"] == "E-W":
+                domain = ((0, 0), (stand[a][b]["width"] * conv_coef, stand[a][b]["length"] * conv_coef))
             domain_area = (abs(domain[1][0] - domain[0][0]) / conv_coef
                             * abs(domain[1][1] - domain[0][1]) / conv_coef)
             domain_areas[a][b] = domain_area
+
+
+            # rows.append([a, domain[0][0], domain[0][1], domain[1][0], domain[1][1]])
+            # with open(domain_file, "w", newline="") as file:
+            #     writer = csv.writer(file)
+            #     writer.writerows(rows) 
 
             # Read weather data
             df_weather = stics_weather_3d_bis(filename=weather_file, dates=dates)
@@ -249,7 +276,7 @@ def light_interception_IC(weather_file, stand, location, mtgs, zenith=False, dir
 
             # For each time step
             for i,incident_rad in zip(dates,incident_rads):
-                
+
                 # Compute light sources
                 par = incident_rad.rad * 0.48 * 0.95
                 if zenith:
@@ -268,8 +295,17 @@ def light_interception_IC(weather_file, stand, location, mtgs, zenith=False, dir
                 scene, labels = build_scene(mtg=list_of_graphs[a][b][i], position=positions_crop[a][b], senescence=True)
                 # Viewer.display(scene)
                 # Viewer.frameGL.saveImage(f'scene_{a}_{i}.png') 
-                cs, raw, agg = illuminate(scene=scene, light=lights, labels=labels, domain=domain, direct=direct) # --> cf PARaggregators in caribu scene node
                 
+                if i > min(dates):
+                    for k,g in enumerate(list_of_graphs[a][b][i]):
+                        sc, _ = build_scene(mtg=g, position=positions_crop[a][b][k], senescence=True)
+                        mtg_fn = Path(f"../simulations_ArchiCrop/test/{a}_{b}_{i}_{k}.mtg")
+                        obj_fn = Path(f"../simulations_ArchiCrop/test/{a}_{b}_{i}_{k}.obj")
+                        save_mtg(g, sc, mtg_fn, obj_fn)
+
+            '''
+                cs, raw, agg = illuminate(scene=scene, light=lights, labels=labels, domain=domain, direct=direct) # --> cf PARaggregators in caribu scene node
+
                 # Compute energy per leaf
                 df_mod = mean_leaf_irradiance(agg) 
 
@@ -301,8 +337,16 @@ def light_interception_IC(weather_file, stand, location, mtgs, zenith=False, dir
                     cs.plot(raw, maxval=max(raw_new), display=False)
                     Viewer.frameGL.saveImage(f'scene_{a}_{i}.png') 
 
+                # if i > min(dates):
+                #     for k,g in enumerate(list_of_graphs[a][b][i]):
+                #         sc, _ = build_scene(mtg=g, position=positions_crop[a][b][k], senescence=True)
+                #         mtg_fn = Path(f"../simulations_ArchiCrop/test/{a}_{b}_{i}_{k}.mtg")
+                #         obj_fn = Path(f"../simulations_ArchiCrop/test/{a}_{b}_{i}_{k}.obj")
+                #         save_mtg(g, sc, mtg_fn, obj_fn)
+                
             # nrj_per_plant[k] = [sum(nrj) for nrj in nrj_per_leaf]
             nrj_per_plant[a][b][plants[0]][ids[0]] = nrj_per_leaf[plants[0]]
             nrj_per_plant[a][b][plants[1]][ids[0]] = nrj_per_leaf[plants[1]]
+            '''
 
     return nrj_per_plant, nrj_crop, domain_areas

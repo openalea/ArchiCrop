@@ -15,6 +15,7 @@ from .stics_io import get_pheno
 class ArchiCrop:
 
     def __init__(self, 
+                 species,
                  height,
                  leaf_area,
                  nb_phy=10,
@@ -91,6 +92,7 @@ class ArchiCrop:
             end_juv = 0
             end_veg = 1000
             
+        self.species = species
         self.nb_phy = nb_phy
         self.height = height
         self.leaf_area = leaf_area
@@ -170,7 +172,8 @@ class ArchiCrop:
                         tiller_delay=self.tiller_delay,
                         tiller_angle=self.tiller_angle,
                         tropism_coefficient=self.tropism_coefficient,
-                        plant_orientation=self.plant_orientation)
+                        plant_orientation=self.plant_orientation,
+                        species=self.species)
     
     def grow_plant(self, rate=False, distribution_function=demand_dist_bis):
         """
