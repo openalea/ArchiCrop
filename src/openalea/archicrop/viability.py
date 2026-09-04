@@ -121,7 +121,7 @@ def resolve_organ_growth(N, ligul_factor, la_ends):
 '''
 
 
-def resolve_organ_growth(N, duration, la_ends, nb_tillers=0, tillers=None, reduction_factor=1):
+def resolve_organ_growth(N, duration, la_ends, phyllochron=None, growth_rate=0.2, nb_tillers=0, tillers=None, reduction_factor=1, linear=True):
     '''
     A: matrix of the advancement of elongation of phytomers i at the end of elongation of phytomers j on the main stem
     T: dict of matrices of the advancement of elongation of phytomers i at the end of elongation of phytomers j on tillers
@@ -136,8 +136,13 @@ def resolve_organ_growth(N, duration, la_ends, nb_tillers=0, tillers=None, reduc
     else:
         T = None
 
+    if linear:
+        a = (duration - 1) / duration
+    else:
+        a = 1 / (1 + math.exp(-growth_rate*phyllochron*(duration/2-1)))
+
     for x in range(0, N):
-        A[x, min(x+1,N-1)] = (duration - 1) / duration
+        A[x, min(x+1,N-1)] = a
         for i in range(x+1):
             A[x, i] = 1
         B[x] = la_ends[x] 
@@ -146,7 +151,7 @@ def resolve_organ_growth(N, duration, la_ends, nb_tillers=0, tillers=None, reduc
             for id,t in T.items():
                 delay = tillers[id][1]
                 if x >= delay:
-                    t[x, min(x+1-delay,N-1)] = (duration - 1) / duration
+                    t[x, min(x+1-delay,N-1)] = a
                     for j in range(x+1): # range(delay+1, x+1) for other hypothesis
                         t[x, max(0,j-delay)] = 1
 
@@ -157,10 +162,10 @@ def resolve_organ_growth(N, duration, la_ends, nb_tillers=0, tillers=None, reduc
             t *= reduction_factor**tillers[id][0]
             P += t
 
-    if T is None:
-        S = np.linalg.solve(P, B)
-    else:
-        S = nnls(P, B)[0]
+    # if T is None:
+    #     S = np.linalg.solve(P, B)
+    # else:
+    S = nnls(P, B)[0]
 
     return S, P, A, T
 
@@ -183,7 +188,7 @@ def compute_phi(nb_phy, end_veg, ligul_factor=1.6):
     phyllochron = (end_veg)/(nb_phy - 1 + ligul_factor)
     return phyllochron
 
-def compute_rmax(nb_phy, end_veg, index_end_veg, thermal_time, leaf_area_plant, params):
+def compute_rmax(nb_phy, end_veg, index_end_veg, thermal_time, leaf_area_plant, params, linear=True, growth_rate=0.2):
 
     ligul_factor = params['leaf_duration']
     nb_tillers = params['nb_tillers']
@@ -207,7 +212,7 @@ def compute_rmax(nb_phy, end_veg, index_end_veg, thermal_time, leaf_area_plant, 
     g, tillers = generate_tillers(nb_phy, phyllochron, ligul_factor, nb_tillers) # Dict for tillers: {id: [order, delay]}
 
     # Numeric solution for minimal constrained growth (H: linear organ growth)
-    min_leaf_areas,_,_,_ = resolve_organ_growth(nb_phy, ligul_factor, la_ends, nb_tillers, tillers, reduction_factor)
+    min_leaf_areas,_,_,_ = resolve_organ_growth(nb_phy, ligul_factor, la_ends, phyllochron, growth_rate, nb_tillers, tillers, reduction_factor, linear)
     
     # Find viable rmax interval
     for i, la in enumerate(min_leaf_areas):
@@ -231,14 +236,14 @@ def compute_skew(leaf_areas, rank, nb_phy, rmax):
     return math.log(leaf_areas[rank-1]/max(leaf_areas))/((rank/nb_phy - rmax)**2)
 
 
-def compute_viable_parameter_space(N_bounds, phi_bounds, rmax_bounds, thermal_time_pot, leaf_area_plant_pot, index_end_veg_pot, archi, end_veg_corr=1):
+def compute_viable_parameter_space(N_bounds, phi_bounds, rmax_bounds, thermal_time_pot, leaf_area_plant_pot, index_end_veg_pot, archi, end_veg_corr=1, linear=True, growth_rate=0.2):
         # Example parameter space
         N = np.arange(min(N_bounds), max(N_bounds) + 1)
 
         end_veg_pot = thermal_time_pot[index_end_veg_pot+end_veg_corr] # +1 or +2,3... not always very accurate in STICS, but we want to be sure to be after the end of the vegetative phase
 
         phi = {n : compute_phi(n, end_veg_pot) for n in N}
-        rmax = {n : compute_rmax(n, end_veg_pot, index_end_veg_pot, thermal_time_pot, leaf_area_plant_pot, archi)
+        rmax = {n : compute_rmax(n, end_veg_pot, index_end_veg_pot, thermal_time_pot, leaf_area_plant_pot, archi, linear, growth_rate)
                 for n in N
         }
 
@@ -247,7 +252,7 @@ def compute_viable_parameter_space(N_bounds, phi_bounds, rmax_bounds, thermal_ti
         return d, N, phi, rmax
 
 
-def compute_viable_params(params_sets: dict, daily_dynamics: dict, pot_factor_lai: float = 1.5, pot_factor_height: float = 3) -> dict:
+def compute_viable_params(params_sets: dict, daily_dynamics: dict, pot_factor_lai: float = 1.5, pot_factor_height: float = 3, linear: bool = True, growth_rate: float = 0.2) -> dict:
     """Compute viable parameters wrt the dynamic constraint of LAI and height."""
 
     # Dynamics of vegetative phase
@@ -288,7 +293,7 @@ def compute_viable_params(params_sets: dict, daily_dynamics: dict, pot_factor_la
             g, tillers = generate_tillers(nb_phy, phyllochron, leaf_duration, nb_tillers) # Dict for tillers: {id: [order, delay]}
 
             # Numeric solution for minimal constrained growth (H: linear organ growth)
-            min_leaf_areas,_,_,_ = resolve_organ_growth(nb_phy, leaf_duration, la_ends, nb_tillers, tillers, reduction_factor)
+            min_leaf_areas,_,_,_ = resolve_organ_growth(nb_phy, leaf_duration, la_ends, phyllochron, growth_rate, nb_tillers, tillers, reduction_factor, linear)
 
             # Find viable rmax interval
             for i, la in enumerate(min_leaf_areas):

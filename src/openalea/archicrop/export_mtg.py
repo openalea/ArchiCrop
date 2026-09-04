@@ -57,21 +57,22 @@ def save_mtg(g, scene, mtg_fn, obj_fn):
         ids[vid]=vid
 
     def bools(g):
-        for p in ['is_green', 'grow', 'dead', 'senescence']:
+        for p in ['is_green']: # , 'grow', 'dead', 'senescence']:
             _prop = g.properties()[p]
             for vid in _prop:
                 _prop[vid] = int(bool(_prop[vid]))
     
     bools(g)
     props = [
-        ('Id','INT'),
+     ('Id','INT'),
+     ('species','STRING'),
      ('rank', 'INT'),
      ('length','REAL'),
      ('visible_length','REAL'),
      ('is_green','INT'),
      ('stem_diameter','REAL'),
      ('azimuth','REAL'),
-     ('grow','INT'),
+    #  ('grow','INT'),
      ('age','REAL'),
      ('tiller_angle','REAL'),
      ('leaf_area','REAL'),
@@ -79,9 +80,9 @@ def save_mtg(g, scene, mtg_fn, obj_fn):
      ('senescent_area','REAL'),
      ('senescent_length','REAL'),
      ('shape_max_width','REAL'),
-     ('dead','INT'),
+    #  ('dead','INT'),
      ('inclination','REAL'),
-     ('senescence', 'INT')
+    #  ('senescence', 'INT')
     ] 
 
     mtg_lines=write_mtg(g, props)

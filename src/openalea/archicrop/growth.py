@@ -20,10 +20,11 @@ def init_visible_variables(g, daily_dynamics):
         g.properties()["senescent_lengths"][k] = [0.0]*len(daily_dynamics)
     # for k in g.properties()["visible_leaf_area"]:
     #     g.properties()["visible_leaf_area"][k] = 0.0
-    for k in g.properties()["leaf_lengths"]:
+    for k in g.properties()["stem_lengths"]:
         g.properties()["stem_lengths"][k] = [0.0]*len(daily_dynamics)
     for k in g.properties()["stem_diameter"]:
         g.properties()["stem_diameter"][k] = 0.0
+        g.properties()["stem_diameters"][k] = [0.0]*len(daily_dynamics)
 
     return g
 
@@ -62,7 +63,7 @@ def age_dist(increment, senescing_organs):
             for vid, values in senescing_organs.items()}
 
 
-def get_growing_and_senescing_organs(g, time, prev_time):
+def get_growing_and_senescing_organs(g, time, prev_time, day):
     """Identify growing organs and their potential dimension at a given time"""
 
     growing_internodes = {}
@@ -79,6 +80,7 @@ def get_growing_and_senescing_organs(g, time, prev_time):
         n.stem_diameter = min(n.mature_stem_diameter/2 * (0.5+0.5*(time - n_stem.start_tt) / (n_stem.end_tt - n_stem.start_tt)), n.mature_stem_diameter) 
         # If it is a stem element / internode
         if n.label.startswith("Stem"): 
+            n.stem_diameters[day] = n.stem_diameter
             # If the internode is growing, or has finished growing in the last time step, according to development
             if (n.start_tt < time <= n.end_tt or prev_time < n.end_tt <= time) and n.visible_length < ml: 
                 growing_internodes[vid] = {"potential": ml, "visible": n.visible_length, "age": n.age, "axis_order": g.order(g.parent(vid))}
@@ -147,7 +149,7 @@ def grow_organs(g, day, daily_dynamics, rate=False, distribution_function=demand
     prev_time = max(0.0, time - thermal_time_incr)
 
     # Get growing and senescent organs in a dict of dict : {id : dict(potential, visible, age)}
-    growing_internodes, growing_leaves, senescing_leaves = get_growing_and_senescing_organs(g, time, prev_time)
+    growing_internodes, growing_leaves, senescing_leaves = get_growing_and_senescing_organs(g, time, prev_time, day)
 
     # Distribute daily plant-scale growth increment among organs
     if daily_dynamics["Leaf area increment"] > 0.0 and len(growing_leaves) > 0:
@@ -237,6 +239,7 @@ def update_stem_growth_height(n, height_for_this_internode, day, time_increment=
 
     for d in range(day-1, len(n.stem_lengths)):
         n.stem_lengths[d] = n.visible_length
+        # n.stem_diameters[d] = n.stem_diameter
 
 
 def update_stem_growth_rate(n, height_for_this_internode, day, time_increment):
@@ -251,6 +254,7 @@ def update_stem_growth_rate(n, height_for_this_internode, day, time_increment):
 
     for d in range(day-1, len(n.stem_lengths)):
         n.stem_lengths[d] = n.visible_length
+        # n.stem_diameters[d] = n.stem_diameter
 
 
 def update_leaf_senescence_area(n, sen_LA_for_this_leaf, day, time_increment=None):

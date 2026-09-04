@@ -285,6 +285,8 @@ def cereal(nb_phy, phyllochron, plastochron, stem_duration, leaf_duration,
             tiller_angle,
             tropism_coefficient,
             species,
+            SLA=200,
+            N_conc_leaf=0.048,
             plant_orientation=45,
             spiral=True,
             classic=False):
@@ -362,12 +364,16 @@ def cereal(nb_phy, phyllochron, plastochron, stem_duration, leaf_duration,
             first = False
         else:
             vid_stem = g.add_child(vid_stem, edge_type="<", **stem)
+        g.node(vid_stem).vol_mass = 0.2 # Volumetric mass of the stem (g/cm3)
+        g.node(vid_stem).N_conc_stem = 0.15 # Mitrogen concentration in stem (g N/ g DM)
         tt_stem = add_development(g=g, vid=vid_stem, tt=tt_stem, dtt=dtt_stem, rate=phyllochron)
         # compute_potential_growth_rate(g=g, vid=vid_stem)
         tiller_points.append((vid_stem, tt_stem + tiller_delay*phyllochron))
 
         leaf = leaf_as_dict(stem_prop=stem_prop, leaf_prop=leaf_prop, rank=rank, wl=wl)
         vid_leaf = g.add_child(vid_stem, edge_type="+", **leaf)  
+        g.node(vid_leaf).SLA = SLA
+        g.node(vid_leaf).N_conc_leaf = N_conc_leaf
         tt_leaf = add_development(g=g, vid=vid_leaf, tt=tt_leaf, dtt=dtt_leaf, rate=plastochron)
         # compute_potential_growth_rate(g=g, vid=vid_leaf)
         add_leaf_senescence(g=g, vid_leaf=vid_leaf, leaf_lifespan=leaf_lifespan, leaf_lifespan_early=leaf_lifespan_early, end_juv=end_juv)
