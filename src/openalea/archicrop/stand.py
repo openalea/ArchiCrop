@@ -68,7 +68,7 @@ def config_positions_intercrop(inter_row_1, inter_row_2, inter_plant_1, inter_pl
         else:
             for i in range(int(nstrips)):
                 for j in [0,1]:
-                    print(int(plant_per_row[j]), dx[j], dy[j])
+                    # print(int(plant_per_row[j]), dx[j], dy[j])
                     pos_tmp = regular_ew(int(nrows[j] * plant_per_row[j]), int(nrows[j]), dx[j], dy[j], int(plant_per_row[j]))[0]
                     # offset to pos_tmp depending on i and j
                     for k, (x,y,z) in enumerate(pos_tmp):
