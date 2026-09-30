@@ -86,7 +86,7 @@ def save_mtg(g, scene, mtg_fn, obj_fn):
     ] 
 
     mtg_lines=write_mtg(g, props)
-    fn = mtg_fn
+    fn = Path(mtg_fn)
     if fn.exists():
         fn.unlink(missing_ok=True)
 
@@ -106,7 +106,7 @@ def save_mtg(g, scene, mtg_fn, obj_fn):
             
         sh.setName(f'vid_{vid}')
 
-    fn = obj_fn
+    fn = Path(obj_fn)
     if fn.exists():
         fn.unlink(missing_ok=True)
     scene.save(str(obj_fn))

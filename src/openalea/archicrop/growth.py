@@ -80,7 +80,7 @@ def get_growing_and_senescing_organs(g, time, prev_time, day):
         n.stem_diameter = min(n.mature_stem_diameter/2 * (0.5+0.5*(time - n_stem.start_tt) / (n_stem.end_tt - n_stem.start_tt)), n.mature_stem_diameter) 
         # If it is a stem element / internode
         if n.label.startswith("Stem"): 
-            n.stem_diameters[day] = n.stem_diameter
+            n.stem_diameters[day-1] = n.stem_diameter
             # If the internode is growing, or has finished growing in the last time step, according to development
             if (n.start_tt < time <= n.end_tt or prev_time < n.end_tt <= time) and n.visible_length < ml: 
                 growing_internodes[vid] = {"potential": ml, "visible": n.visible_length, "age": n.age, "axis_order": g.order(g.parent(vid))}

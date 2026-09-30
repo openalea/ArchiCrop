@@ -177,6 +177,12 @@ def read_csv_file_IC(file_csv, conv_unit=100):
         "ilaxs",
         "densite",
         "demande",
+        "codebbch_output",
+        "masec_n",
+        "masecveg",
+        "masec_kg_ha",
+        "mafeuil_kg_ha",
+        "matigestruc_kg_ha"
     ]
 
     nested_dict = {}
@@ -259,7 +265,12 @@ def read_csv_file_IC(file_csv, conv_unit=100):
                         par_abs = float(day["raint"])/par_inc # to % of light intercepted, in MJ/m^2
 
                         # N demand
-                        n_demand = float(day["demande"])
+                        n_demand = float(day["demande"]) / 10 # kg/ha to g/m2
+                        bbch = str(day["codebbch_output"])
+                        DM_veg = float(day["masecveg"]) * 100 # t/ha to g/m2
+                        DM = float(day["masec_kg_ha"]) / 10 # kg/ha to g/m2
+                        DM_leaf = float(day["mafeuil_kg_ha"]) / 10 # kg/ha to g/m2
+                        DM_stem = float(day["matigestruc_kg_ha"]) / 10 # kg/ha to g/m2
 
                         # Density
                         density = day["densite"]
@@ -278,7 +289,12 @@ def read_csv_file_IC(file_csv, conv_unit=100):
                             "Incident PAR": round(par_inc,4),
                             "Absorbed PAR": round(par_abs,4),
                             "N demand": round(n_demand,4),
+                            "DM": round(DM,4),
+                            "DM veg": round(DM_veg,4),
+                            "DM leaf": round(DM_leaf,4),
+                            "DM stem": round(DM_stem,4),
                             "Density": round(density,4),
+                            "BBCH stage": bbch,
                             "Emergence": day["ilevs"]
                             }
                         

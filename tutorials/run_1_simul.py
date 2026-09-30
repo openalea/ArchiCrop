@@ -1,15 +1,21 @@
 # Imports
+import time
+from pathlib import Path
 from openalea.archicrop.archicrop import ArchiCrop
 from openalea.archicrop.stics_io import get_stics_data
 from openalea.archicrop.simulation import define_params_1_plant
 
 # STICS files
-tec_file='path/to/file_tec.xml' # Path to the STICS management XML file
-plant_file='path/to/file_plt.xml' # Path to the STICS plant XML file
-stics_output_file='path/to/mod_s_.sti' # Path to the STICS output file
+# path = Path(input("Enter the path to the STICS files directory: "))
+path = Path("../data/usms_STICS/v10")
+tec_file = path / 'Ble_tec.xml' # Path to the STICS management XML file
+plant_file = path / 'plant/wheat_plt.xml' # Path to the STICS plant XML file
+stics_output_file = path / 'mod_swheat.sti' # Path to the STICS output file
 
 # Plant architecture and development parameters
 archi_wheat = {
+    "species": "wheat",
+
     "nb_phy": 10, # number of phytomers on the main stem 
     "nb_short_phy": 5, # number of short phytomers on the main stem (included in number of phytomers)
     "short_phy_len": 3, # length of short phytomers
@@ -44,7 +50,7 @@ archi_wheat = {
     "leaf_duration": 1.6, # delay, as factor of phyllochron, between the appearance of two successive phytomers
 
     # Tillering
-    "nb_tillers": 6, # number of tillers
+    "nb_tillers": 3, # number of tillers
     "tiller_angle": 5, # tiller insertion angle
     "tiller_delay": 1, # delay, as factor of phyllochron, between the appearance of a phytomer and the appearance of its tiller
     "reduction_factor": 0.8, # reduction factor between tillers of consecutive order
@@ -66,6 +72,9 @@ params_wheat = define_params_1_plant(
     archi_params=archi_wheat)
 
 # Generate and grow plant with ArchiCrop, following the given growth dynamics
+start = time.time()
 wheat = ArchiCrop(daily_dynamics=daily_dynamics, **params_wheat)
 wheat.generate_potential_plant()
 growing_plant = wheat.grow_plant() # returns a list of MTGs
+end = time.time()
+print(f"Time for 1 simulation of {len(growing_plant)} days: {end-start}")

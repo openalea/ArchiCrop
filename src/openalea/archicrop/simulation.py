@@ -303,7 +303,7 @@ def define_archicrop_parameters_IC(archi_params: dict,
         daily_dynamics=d_outputs, 
         pot_factor_lai=pot_factor_lai, pot_factor_height=pot_factor_height)
 
-    return {0:param_sets[min(list(param_sets.keys()))]}, density
+    return param_sets, density # {0:param_sets[min(list(param_sets.keys()))]}, density
 
 
 
@@ -543,8 +543,8 @@ def save_scenes_IC(stand, mtgs, path, conv_coef=100):
                 if i > min(dates):
                     for k,g in enumerate(list_of_graphs[a][b][i]):
                         sc, _ = build_scene(mtg=g, position=positions_crop[a][b][k], senescence=True)
-                        mtg_fn = path.glob(f"{a}_{b}_{i}_{k}.mtg")
-                        obj_fn = path.glob(f"{a}_{b}_{i}_{k}.obj")
+                        mtg_fn = path + f"{a}_{b}_{i}_{k}.mtg"
+                        obj_fn = path + f"{a}_{b}_{i}_{k}.obj"
                         save_mtg(g, sc, mtg_fn, obj_fn)
 
 
