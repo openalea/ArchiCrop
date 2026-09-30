@@ -408,6 +408,7 @@ def get_pheno(daily_dynamics: dict):
     thermal_time = [value["Thermal time"] for value in daily_dynamics.values() if value is not None]
 
     index_end_veg = len(thermal_time) - 1
+    end_juv = None
     end_veg = thermal_time[index_end_veg] 
 
     for key, value in daily_dynamics.items():
